@@ -1,7 +1,7 @@
 {
-	"name": "netherphp/empty",
-	"description": "An empty library.",
-	"keywords": [ "php", "empty" ],
+	"name": "netherphp/common",
+	"description": "Things that I found pretty useful and needed everywhere.",
+	"keywords": [ "php", "utilities" ],
 	"license": "BSD-2-Clause",
 	"authors":[
 		{
