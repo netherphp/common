@@ -1,7 +1,6 @@
 <?php
 
 namespace Nether\Common\Units;
-use Nether;
 
 class Timeframe {
 /*//
@@ -11,6 +10,34 @@ into a time by strtotime, calculate the timespan between the two points. when
 zeroing the time difference is forced to be zero when it rolls past zero. if
 leaping is enabled then the math will use a fractional days-per-year.
 //*/
+
+	const
+	LabelCaseNormal = 0,
+	LabelCaseUpper  = 1,
+	LabelCaseLower  = -1;
+
+	const
+	LabelSetFull     = 0,
+	LabelSetShort    = 1,
+	LabelSetShortest = 2;
+
+	const
+	LabelSets = [
+		self::LabelSetFull => [
+			'Y'=> 'Years', 'D'=> 'Days',
+			'H'=> 'Hours', 'M'=> 'Minutes', 'S'=> 'Seconds'
+		],
+		self::LabelSetShort => [
+			'Y'=> 'Yr', 'D'=> 'D',
+			'H'=> 'Hr', 'M'=> 'Min', 'S'=> 'Sec'
+		],
+		self::LabelSetShortest => [
+			'Y'=> 'Y', 'D'=> 'D',
+			'H'=> 'H', 'M'=> 'M', 'S'=> 'S'
+		]
+	];
+
+	////////
 
 	protected mixed
 	$Start;
@@ -27,8 +54,8 @@ leaping is enabled then the math will use a fractional days-per-year.
 	protected string
 	$UnitSep = ', ';
 
-	protected string
-	$LabelSet = 'Full';
+	protected int
+	$LabelSet = self::LabelSetFull;
 
 	protected string
 	$LabelSep = ' ';
@@ -36,18 +63,8 @@ leaping is enabled then the math will use a fractional days-per-year.
 	protected int
 	$LabelCase = 0;
 
-	protected array
-	$LabelSets = [
-		'Full'     => [ 'Y'=> 'Years', 'D'=> 'Days', 'H'=> 'Hours', 'M'=> 'Minutes', 'S'=> 'Seconds' ],
-		'Short'    => [ 'Y'=> 'Yr', 'D'=> 'D', 'H'=> 'Hr', 'M'=> 'Min', 'S'=> 'Sec' ],
-		'Shortest' => [ 'Y'=> 'Y', 'D'=> 'D', 'H'=> 'H', 'M'=> 'M', 'S'=> 'S' ]
-	];
-
 	public function
-	__Construct(
-		int|float|string|NULL $Start = NULL,
-		int|float|string|NULL $Stop  = NULL
-	) {
+	__Construct(mixed $Start = NULL, mixed $Stop = NULL) {
 
 		$this->SetStart($Start);
 		$this->SetStop($Stop);
@@ -115,18 +132,18 @@ leaping is enabled then the math will use a fractional days-per-year.
 	SetLabelSep(?string $What=NULL):
 	static {
 
-		$this->LabelSep = $What ?? ' ';
+		$this->LabelSep = $What ?? '';
 		return $this;
 	}
 
 	public function
-	SetLabelSet(?string $Which=NULL):
+	SetLabelSet(?int $Which=NULL):
 	static {
 
 		if(!$Which)
-		$Which = 'Full';
+		$Which = static::LabelSetFull;
 
-		if(array_key_exists($Which, $this->LabelSets))
+		if(array_key_exists($Which, static::LabelSets))
 		$this->LabelSet = $Which;
 
 		return $this;
@@ -221,7 +238,7 @@ leaping is enabled then the math will use a fractional days-per-year.
 	GetLabelSet():
 	array {
 
-		$LabelSet = $this->LabelSets[$this->LabelSet];
+		$LabelSet = static::LabelSets[$this->LabelSet];
 
 		if($this->LabelCase === 1) {
 			foreach($LabelSet as &$Label)
