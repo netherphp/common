@@ -10,8 +10,18 @@ abstract class Library {
 	static Nether\Object\Datastore
 	$Config;
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	static public function
-	PrepareDefaultConfig(?Datastore $Config=NULL):
+	Init(...$Argv):
+	void {
+
+		return;
+	}
+
+	static public function
+	InitDefaultConfig(?Datastore $Config=NULL):
 	Datastore {
 	/*//
 	provide a base implementation for setting library values to their
@@ -35,6 +45,42 @@ abstract class Library {
 		// then spit it out for whatever reason too why not.
 
 		return $Config;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	// public api for library config object for considering making the
+	// actual static property protected.
+
+	static public function
+	Config():
+	Datastore {
+
+		if(!isset(static::$Config))
+		static::InitDefaultConfig();
+
+		return static::$Config;
+	}
+
+	static public function
+	Get(string $Key):
+	mixed {
+
+		if(!isset(static::$Config))
+		static::InitDefaultConfig();
+
+		return static::$Config[$Key];
+	}
+
+	static public function
+	Set(string $Key, mixed $Val):
+	mixed {
+
+		if(!isset(static::$Config))
+		static::InitDefaultConfig();
+
+		return static::$Config[$Key] = $Val;
 	}
 
 }

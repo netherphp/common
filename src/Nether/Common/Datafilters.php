@@ -22,7 +22,7 @@ class Datafilters {
 
 	static public function
 	TypeStringNullable(DatafilterItem $Item):
-	string {
+	?string {
 	/*//
 	@date 2022-11-11
 	makes sure the result is a string. returns null if the result is falsy.
