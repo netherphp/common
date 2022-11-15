@@ -37,7 +37,6 @@ class Datafilters {
 	////////////////////////////////////////////////////////////////
 	// generic text filters ////////////////////////////////////////
 
-
 	static public function
 	Base64Encode($Val):
 	string {
@@ -70,18 +69,21 @@ class Datafilters {
 	}
 
 	static public function
-	TrimmedText(DatafilterItem $Item):
+	TrimmedText(string|DatafilterItem $Item):
 	string {
 	/*//
 	@date 2022-11-11
 	trim whitespace from either end of the input.
 	//*/
 
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
 		return trim((string)$Item->Value ?: '');
 	}
 
 	static public function
-	TrimmedTextNullable(DatafilterItem $Item):
+	TrimmedTextNullable(string|DatafilterItem $Item):
 	?string {
 	/*//
 	@date 2022-11-11
@@ -89,10 +91,30 @@ class Datafilters {
 	is falsy.
 	//*/
 
-		if(!$Item->Value)
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		if(!$Item)
 		return NULL;
 
-		return trim($Item->Value) ?: NULL;
+		return trim($Item) ?: NULL;
+	}
+
+	static public function
+	Email(string|DatafilterItem $Item):
+	string {
+	/*//
+	@date 2022-11-14
+	//*/
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return strtolower(filter_var(
+			trim($Item),
+			FILTER_VALIDATE_EMAIL,
+			[ 'options' => [ 'default' => '' ]]
+		));
 	}
 
 }
