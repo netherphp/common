@@ -10,41 +10,73 @@ class Datafilters {
 	// primative type filters //////////////////////////////////////
 
 	static public function
-	TypeString(DatafilterItem $Item):
+	TypeInt(mixed $Item):
+	int {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return (int)$Item;
+	}
+
+	static public function
+	TypeIntNullable(mixed $Item):
+	?int {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		if(!$Item)
+		return NULL;
+
+		return (int)$Item;
+	}
+
+	static public function
+	TypeString(mixed $Item):
 	string {
 	/*//
 	@date 2022-11-11
 	makes sure the result is a string.
 	//*/
 
-		return (string)$Item->Value;
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return (string)$Item;
 	}
 
 	static public function
-	TypeStringNullable(DatafilterItem $Item):
+	TypeStringNullable(mixed $Item):
 	?string {
 	/*//
 	@date 2022-11-11
 	makes sure the result is a string. returns null if the result is falsy.
 	//*/
 
-		if(!$Item->Value)
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		if(!$Item)
 		return NULL;
 
-		return (string)$Item->Value ?: NULL;
+		return (string)$Item ?: NULL;
 	}
 
 	////////////////////////////////////////////////////////////////
 	// generic text filters ////////////////////////////////////////
 
 	static public function
-	Base64Encode($Val):
+	Base64Encode(mixed $Val):
 	string {
 	/*//
 	encode into base64 safe for urls omitting the trailing padding as it is
 	not needed tbh.
 	https://en.wikipedia.org/wiki/Base64#URL_applications
 	//*/
+
+		if($Val instanceof DatafilterItem)
+		$Val = $Val->Value;
 
 		return str_replace(
 			['+','/'],
@@ -54,12 +86,15 @@ class Datafilters {
 	}
 
 	static public function
-	Base64Decode($Val):
+	Base64Decode(mixed $Val):
 	string {
 	/*//
 	decode from url safe base64.
 	https://en.wikipedia.org/wiki/Base64#URL_applications
 	//*/
+
+		if($Val instanceof DatafilterItem)
+		$Val = $Val->Value;
 
 		return base64_decode(str_replace(
 			['-','_'],
@@ -69,7 +104,7 @@ class Datafilters {
 	}
 
 	static public function
-	TrimmedText(string|DatafilterItem $Item):
+	TrimmedText(mixed $Item):
 	string {
 	/*//
 	@date 2022-11-11
@@ -83,7 +118,7 @@ class Datafilters {
 	}
 
 	static public function
-	TrimmedTextNullable(string|DatafilterItem $Item):
+	TrimmedTextNullable(mixed $Item):
 	?string {
 	/*//
 	@date 2022-11-11
@@ -101,7 +136,7 @@ class Datafilters {
 	}
 
 	static public function
-	Email(string|DatafilterItem $Item):
+	Email(mixed $Item):
 	string {
 	/*//
 	@date 2022-11-14
