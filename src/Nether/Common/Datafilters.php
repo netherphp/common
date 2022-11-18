@@ -33,6 +33,51 @@ class Datafilters {
 	}
 
 	static public function
+	TypeBool(mixed $Item):
+	bool {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		// scale back the number of things we need to test for.
+
+		$Item = strtoupper(trim(
+			(string)($Item ?: '')
+		));
+
+		return match($Item) {
+			'1', 'T', 'TRUE', 'Y', 'YES'
+			=> TRUE,
+
+			default
+			=> FALSE
+		};
+	}
+
+	static public function
+	TypeBoolNullable(mixed $Item):
+	?bool {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		if(!$Item)
+		return NULL;
+
+		$Item = strtoupper(trim(
+			(string)($Item ?: '')
+		));
+
+		return match($Item) {
+			'1', 'T', 'TRUE', 'Y', 'YES'
+			=> TRUE,
+
+			default
+			=> FALSE
+		};
+	}
+
+	static public function
 	TypeString(mixed $Item):
 	string {
 	/*//
@@ -141,6 +186,8 @@ class Datafilters {
 	/*//
 	@date 2022-11-14
 	//*/
+
+		//var_dump($Item); die();
 
 		if($Item instanceof DatafilterItem)
 		$Item = $Item->Value;
