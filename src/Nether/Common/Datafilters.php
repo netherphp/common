@@ -159,7 +159,7 @@ class Datafilters {
 		if($Item instanceof DatafilterItem)
 		$Item = $Item->Value;
 
-		return trim((string)$Item->Value ?: '');
+		return trim((string)$Item ?: '');
 	}
 
 	static public function
