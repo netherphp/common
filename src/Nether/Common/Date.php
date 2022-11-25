@@ -33,7 +33,7 @@ implements
 		$this->DateTime = new DateTime($Input);
 
 		$this->DateTime->SetTimezone(new DateTimeZone(
-			Common\Library::Get('Nether.Common.Date.Timezone')
+			Common\Library::Get(Common\Library::ConfDefaultTimezone)
 			?? 'UTC'
 		));
 
@@ -45,6 +45,16 @@ implements
 	string {
 
 		return $this->DateTime->Format($this->DateFormat);
+	}
+
+	public function
+	__Invoke(...$Argv):
+	?string {
+
+		if(count($Argv) === 1)
+		return $this->DateTime->Format($Argv[0]);
+
+		return NULL;
 	}
 
 	public function

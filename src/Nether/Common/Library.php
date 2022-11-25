@@ -7,6 +7,12 @@ use Nether\Object\Datastore;
 
 abstract class Library {
 
+	const
+	ConfDefaultTimezone = 'Nether.Common.Date.Timezone';
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	static Nether\Object\Datastore
 	$Config;
 

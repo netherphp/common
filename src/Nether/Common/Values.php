@@ -17,6 +17,7 @@ class Values {
 	DateFormatFancyDate        = 'F jS, Y',
 	DateFormatFancyDateVerbose = 'l F jS, Y',
 	DateFormatT24              = 'H:i',
+	DateFormatT24Z             = 'H:i T',
 	DateFormatT12              = 'g:ia',
 	DateFormatT12Z             = 'g:ia T',
 	DateFormatTZ               = 'T',

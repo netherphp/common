@@ -46,7 +46,7 @@ leaping is enabled then the math will use a fractional days-per-year.
 	$Stop;
 
 	protected bool
-	$Leap = TRUE;
+	$Leap = FALSE;
 
 	protected bool
 	$Zero = FALSE;
@@ -63,11 +63,15 @@ leaping is enabled then the math will use a fractional days-per-year.
 	protected int
 	$LabelCase = 0;
 
+	protected int
+	$Precision = 0;
+
 	public function
-	__Construct(mixed $Start = NULL, mixed $Stop = NULL) {
+	__Construct(mixed $Start=NULL, mixed $Stop=NULL, int $Precision=0) {
 
 		$this->SetStart($Start);
 		$this->SetStop($Stop);
+		$this->SetPrecision($Precision);
 
 		return;
 	}
@@ -165,6 +169,14 @@ leaping is enabled then the math will use a fractional days-per-year.
 		return $this;
 	}
 
+	public function
+	SetPrecision(int $Prec=0):
+	static {
+
+		$this->Precision = $Prec;
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -203,24 +215,24 @@ leaping is enabled then the math will use a fractional days-per-year.
 
 		////////
 
-		$Seconds = floor(
-			($Diff) % $SecPerMin
+		$Seconds = (
+			(int)($Diff) % $SecPerMin
 		);
 
-		$Minutes = floor(
-			($Diff / $SecPerMin) % $MinPerHr
+		$Minutes = (
+			(int)($Diff / $SecPerMin) % $MinPerHr
 		);
 
-		$Hours = floor(
-			($Diff / ($MinPerHr * $SecPerMin)) % $HrPerDay
+		$Hours = (
+			(int)($Diff / ($MinPerHr * $SecPerMin)) % $HrPerDay
 		);
 
-		$Days = floor(
-			($Diff / ($HrPerDay * $MinPerHr * $SecPerMin)) % $DayPerYr
+		$Days = (
+			(int)($Diff / ($HrPerDay * $MinPerHr * $SecPerMin)) % $DayPerYr
 		);
 
-		$Years = floor(
-			($Diff / ($HrPerDay * $MinPerHr * $SecPerMin * $DayPerYr))
+		$Years = (
+			(int)($Diff / ($HrPerDay * $MinPerHr * $SecPerMin * $DayPerYr))
 		);
 
 		return [
@@ -260,17 +272,29 @@ leaping is enabled then the math will use a fractional days-per-year.
 		$Calc = $this->Calc();
 		$LabelSet = $this->GetLabelSet();
 		$Key = NULL;
+		$Output = [];
+		$Precision = $this->Precision ?: count($Calc);
 
 		// run through the units.
 
-		foreach(['Y', 'D', 'H', 'M', 'S'] as $Key)
-		if($Calc[$Key] !== 0)
-		$Output[] = "{$Calc[$Key]}{$this->LabelSep}{$LabelSet[$Key]}";
+		foreach(['Y', 'D', 'H', 'M', 'S'] as $Key) {
+			if($Calc[$Key] === 0)
+			continue;
+
+			if($Precision-- <= 0)
+			continue;
+
+			$Output[] = "{$Calc[$Key]}{$this->LabelSep}{$LabelSet[$Key]}";
+		}
 
 		// compile the final string.
 
-		$String = (($Calc['Dir'] > 0) ? '+ ' : '- ');
+		$String = (($Calc['Dir'] < 0) ? '+ ' : '- ');
+
+		if(count($Output))
 		$String .= join($this->UnitSep, $Output);
+		else
+		$String = "+ 0{$this->LabelSep}{$LabelSet['S']}";
 
 		return $String;
 	}
@@ -282,19 +306,44 @@ leaping is enabled then the math will use a fractional days-per-year.
 		$Calc = $this->Calc();
 		$LabelSet = $this->GetLabelSet();
 		$Key = NULL;
+		$Output = [];
+		$Precision = $this->Precision ?: count($Calc);
 
 		// run throught the units.
 
-		foreach(['Y', 'D', 'H', 'M', 'S'] as $Key)
-		if($Calc[$Key] !== 0)
-		$Output[] = "{$Calc[$Key]}{$this->LabelSep}{$LabelSet[$Key]}";
+		foreach(['Y', 'D', 'H', 'M', 'S'] as $Key) {
+			if($Calc[$Key] === 0)
+			continue;
+
+			if($Precision-- <= 0)
+			continue;
+
+			$Output[] = "{$Calc[$Key]}{$this->LabelSep}{$LabelSet[$Key]}";
+		}
 
 		// compile the final string.
 
 		$String = join($this->UnitSep, $Output);
+
+		if($String)
 		$String .= (($Calc['Dir'] > 0) ? " {$Ago}" : " {$Until}");
+		else
+		$String = 'Now';
 
 		return $String;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	CalcSuffixedString(mixed $Start=NULL, mixed $Stop=NULL, int $Precision=0):
+	string {
+
+		return (
+			(new static($Start, $Stop, $Precision))
+			->GetSuffixedString()
+		);
 	}
 
 }
