@@ -23,4 +23,23 @@ class Values {
 	DateFormatTZ               = 'T',
 	DateFormatUnix             = 'U';
 
+	static public function
+	DebugProtectValue(mixed $Val):
+	string {
+
+		$Type = gettype($Val);
+		$Out = match($Type) {
+			'string'
+			=> sprintf(
+				'[protected %s len:%d]',
+				$Type, strlen($Val)
+			),
+
+			default
+			=> sprintf('[protected %s]', $Type)
+		};
+
+		return $Out;
+	}
+
 }
