@@ -33,6 +33,29 @@ class Datafilters {
 	}
 
 	static public function
+	TypeFloat(mixed $Item):
+	int {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return (float)$Item;
+	}
+
+	static public function
+	TypeFloatNullable(mixed $Item):
+	?int {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		if(!$Item)
+		return NULL;
+
+		return (float)$Item;
+	}
+
+	static public function
 	TypeBool(mixed $Item):
 	bool {
 
@@ -186,8 +209,6 @@ class Datafilters {
 	/*//
 	@date 2022-11-14
 	//*/
-
-		//var_dump($Item); die();
 
 		if($Item instanceof DatafilterItem)
 		$Item = $Item->Value;

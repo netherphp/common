@@ -7,12 +7,6 @@ use Nether\Object\Datastore;
 
 class Library {
 
-	const
-	ConfDefaultTimezone = 'Nether.Common.Date.Timezone';
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
 	static Nether\Object\Datastore
 	$Config;
 
@@ -22,7 +16,10 @@ class Library {
 	public function
 	__Construct(...$Argv) {
 
-		static::$Config = $Argv['Config'] ?? new Nether\Object\Datastore;
+		static::$Config = (
+			$Argv['Config']
+			?? new Nether\Object\Datastore
+		);
 
 		$this->OnLoad($Argv);
 
@@ -32,6 +29,11 @@ class Library {
 	public function
 	OnLoad(...$Argv):
 	void {
+	/*//
+	when a library is first require'd from disk. the library may self
+	configure any defaults here, but know that the framework that
+	loaded it may not be fully configured itself yet.
+	//*/
 
 		return;
 	}
@@ -39,6 +41,10 @@ class Library {
 	public function
 	OnPrepare(...$Argv):
 	void {
+	/*//
+	after the framework that loaded this has determined the environment
+	and its required setup.
+	//*/
 
 		return;
 	}
@@ -46,6 +52,11 @@ class Library {
 	public function
 	OnReady(...$Argv):
 	void {
+	/*//
+	after all libraries should have already configured themselves via load
+	and prepare. last step before handing execution off to the application
+	trying to use this stuff.
+	//*/
 
 		return;
 	}

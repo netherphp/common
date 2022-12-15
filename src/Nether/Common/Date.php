@@ -15,6 +15,12 @@ implements
 	Stringable,
 	JsonSerializable {
 
+	const
+	ConfDefaultTimezone = 'Nether.Common.Date.Timezone';
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	protected DateTime
 	$DateTime;
 
@@ -33,7 +39,7 @@ implements
 		$this->DateTime = new DateTime($Input);
 
 		$this->DateTime->SetTimezone(new DateTimeZone(
-			Common\Library::Get(Common\Library::ConfDefaultTimezone)
+			Common\Library::Get(static::ConfDefaultTimezone)
 			?? 'UTC'
 		));
 
