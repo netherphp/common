@@ -1,6 +1,6 @@
 {
 	"name": "netherphp/common",
-	"description": "Things that I found pretty useful and needed everywhere.",
+	"description": "Things that were found useful and needed everywhere.",
 	"keywords": [ "php", "utilities" ],
 	"license": "BSD-2-Clause",
 	"authors":[
