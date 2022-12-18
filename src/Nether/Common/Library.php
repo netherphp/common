@@ -21,7 +21,7 @@ class Library {
 			?? new Nether\Object\Datastore
 		);
 
-		$this->OnLoad($Argv);
+		$this->OnLoad(...$Argv);
 
 		return;
 	}
