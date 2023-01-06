@@ -103,10 +103,6 @@ class Datafilters {
 	static public function
 	TypeString(mixed $Item):
 	string {
-	/*//
-	@date 2022-11-11
-	makes sure the result is a string.
-	//*/
 
 		if($Item instanceof DatafilterItem)
 		$Item = $Item->Value;
@@ -117,10 +113,6 @@ class Datafilters {
 	static public function
 	TypeStringNullable(mixed $Item):
 	?string {
-	/*//
-	@date 2022-11-11
-	makes sure the result is a string. returns null if the result is falsy.
-	//*/
 
 		if($Item instanceof DatafilterItem)
 		$Item = $Item->Value;
@@ -218,6 +210,79 @@ class Datafilters {
 			FILTER_VALIDATE_EMAIL,
 			[ 'options' => [ 'default' => '' ]]
 		));
+	}
+
+	static public function
+	PathableKey(mixed $Input):
+	string {
+	/*//
+	utility method i have in almost all of my projects to take input uris and
+	spit out versions that would break anything if we tried to use it in a
+	file path. so its a super sanitiser only allowing alphas, numerics,
+	dashes, periods, and forward slashes. does not allow dot stacking
+	to prevent traversal foolery.
+	//*/
+
+		if($Input instanceof DatafilterItem)
+		$Input = $Input->Value;
+
+		////////
+
+		$Output = strtolower(trim($Input));
+
+		// allow things that could be nice clean file names.
+
+		$Output = preg_replace(
+			'#[^a-zA-Z0-9\-\/\.]#', '',
+			str_replace(' ', '-', $Output)
+		);
+
+		// disallow traversal foolery.
+
+		$Output = preg_replace(
+			'#[\.]{2,}#', '',
+			$Output
+		);
+
+		$Output = preg_replace(
+			'#[\/]{2,}#', '/',
+			$Output
+		);
+
+		return $Output;
+	}
+
+	static public function
+	PathableKeySingle(mixed $Input):
+	string {
+
+		if($Input instanceof DatafilterItem)
+		$Input = $Input->Value;
+
+		////////
+
+		$Output = strtolower(trim($Input));
+
+		// allow things that could be nice clean file names.
+
+		$Output = preg_replace(
+			'#[^a-zA-Z0-9\-\.]#', '',
+			str_replace(' ', '-', $Output)
+		);
+
+		// disallow traversal foolery.
+
+		$Output = preg_replace(
+			'#[\.]{2,}#', '',
+			$Output
+		);
+
+		$Output = preg_replace(
+			'#[\/]{2,}#', '/',
+			$Output
+		);
+
+		return $Output;
 	}
 
 }
