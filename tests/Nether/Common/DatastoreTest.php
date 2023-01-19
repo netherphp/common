@@ -687,7 +687,6 @@ extends PHPUnit\Framework\TestCase {
 		$Result = Datastore::NewFromFile($Jsonname);
 
 		if(PHP_OS_FAMILY === 'Windows') {
-			$Filename = Filesystem\Util::Repath($Filename);
 			system(sprintf(
 				'icacls %s /grant everyone:R 2>&1 1>NUL',
 				$Filename
