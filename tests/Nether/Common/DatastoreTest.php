@@ -1,6 +1,6 @@
 <?php
 
-namespace NetherTestSuite\Common\DatastoreTest;
+namespace Nether\Common;
 use PHPUnit;
 
 use Nether\Common\Datastore;
@@ -505,7 +505,11 @@ extends PHPUnit\Framework\TestCase {
 
 		try {
 			$Failed = FALSE;
-			$Store->Write('/quoth/the/raven/nevermore.lulz');
+			$Store->Write(
+				PHP_OS_FAMILY === 'Windows'
+				? 'zz:/quoth/the/raven/nevermore.lulz'
+				: '/quoth/the/raven/nevermore.lulz'
+			);
 		}
 
 		catch(Throwable $Err) {
@@ -645,8 +649,9 @@ extends PHPUnit\Framework\TestCase {
 		// try to fail at reading a file due to permissions.
 
 		if(PHP_OS_FAMILY === 'Windows') {
+			$Filename = Filesystem\Util::Repath($Filename);
 			system(sprintf(
-				'icacls %s /deny everyone:R',
+				'icacls %s /deny everyone:R 2>&1 1>NUL',
 				$Filename
 			));
 		}
@@ -680,6 +685,17 @@ extends PHPUnit\Framework\TestCase {
 
 		file_put_contents($Jsonname, "{}");
 		$Result = Datastore::NewFromFile($Jsonname);
+
+		if(PHP_OS_FAMILY === 'Windows') {
+			$Filename = Filesystem\Util::Repath($Filename);
+			system(sprintf(
+				'icacls %s /grant everyone:R 2>&1 1>NUL',
+				$Filename
+			));
+		}
+		else {
+			chmod($Filename, 0666);
+		}
 
 		unlink($Filename);
 		unlink($Jsonname);
