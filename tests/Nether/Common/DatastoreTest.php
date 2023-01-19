@@ -644,9 +644,17 @@ extends PHPUnit\Framework\TestCase {
 
 		// try to fail at reading a file due to permissions.
 
-		chmod($Filename, 0000);
-		$HadException = FALSE;
+		if(PHP_OS_FAMILY === 'Windows') {
+			system(sprintf(
+				'icacls %s /deny everyone:R',
+				$Filename
+			));
+		}
+		else {
+			chmod($Filename, 0000);
+		}
 
+		$HadException = FALSE;
 		try { $Store = Datastore::NewFromFile($Filename); }
 
 		catch(Throwable $Err) {
