@@ -23,7 +23,10 @@ class Util {
 	Repath(string $Input):
 	string {
 
-		return str_replace('\\', '/', $Input);
+		if(PHP_OS_FAMILY === 'Windows')
+		$Input = str_replace('/', '\\', $Input);
+
+		return $Input;
 	}
 
 }
