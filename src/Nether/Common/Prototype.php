@@ -2,10 +2,11 @@
 
 namespace Nether\Common;
 
-use ReflectionClass;
 use Nether\Common\Prototype\Flags;
 use Nether\Common\Prototype\ConstructArgs;
-use ReflectionProperty;
+use Nether\Common\Package\ClassInfoPackage;
+use Nether\Common\Package\PropertyInfoPackage;
+use Nether\Common\Package\MethodInfoPackage;
 
 class Prototype {
 /*//
@@ -15,6 +16,11 @@ properties you need will exist, prefilled with a default value if needed. this
 class and its supports have been micro-optimized to have the most minimal
 impact i can find while packing in as many features as possible.
 //*/
+
+	use
+	ClassInfoPackage,
+	PropertyInfoPackage,
+	MethodInfoPackage;
 
 	public function
 	__Construct(array|object|NULL $Raw=NULL, array|object|NULL $Defaults=NULL, int $Flags=0) {
@@ -40,7 +46,7 @@ impact i can find while packing in as many features as possible.
 
 		////////
 
-		$Properties = static::GetPropertyAttributes();
+		$Properties = static::GetPropertyIndex();
 		$StrictDefaults = ($Flags & Flags::StrictDefault) !== 0;
 		$CullUsingDefaults = ($Flags & Flags::CullUsingDefault) !== 0;
 		$StrictInput = ($Flags & Flags::StrictInput) !== 0;
@@ -102,10 +108,22 @@ impact i can find while packing in as many features as possible.
 		// apply any follow up attribute demands.
 
 		foreach($Properties as $Src => $Val) {
-			if($Val->Objectify)
-			$this->{$Val->Name} = new ($Val->Type)(
-				...$Val->Objectify->Args
-			);
+			if($Val->Objectify instanceof Meta\PropertyObjectify) {
+				if($Val->Objectify instanceof Meta\PropertyFactory) {
+					if(class_exists($Properties[$Src]->Type))
+					if(is_callable("{$Properties[$Src]->Type}::{$Val->Objectify->Callable}"))
+					if(property_exists($this, $Val->Objectify->Source))
+					$this->{$Val->Name} = (
+						("{$Properties[$Src]->Type}::{$Val->Objectify->Callable}")
+						($this->{$Val->Objectify->Source}, ...$Val->Objectify->Args)
+					);
+				}
+
+				else
+				$this->{$Val->Name} = new ($Val->Type)(
+					...$Val->Objectify->Args
+				);
+			}
 		}
 
 		// as handy as it was to create this ConstructArgs first thing
@@ -137,116 +155,6 @@ impact i can find while packing in as many features as possible.
 	//*/
 
 		return;
-	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
-	static public function
-	FetchClassAttributes(bool $Init=TRUE):
-	array {
-	/*//
-	@date 2021-08-24
-	return a list of all the attributes on this class.
-	//*/
-
-		$RefClass = new ReflectionClass(static::class);
-		$Attrib = NULL;
-		$Output = [];
-
-		foreach($RefClass->GetAttributes() as $Attrib)
-		$Output[] = $Init ? $Attrib->NewInstance() : $Attrib;
-
-		return $Output;
-	}
-
-	static public function
-	FetchPropertyAttributes(?string $Property=NULL, bool $Init=TRUE):
-	array {
-	/*//
-	@date 2021-08-24
-	if a property is specified returns a list of the attributes upon it.
-	else it returns a list of all the properties on this class each
-	containing their list of attributes.
-	//*/
-
-		$RefClass = new ReflectionClass(static::class);
-		$RefProp = NULL;
-		$Name = NULL;
-		$Attrib = NULL;
-		$Output = [];
-
-		// return a list of the attributes for the specified property.
-
-		if($Property !== NULL) {
-			if($RefProp = $RefClass->GetProperty($Property))
-			foreach($RefProp->GetAttributes() as $Attrib)
-			$Output[] = $Init ? $Attrib->NewInstance() : $Attrib;
-
-			return $Output;
-		}
-
-		// else return a list of all the properties in this class and
-		// their attributes.
-
-		foreach($RefClass->GetProperties() as $RefProp) {
-			$Output[($Name = $RefProp->GetName())] = [];
-
-			foreach($RefProp->GetAttributes() as $Attrib)
-			$Output[$Name][] = $Init ? $Attrib->NewInstance() : $Attrib;
-		}
-
-		return $Output;
-	}
-
-	static public function
-	GetPropertyAttributes():
-	array {
-	/*//
-	@date 2021-08-05
-	@mopt isset, direct read, direct write.
-	returns an array of all the properties on this class keyed to their
-	data origin name.
-	//*/
-
-		if(isset(Prototype\PropertyCache::$Cache[static::class]))
-		return Prototype\PropertyCache::$Cache[static::class];
-
-		$Output = [];
-		$RefClass = NULL;
-		$Prop = NULL;
-		$Attrib = NULL;
-
-		////////
-
-		$RefClass = new ReflectionClass(static::class);
-
-		foreach($RefClass->GetProperties() as $Prop) {
-			$Attrib = new Prototype\PropertyAttributes($Prop);
-			$Output[$Attrib->Origin] = $Attrib;
-		}
-
-		return Prototype\PropertyCache::$Cache[static::class] = $Output;
-	}
-
-	static public function
-	GetPropertyMap():
-	array {
-	/*//
-	@date 2021-08-16
-	returns an assoc array keyed with a data source name and values of the
-	data destination name.
-	//*/
-
-		$Output = array_map(
-			(fn($Val)=> $Val->Name),
-			array_filter(
-				static::GetPropertyAttributes(),
-				(fn($Val)=> !$Val->Static)
-			)
-		);
-
-		return $Output;
 	}
 
 	////////////////////////////////////////////////////////////////

@@ -10,23 +10,19 @@ use ReflectionProperty;
 use ReflectionAttribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class PropertyOrigin
-implements PropertyInfoInterface {
-/*//
-@date 2021-08-05
-@related Nether\Common\Prototype::__Construct
-when attached to a class property with a single string argument that will
-tell the prototype object to pull the data stored in the arguement and to put
-it into the property this is attached to.
-//*/
+class PropertyFactory
+extends PropertyObjectify {
 
 	public string
-	$Name;
+	$Callable;
 
 	public function
-	__Construct(string $Name) {
+	__Construct(string $Callable, string $Source, ...$Args) {
 
-		$this->Name = $Name;
+		$this->Callable = $Callable;
+		$this->Source = $Source;
+		$this->Args = $Args;
+
 		return;
 	}
 
@@ -34,7 +30,9 @@ it into the property this is attached to.
 	OnPropertyInfo(PropertyInfo $Attrib, ReflectionProperty $RefProp, ReflectionAttribute $RefAttrib):
 	static {
 
-		$Attrib->Origin = $this->Name;
+		$Attrib->Objectify = $this;
+
 		return $this;
 	}
+
 }

@@ -1,17 +1,68 @@
 <?php
 
-namespace Nether;
-
+namespace NetherTestSuite\PrototypeConstructTest;
 use PHPUnit;
 
+use Nether\Common\Datastore;
+use Nether\Common\Prototype;
+use Nether\Common\Prototype\Flags;
+use Nether\Common\Prototype\PropertyInfo;
+use Nether\Common\Prototype\MethodInfo;
+use Nether\Common\Prototype\ConstructArgs;
+use Nether\Common\Meta\PropertyOrigin;
+use Nether\Common\Meta\PropertyObjectify;
+use Throwable;
+
 class LocalTest2
-extends Common\Prototype {
+extends Prototype {
 
-	#[Common\Meta\PropertyOrigin('number_one')]
-	public int $One;
+	#[PropertyOrigin('number_one')]
+	public int
+	$One;
 
-	#[Common\Meta\PropertyOrigin('number_two')]
-	public int $Two;
+	#[PropertyOrigin('number_two')]
+	public int
+	$Two;
+
+}
+
+class LocalTest3
+extends Prototype {
+
+	public int
+	$TypedProperty;
+
+	public
+	$UntypedProperty;
+
+	public function
+	TypedMethod():
+	int {
+
+		return 1;
+	}
+
+	public function
+	UntypedMethod() {
+
+		return;
+	}
+
+}
+
+class LocalTest4
+extends Prototype {
+
+	public ConstructArgs
+	$Args;
+
+	protected function
+	OnReady(ConstructArgs $Args):
+	void {
+
+		$this->Args = $Args;
+		return;
+	}
 
 }
 
@@ -26,7 +77,7 @@ extends PHPUnit\Framework\TestCase {
 	an object which has no properties.
 	//*/
 
-		$Obj = new Common\Prototype;
+		$Obj = new Prototype;
 		$this->AssertTrue(count(get_object_vars($Obj)) === 0);
 
 		return;
@@ -48,7 +99,7 @@ extends PHPUnit\Framework\TestCase {
 			'PropertyTwo' => 2
 		];
 
-		$Object = new Common\Prototype($Input);
+		$Object = new Prototype($Input);
 
 		foreach($Input as $Key => $Value) {
 			$this->AssertObjectHasAttribute($Key,$Object);
@@ -82,11 +133,46 @@ extends PHPUnit\Framework\TestCase {
 
 		$Result = $Input + $Default;
 
-		$Object = new Common\Prototype($Input,$Default);
+		$Object = new Prototype($Input,$Default);
 		foreach($Result as $Key => $Value) {
 			$this->AssertObjectHasAttribute($Key,$Object);
 			$this->AssertEquals($Object->{$Key},$Value);
 		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestDefaultsStrict() {
+	/*//
+	check that any properties missing from the input get set to the specified
+	default values.
+	//*/
+
+		$Key = NULL;
+		$Value = NULL;
+
+		$Input = [
+			'One' => 1,
+			'Two' => 2
+		];
+
+		$Default = [
+			'One'   => -1,
+			'Three' => 3
+		];
+
+		$Result = $Input + $Default;
+
+		$Object = new LocalTest2($Input, $Default, Flags::StrictDefault);
+		$this->AssertObjectHasAttribute('One', $Object);
+		$this->AssertObjectHasAttribute('Two', $Object);
+		$this->AssertObjectNotHasAttribute('Three', $Object);
+
+		$this->AssertEquals($Object->One, 1);
+		$this->AssertEquals($Object->Two, 2);
+
 
 		return;
 	}
@@ -118,10 +204,10 @@ extends PHPUnit\Framework\TestCase {
 		$Result = $Input + $Default;
 		unset($Result['PropertyOne']);
 
-		$Object = new Common\Prototype(
+		$Object = new Prototype(
 			$Input,
 			$Default,
-			Common\Prototype\Flags::CullUsingDefault
+			Prototype\Flags::CullUsingDefault
 		);
 
 		foreach($Result as $Key => $Value) {
@@ -133,6 +219,75 @@ extends PHPUnit\Framework\TestCase {
 		// culled by not having a key in the default array.
 
 		$this->AssertFalse(property_exists($Object,'PropertyOne'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestObjectInputs() {
+	/*//
+	check that any properties missing from the input get set to the specified
+	default values.
+	//*/
+
+		$Key = NULL;
+		$Value = NULL;
+
+		$Input = [
+			'PropertyOne' => 1,
+			'PropertyTwo' => 2
+		];
+
+		$Default = [
+			'PropertyOne'   => -1,
+			'PropertyTwo'   => -2,
+			'PropertyThree' => -3
+		];
+
+		$Result = $Input + $Default;
+
+		$Object = new Prototype((object)$Input, (object)$Default);
+		foreach($Result as $Key => $Value) {
+			$this->AssertObjectHasAttribute($Key,$Object);
+			$this->AssertEquals($Object->{$Key},$Value);
+		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestConstructArgsThings() {
+
+		$Input = [
+			'PropertyOne' => 1
+		];
+
+		$Defaults = [
+			'PropertyOne' => -1
+		];
+
+		$O1 = new LocalTest4($Input);
+		$O2 = new LocalTest4($Input, $Defaults);
+
+		$this->AssertTrue($O1->Args->InputHas('PropertyOne'));
+		$this->AssertTrue($O1->Args->InputExists('PropertyOne'));
+		$this->AssertTrue($O1->Args->InputGet('PropertyOne') === 1);
+		$this->AssertFalse($O1->Args->InputHas('Nope'));
+		$this->AssertFalse($O1->Args->InputExists('Nope'));
+		$this->AssertNull($O1->Args->InputGet('Nope'));
+
+		$this->AssertFalse($O1->Args->DefaultHas('PropertyOne'));
+		$this->AssertFalse($O1->Args->DefaultExists('PropertyOne'));
+		$this->AssertNull($O1->Args->DefaultGet('PropertyOne'));
+		$this->AssertFalse($O1->Args->DefaultHas('Nope'));
+		$this->AssertFalse($O1->Args->DefaultExists('Nope'));
+		$this->AssertNull($O1->Args->DefaultGet('Nope'));
+
+		$this->AssertTrue($O2->Args->DefaultHas('PropertyOne'));
+		$this->AssertTrue($O2->Args->DefaultExists('PropertyOne'));
+		$this->AssertTrue($O2->Args->DefaultGet('PropertyOne') === -1);
 
 		return;
 	}
@@ -151,10 +306,12 @@ extends PHPUnit\Framework\TestCase {
 			'PropertyBool1'  => 0,
 			'PropertyBool2'  => 1,
 			'PropertyBool3'  => 'five',
-			'PropertyWhat'   => '42.42'
+			'PropertyWhat'   => '42.42',
+			'PropertyNullableString' => 'asdf',
+			'PropertyNullableNulled' => NULL
 		];
 
-		$Object = new class($Input) extends Common\Prototype {
+		$Object = new class($Input) extends Prototype {
 			public int $PropertyInt;
 			public float $PropertyFloat;
 			public string $PropertyString;
@@ -162,11 +319,13 @@ extends PHPUnit\Framework\TestCase {
 			public bool $PropertyBool2;
 			public bool $PropertyBool3;
 			public mixed $PropertyWhat;
+			public ?string $PropertyNullableString;
+			public ?string $PropertyNullableNulled;
 		};
 
 		//var_dump($Object::GetPropertyMap());
 
-		//$Object = new Common\Prototype($Input);
+		//$Object = new Prototype($Input);
 		$this->AssertTrue($Object->PropertyInt === 1);
 		$this->AssertTrue($Object->PropertyFloat === 1.234);
 		$this->AssertTrue($Object->PropertyString === '42');
@@ -174,6 +333,8 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue($Object->PropertyBool2 === TRUE);
 		$this->AssertTrue($Object->PropertyBool3 === TRUE);
 		$this->AssertTrue($Object->PropertyWhat === '42.42');
+		$this->AssertTrue($Object->PropertyNullableString === 'asdf');
+		$this->AssertTrue($Object->PropertyNullableNulled === NULL);
 
 		return;
 	}
@@ -190,7 +351,7 @@ extends PHPUnit\Framework\TestCase {
 			'PropertyFloat' => '9000.1'
 		];
 
-		$Object = new class($Input,$Default) extends Common\Prototype {
+		$Object = new class($Input,$Default) extends Prototype {
 			public float $PropertyFloat;
 		};
 
@@ -207,9 +368,9 @@ extends PHPUnit\Framework\TestCase {
 	where wanted.
 	//*/
 
-		$Object = new class() extends Common\Prototype {
-			#[Common\Meta\PropertyObjectify]
-			public Common\Datastore $Data;
+		$Object = new class() extends Prototype {
+			#[PropertyObjectify]
+			public Datastore $Data;
 		};
 
 		$this->AssertInstanceOf(
@@ -259,6 +420,55 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertObjectHasAttribute('One',$Test2);
 		$this->AssertObjectHasAttribute('Two',$Test2);
 		$this->AssertObjectHasAttribute('Three',$Test2);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestThatAllowNullOnNullCallLogicFailWithUntypedProps() {
+
+		// tests a failure in my logic that went unnoticed for a while
+		// since i tend to strict type everything, that we ran into at
+		// work like a month after the release. it was calling a method
+		// a reflection type when there was no type defined gg.
+
+		try {
+			$Props = LocalTest3::GetPropertyIndex();
+			$Prop = $Props['UntypedProperty'];
+		}
+
+		catch(Throwable $E) {
+			$this->AssertFalse(TRUE, 'the problem exists.');
+		}
+
+		$this->AssertTrue($Prop instanceof PropertyInfo);
+		$this->AssertEquals($Prop->Type, 'mixed');
+		$this->AssertTrue($Prop->Nullable);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestThatAllowNullOnNullCallLogicFailWithUntypedMethods() {
+
+		// tests a failure in my logic that went unnoticed for a while
+		// since i tend to strict type everything, that we ran into at
+		// work like a month after the release. it was calling a method
+		// a reflection type when there was no type defined gg.
+
+		try {
+			$Methods = LocalTest3::GetMethodIndex();
+			$Method = $Methods['UntypedMethod'];
+		}
+
+		catch(Throwable $E) {
+			$this->AssertFalse(TRUE, 'the problem exists.');
+		}
+
+		$this->AssertTrue($Method instanceof MethodInfo);
+		$this->AssertEquals($Method->Type, 'mixed');
 
 		return;
 	}
