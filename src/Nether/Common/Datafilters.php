@@ -2,7 +2,7 @@
 
 namespace Nether\Common;
 
-use Nether\Object\Struct\DatafilterItem;
+use Nether\Common\Struct\DatafilterItem;
 
 class Datafilters {
 

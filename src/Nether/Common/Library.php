@@ -3,11 +3,11 @@
 namespace Nether\Common;
 use Nether;
 
-use Nether\Object\Datastore;
+use Nether\Common\Datastore;
 
 class Library {
 
-	static Nether\Object\Datastore
+	static Nether\Common\Datastore
 	$Config;
 
 	////////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ class Library {
 
 		static::$Config = (
 			$Argv['Config']
-			?? new Nether\Object\Datastore
+			?? new Nether\Common\Datastore
 		);
 
 		$this->OnLoad(...$Argv);
