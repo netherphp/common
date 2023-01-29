@@ -20,6 +20,25 @@ class Util {
 	}
 
 	static public function
+	Pathify(...$Argv):
+	string {
+
+		return static::PathifyWith(DIRECTORY_SEPARATOR, ...$Argv);
+	}
+
+	static public function
+	PathifyWith(string $DS, ...$Argv):
+	string {
+
+		$Arg = NULL;
+
+		foreach($Argv as &$Arg)
+		$Arg = trim($Arg, $DS);
+
+		return join($DS, $Argv);
+	}
+
+	static public function
 	Repath(string $Input):
 	string {
 
