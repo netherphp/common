@@ -33,7 +33,7 @@ class Util {
 		$Arg = NULL;
 
 		foreach($Argv as &$Arg)
-		$Arg = trim($Arg, $DS);
+		$Arg = rtrim($Arg, $DS);
 
 		return join($DS, $Argv);
 	}
