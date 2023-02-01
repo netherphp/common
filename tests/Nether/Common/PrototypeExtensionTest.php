@@ -95,11 +95,12 @@ extends PHPUnit\Framework\TestCase {
 
 		$Object = new PrototypeRegionTest(
 			$this->Input,
-			NULL
+			NULL,
+			0
 		);
 
-		$this->AssertTrue(property_exists($Object,'country_king'));
-		$this->AssertEquals($Object->country_king,$this->Input['country_king']);
+		$this->AssertTrue(property_exists($Object, 'country_king'));
+		$this->AssertEquals($Object->country_king, $this->Input['country_king']);
 
 		return;
 	}

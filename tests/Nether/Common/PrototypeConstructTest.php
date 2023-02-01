@@ -1,8 +1,10 @@
 <?php
 
 namespace NetherTestSuite\PrototypeConstructTest;
+
 use PHPUnit;
 
+use Throwable;
 use Nether\Common\Datastore;
 use Nether\Common\Prototype;
 use Nether\Common\Prototype\Flags;
@@ -11,7 +13,6 @@ use Nether\Common\Prototype\MethodInfo;
 use Nether\Common\Prototype\ConstructArgs;
 use Nether\Common\Meta\PropertyOrigin;
 use Nether\Common\Meta\PropertyObjectify;
-use Throwable;
 
 class LocalTest2
 extends Prototype {
@@ -99,12 +100,17 @@ extends PHPUnit\Framework\TestCase {
 			'PropertyTwo' => 2
 		];
 
-		$Object = new Prototype($Input);
+		$Object = new Prototype($Input, NULL, 0);
 
 		foreach($Input as $Key => $Value) {
-			$this->AssertObjectHasAttribute($Key,$Object);
-			$this->AssertEquals($Object->{$Key},$Value);
+			$this->AssertObjectHasAttribute($Key, $Object);
+			$this->AssertEquals($Object->{$Key}, $Value);
 		}
+
+		$Object2 = new Prototype($Input);
+
+		foreach($Input as $Key => $Value)
+		$this->AssertObjectNotHasAttribute($Key, $Object2);
 
 		return;
 	}
