@@ -23,7 +23,7 @@ impact i can find while packing in as many features as possible.
 	MethodInfoPackage;
 
 	public function
-	__Construct(array|object|NULL $Raw=NULL, array|object|NULL $Defaults=NULL, int $Flags=0) {
+	__Construct(array|object|NULL $Raw=NULL, array|object|NULL $Defaults=NULL, ?int $Flags=NULL) {
 	/*//
 	@date 2021-08-05
 	@mopt busyunit, isset, avoid-obj-prop-rw
@@ -43,6 +43,8 @@ impact i can find while packing in as many features as possible.
 
 		if(is_object($Defaults))
 		$Defaults = (array)$Defaults;
+
+		$Flags ??= Flags::StrictInput;
 
 		////////
 
@@ -188,7 +190,11 @@ impact i can find while packing in as many features as possible.
 	variables you provide will be created if they did not already exist.
 	//*/
 
-		return new static($Argv);
+		return new static(
+			$Argv,
+			NULL,
+			0
+		);
 	}
 
 }
