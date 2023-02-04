@@ -249,6 +249,11 @@ class Datafilters {
 			$Output
 		);
 
+		$Output = preg_replace(
+			'#[\-]{2,}#', '',
+			$Output
+		);
+
 		return $Output;
 	}
 
@@ -279,6 +284,11 @@ class Datafilters {
 
 		$Output = preg_replace(
 			'#[\/]{2,}#', '/',
+			$Output
+		);
+
+		$Output = preg_replace(
+			'#[\-]{2,}#', '',
 			$Output
 		);
 
