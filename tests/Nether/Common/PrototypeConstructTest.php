@@ -103,14 +103,14 @@ extends PHPUnit\Framework\TestCase {
 		$Object = new Prototype($Input, NULL, 0);
 
 		foreach($Input as $Key => $Value) {
-			$this->AssertObjectHasAttribute($Key, $Object);
+			$this->AssertTrue(property_exists($Object, $Key));
 			$this->AssertEquals($Object->{$Key}, $Value);
 		}
 
 		$Object2 = new Prototype($Input);
 
 		foreach($Input as $Key => $Value)
-		$this->AssertObjectNotHasAttribute($Key, $Object2);
+		$this->AssertFalse(property_exists($Object2, $Key));
 
 		return;
 	}
@@ -141,7 +141,7 @@ extends PHPUnit\Framework\TestCase {
 
 		$Object = new Prototype($Input,$Default);
 		foreach($Result as $Key => $Value) {
-			$this->AssertObjectHasAttribute($Key,$Object);
+			$this->AssertTrue(property_exists($Object, $Key));
 			$this->AssertEquals($Object->{$Key},$Value);
 		}
 
@@ -172,9 +172,9 @@ extends PHPUnit\Framework\TestCase {
 		$Result = $Input + $Default;
 
 		$Object = new LocalTest2($Input, $Default, Flags::StrictDefault);
-		$this->AssertObjectHasAttribute('One', $Object);
-		$this->AssertObjectHasAttribute('Two', $Object);
-		$this->AssertObjectNotHasAttribute('Three', $Object);
+		$this->AssertTrue(property_exists($Object, 'One'));
+		$this->AssertTrue(property_exists($Object, 'Two'));
+		$this->AssertFalse(property_exists($Object, 'Three'));
 
 		$this->AssertEquals($Object->One, 1);
 		$this->AssertEquals($Object->Two, 2);
@@ -217,7 +217,7 @@ extends PHPUnit\Framework\TestCase {
 		);
 
 		foreach($Result as $Key => $Value) {
-			$this->AssertObjectHasAttribute($Key,$Object);
+			$this->AssertTrue(property_exists($Object, $Key));
 			$this->AssertEquals($Object->{$Key},$Value);
 		}
 
@@ -255,7 +255,7 @@ extends PHPUnit\Framework\TestCase {
 
 		$Object = new Prototype((object)$Input, (object)$Default);
 		foreach($Result as $Key => $Value) {
-			$this->AssertObjectHasAttribute($Key,$Object);
+			$this->AssertTrue(property_exists($Object, $Key));
 			$this->AssertEquals($Object->{$Key},$Value);
 		}
 
@@ -419,13 +419,12 @@ extends PHPUnit\Framework\TestCase {
 			Three: 3
 		);
 
-		$this->AssertObjectHasAttribute('One',$Test1);
-		$this->AssertObjectHasAttribute('Two',$Test1);
-		$this->AssertObjectNotHasAttribute('Three',$Test1);
+		$this->AssertTrue(property_exists($Test1, 'Two'));
+		$this->AssertFalse(property_exists($Test1, 'Three'));
 
-		$this->AssertObjectHasAttribute('One',$Test2);
-		$this->AssertObjectHasAttribute('Two',$Test2);
-		$this->AssertObjectHasAttribute('Three',$Test2);
+		$this->AssertTrue(property_exists($Test2, 'One'));
+		$this->AssertTrue(property_exists($Test2, 'Two'));
+		$this->AssertTrue(property_exists($Test2, 'Three'));
 
 		return;
 	}

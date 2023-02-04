@@ -60,8 +60,8 @@ extends PHPUnit\Framework\TestCase {
 		$Attrib = NULL;
 
 		foreach(PrototypeRegionTest::GetPropertyIndex() as $Old => $Attrib) {
-			$this->AssertObjectNotHasAttribute($Old,$Object);
-			$this->AssertObjectHasAttribute($Attrib->Name,$Object);
+			$this->AssertFalse(property_exists($Object, $Old));
+			$this->AssertTrue(property_exists($Object, $Attrib->Name));
 		}
 
 		return;
@@ -81,7 +81,7 @@ extends PHPUnit\Framework\TestCase {
 			Common\Prototype\Flags::StrictInput
 		);
 
-		$this->AssertObjectNotHasAttribute('country_king',$Object);
+		$this->AssertFalse(property_exists($Object, 'country_king'));
 
 		return;
 	}
