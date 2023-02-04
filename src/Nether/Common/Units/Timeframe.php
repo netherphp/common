@@ -2,76 +2,77 @@
 
 namespace Nether\Common\Units;
 
+use DateTime;
+
 class Timeframe {
-/*//
-@date 2022-11-10
-given two times in seconds (int|float) or a string that can be converted
-into a time by strtotime, calculate the timespan between the two points. when
-zeroing the time difference is forced to be zero when it rolls past zero. if
-leaping is enabled then the math will use a fractional days-per-year.
-//*/
 
 	const
-	LabelCaseNormal = 0,
-	LabelCaseUpper  = 1,
-	LabelCaseLower  = -1;
-
-	const
-	LabelSetFull     = 0,
-	LabelSetShort    = 1,
-	LabelSetShortest = 2;
-
-	const
-	LabelSets = [
-		self::LabelSetFull => [
-			'Y'=> 'Years', 'D'=> 'Days',
-			'H'=> 'Hours', 'M'=> 'Minutes', 'S'=> 'Seconds'
-		],
-		self::LabelSetShort => [
-			'Y'=> 'Yr', 'D'=> 'D',
-			'H'=> 'Hr', 'M'=> 'Min', 'S'=> 'Sec'
-		],
-		self::LabelSetShortest => [
-			'Y'=> 'Y', 'D'=> 'D',
-			'H'=> 'H', 'M'=> 'M', 'S'=> 'S'
-		]
+	FormatLong = [
+		'sign' => '%r',
+		'y' => '%y [year|years]',
+		'm' => '%m [month|months]',
+		'd' => '%d [day|days]',
+		'h' => '%h [hour|hours]',
+		'i' => '%i [minute|minutes]',
+		's' => '%s [second|seconds]'
 	];
 
-	////////
+	const
+	FormatNormal = [
+		'sign' => '%r',
+		'y' => '%yyr',
+		'm' => '%mmo',
+		'd' => '%dd',
+		'h' => '%hhr',
+		'i' => '%imin',
+		's' => '%ssec'
+	];
 
-	protected mixed
+	const
+	FormatShort = [
+		'sign' => '%r',
+		'y' => '%yyr',
+		'm' => '%mmo',
+		'd' => '%dd',
+		'h' => '%hh',
+		'i' => '%im',
+		's' => '%ss'
+	];
+
+	const
+	FormatShorter = [
+		'sign' => '%r',
+		'y' => '%yy',
+		'm' => '%mm',
+		'd' => '%dd',
+		'h' => '%hh',
+		'i' => '%im',
+		's' => '%ss'
+	];
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	protected DateTime
 	$Start;
 
-	protected mixed
+	protected DateTime
 	$Stop;
 
 	protected bool
-	$Leap = FALSE;
+	$SkipZero = TRUE;
 
-	protected bool
-	$Zero = FALSE;
-
-	protected string
-	$UnitSep = ', ';
-
-	protected int
-	$LabelSet = self::LabelSetFull;
-
-	protected string
-	$LabelSep = ' ';
-
-	protected int
-	$LabelCase = 0;
-
-	protected int
-	$Precision = 0;
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(mixed $Start=NULL, mixed $Stop=NULL, int $Precision=0) {
+	__Construct(mixed $Start=NULL, mixed $Stop=NULL) {
 
-		$this->SetStart($Start);
-		$this->SetStop($Stop);
-		$this->SetPrecision($Precision);
+		$Now = time();
+
+		($this)
+		->SetStart($Start ?? "@{$Now}")
+		->SetStop($Stop ?? "@{$Now}");
 
 		return;
 	}
@@ -80,100 +81,35 @@ leaping is enabled then the math will use a fractional days-per-year.
 	////////////////////////////////////////////////////////////////
 
 	public function
-	SetStart(int|float|string|NULL $Time=NULL):
+	SetStart(mixed $Start):
 	static {
 
-		if($Time === NULL)
-		$Time = microtime(TRUE);
+		if(is_int($Start))
+		$Start = "@{$Start}";
 
-		elseif(is_string($Time))
-		$Time = strtotime($Time);
-
-		////////
-
-		$this->Start = $Time;
-		return $this;
-	}
-
-	public function
-	SetStop(?int $Time=NULL):
-	static {
-
-		if($Time === NULL)
-		$Time = microtime(TRUE);
-
-		elseif(is_string($Time))
-		$Time = strtotime($Time);
-
-		////////
-
-		$this->Stop = $Time;
-		return $this;
-	}
-
-	public function
-	SetUnitSep(?string $What=NULL):
-	static {
-
-		$this->UnitSep = $What ?? ', ';
-		return $this;
-	}
-
-	public function
-	SetLabelCase(?int $How=0):
-	static {
-
-		if($How === NULL)
-		$this->LabelCase = 0;
-
-		else
-		$this->LabelCase = ($How <=> 0);
+		$this->Start = new DateTime($Start);
 
 		return $this;
 	}
 
 	public function
-	SetLabelSep(?string $What=NULL):
+	SetStop(mixed $Stop):
 	static {
 
-		$this->LabelSep = $What ?? '';
-		return $this;
-	}
+		if(is_int($Stop))
+		$Stop = "@{$Stop}";
 
-	public function
-	SetLabelSet(?int $Which=NULL):
-	static {
-
-		if(!$Which)
-		$Which = static::LabelSetFull;
-
-		if(array_key_exists($Which, static::LabelSets))
-		$this->LabelSet = $Which;
+		$this->Stop = new DateTime($Stop);
 
 		return $this;
 	}
 
 	public function
-	SetZeroing(bool $Should):
+	SetSkipZero(bool $Skip):
 	static {
 
-		$this->Zero = $Should;
-		return $this;
-	}
+		$this->SkipZero = $Skip;
 
-	public function
-	SetLeaping(bool $Should):
-	static {
-
-		$this->Leap = $Should;
-		return $this;
-	}
-
-	public function
-	SetPrecision(int $Prec=0):
-	static {
-
-		$this->Precision = $Prec;
 		return $this;
 	}
 
@@ -181,169 +117,54 @@ leaping is enabled then the math will use a fractional days-per-year.
 	////////////////////////////////////////////////////////////////
 
 	public function
-	Calc():
-	array {
+	Set(mixed $Start, mixed $Stop):
+	static {
 
-		$SecPerMin = 60;
-		$MinPerHr = 60;
-		$HrPerDay = 24;
-		$DayPerYr = $this->Leap ? 365.25 : 365;
+		$this->SetStart($Start);
+		$this->SetStop($Stop);
 
-		$Diff = NULL;
-		$Seconds = NULL;
-		$Minutes = NULL;
-		$Hours = NULL;
-		$Days = NULL;
-		$Years = NULL;
-		$Dir = 1;
-
-		////////
-
-
-		$Diff = abs($this->Stop - $this->Start);
-
-		if($this->Stop < $this->Start)
-		$Dir = -1;
-
-		if($this->Zero) {
-			if($Dir === 1 && $Diff < 0)
-			$Diff = 0;
-
-			elseif($Dir === -1 && $Diff > 0)
-			$Diff = 0;
-		}
-
-		////////
-
-		$Seconds = (
-			(int)($Diff) % $SecPerMin
-		);
-
-		$Minutes = (
-			(int)($Diff / $SecPerMin) % $MinPerHr
-		);
-
-		$Hours = (
-			(int)($Diff / ($MinPerHr * $SecPerMin)) % $HrPerDay
-		);
-
-		$Days = (
-			(int)($Diff / ($HrPerDay * $MinPerHr * $SecPerMin)) % $DayPerYr
-		);
-
-		$Years = (
-			(int)($Diff / ($HrPerDay * $MinPerHr * $SecPerMin * $DayPerYr))
-		);
-
-		return [
-			'Dir'   => $Dir,
-			'Total' => $Diff,
-			'Y'     => $Years,
-			'D'     => $Days,
-			'H'     => $Hours,
-			'M'     => $Minutes,
-			'S'     => $Seconds
-		];
+		return $this;
 	}
 
 	public function
-	GetLabelSet():
-	array {
-
-		$LabelSet = static::LabelSets[$this->LabelSet];
-
-		if($this->LabelCase === 1) {
-			foreach($LabelSet as &$Label)
-			$Label = strtoupper($Label);
-		}
-
-		elseif($this->LabelCase === -1) {
-			foreach($LabelSet as &$Label)
-			$Label = strtolower($Label);
-		}
-
-		return $LabelSet;
-	}
-
-	public function
-	GetDiffString():
+	Get(array $Format=self::FormatNormal):
 	string {
 
-		$Calc = $this->Calc();
-		$LabelSet = $this->GetLabelSet();
+		$Diff = $this->Start->Diff($this->Stop);
 		$Key = NULL;
-		$Output = [];
-		$Precision = $this->Precision ?: count($Calc);
+		$Fmt = NULL;
+		$Dataset = [];
 
-		// run through the units.
+		foreach($Format as $Key => $Fmt) {
+			if(strlen($Key) === 1)
+			if(property_exists($Diff, $Key)) {
+				if($this->SkipZero && $Diff->{$Key} === 0)
+				continue;
 
-		foreach(['Y', 'D', 'H', 'M', 'S'] as $Key) {
-			if($Calc[$Key] === 0)
-			continue;
+				$Fmt = $this->ParseFormat($Fmt, $Key, $Diff->{$Key});
+			}
 
-			if($Precision-- <= 0)
-			continue;
-
-			$Output[] = "{$Calc[$Key]}{$this->LabelSep}{$LabelSet[$Key]}";
+			$Dataset[] = $Diff->Format($Fmt);
 		}
 
-		// compile the final string.
-
-		$String = (($Calc['Dir'] < 0) ? '+ ' : '- ');
-
-		if(count($Output))
-		$String .= join($this->UnitSep, $Output);
-		else
-		$String = "+ 0{$this->LabelSep}{$LabelSet['S']}";
-
-		return $String;
+		return trim(join(' ', $Dataset));
 	}
 
 	public function
-	GetSuffixedString(string $Ago='Ago', string $Until='Until'):
+	ParseFormat(string $Fmt, string $Key, int $Val):
 	string {
 
-		$Calc = $this->Calc();
-		$LabelSet = $this->GetLabelSet();
-		$Key = NULL;
-		$Output = [];
-		$Precision = $this->Precision ?: count($Calc);
+		$RegSingPlur = '#\[(.+?)\|(.+?)\]#';
 
-		// run throught the units.
-
-		foreach(['Y', 'D', 'H', 'M', 'S'] as $Key) {
-			if($Calc[$Key] === 0)
-			continue;
-
-			if($Precision-- <= 0)
-			continue;
-
-			$Output[] = "{$Calc[$Key]}{$this->LabelSep}{$LabelSet[$Key]}";
+		if(preg_match($RegSingPlur, $Fmt)) {
+			if($Val === 1)
+			$Fmt = preg_replace($RegSingPlur, '$1', $Fmt);
+			else
+			$Fmt = preg_replace($RegSingPlur, '$2', $Fmt);
 		}
 
-		// compile the final string.
-
-		$String = join($this->UnitSep, $Output);
-
-		if($String)
-		$String .= (($Calc['Dir'] > 0) ? " {$Ago}" : " {$Until}");
-		else
-		$String = 'Now';
-
-		return $String;
-	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
-	static public function
-	CalcSuffixedString(mixed $Start=NULL, mixed $Stop=NULL, int $Precision=0):
-	string {
-
-		return (
-			(new static($Start, $Stop, $Precision))
-			->GetSuffixedString()
-		);
+		return $Fmt;
 	}
 
 }
+
