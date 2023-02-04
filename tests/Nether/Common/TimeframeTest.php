@@ -4,7 +4,7 @@ namespace Nether\Common;
 
 use PHPUnit\Framework\TestCase;
 
-class DatafilterTest
+class TimeframeTest
 extends TestCase {
 
 	/** @test */
