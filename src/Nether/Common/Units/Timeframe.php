@@ -70,6 +70,9 @@ implements Stringable {
 	protected string
 	$Join = ' ';
 
+	protected ?int
+	$Precision = NULL;
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -86,16 +89,19 @@ implements Stringable {
 	}
 
 	public function
-	__Invoke(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL):
+	__Invoke(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL):
 	string {
 
-		($this)
-		->SetStart($Start)
-		->SetStop($Stop);
+		if($Start || $Stop) {
+			($this)
+			->SetStart($Start)
+			->SetStop($Stop);
+		}
 
 		return $this->Get(
 			Format: $Format,
-			Join: $Join
+			Join: $Join,
+			Precision: $Precision
 		);
 	}
 
@@ -166,6 +172,15 @@ implements Stringable {
 		return $this;
 	}
 
+	public function
+	SetPrecision(?int $Prec=NULL):
+	static {
+
+		$this->Precision = $Prec;
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -181,11 +196,12 @@ implements Stringable {
 	}
 
 	public function
-	Get(?array $Format=NULL, ?string $Join=NULL):
+	Get(?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL):
 	string {
 
 		$Format ??= $this->Format;
 		$Join ??= $this->Join;
+		$Precision ??= $this->Precision;
 
 		$Diff = $this->Start->Diff($this->Stop);
 		$Key = NULL;
@@ -204,12 +220,13 @@ implements Stringable {
 			$Dataset[] = $Diff->Format($Fmt);
 		}
 
-
-
 		$Dataset = array_filter(
 			$Dataset,
 			fn(string $Data)=> !!trim($Data)
 		);
+
+		if($Precision !== NULL)
+		$Dataset = array_slice($Dataset, 0, $Precision);
 
 		return trim(join($Join, $Dataset));
 	}

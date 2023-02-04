@@ -169,6 +169,21 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestPrecision():
+	void {
+
+		$Time = new Units\Timeframe(Stop: '+1 year 1 month 1 day 1 hour 1 min 1 sec');
+
+		$this->AssertEquals('1yr 1mo 1d 1hr 1min 1sec', $Time->Get());
+		$this->AssertEquals('1yr 1mo', $Time->SetPrecision(2)->Get());
+		$this->AssertEquals('1yr 1mo 1d', $Time->Get(Precision: 3));
+		$this->AssertEquals('1yr 1mo 1d 1hr', $Time(Precision: 4) );
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
