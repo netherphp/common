@@ -13,7 +13,7 @@ extends TestCase {
 	void {
 
 		$FormatSets = [
-			'FormatNormal' => [
+			'FormatDefault' => [
 				''       => [ 1234, 1234 ],
 				'1sec'   => [ 1234, 1235 ],
 				'1min'   => [ 0, Values::SecPerMin ],
@@ -45,7 +45,7 @@ extends TestCase {
 	void {
 
 		$FormatSets = [
-			'FormatNormal' => [
+			'FormatDefault' => [
 				'0yr 0mo 0d 0hr 0min 0sec'
 				=> [ 1234, 1234 ],
 
@@ -98,6 +98,67 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestInvokeStyle():
+	void {
+
+		$Time = new Units\Timeframe;
+
+		$this->AssertEquals('5sec', $Time(5, 10));
+		$this->AssertEquals('1min 1sec', $Time(0, 61));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestJoin():
+	void {
+
+		$Time = new Units\Timeframe(0, 61);
+
+		$this->AssertEquals('1min 1sec', $Time->SetJoin(' ')->Get());
+		$this->AssertEquals('1min, 1sec', $Time->SetJoin(', ')->Get());
+		$this->AssertEquals('1min-1sec', $Time->SetJoin('-')->Get());
+
+		$this->AssertEquals('1min 1sec', $Time->Get(Join: ' '));
+		$this->AssertEquals('1min, 1sec', $Time->Get(Join: ', '));
+		$this->AssertEquals('1min-1sec', $Time->Get(Join: '-'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestStringable():
+	void {
+
+		$Time = new Units\Timeframe(0, 61);
+
+		$this->AssertEquals('1min 1sec', (string)$Time);
+		$this->AssertEquals('1hr', "{$Time->Span(0, 3600)}");
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestCurrentOffsets():
+	void {
+
+		$Time = new Units\Timeframe;
+
+		$this->AssertEquals('', $Time());
+		$this->AssertEquals('- 4d 23hr 59min 59sec', $Time(Start: '+5 days'));
+		$this->AssertEquals('5d', $Time(Stop: '+5 days'));
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	protected function
 	RunFormattedTests(Units\Timeframe $Time, array $FormatSets):
 	void {
@@ -109,7 +170,7 @@ extends TestCase {
 
 		foreach($FormatSets as $Format => $Sets)
 		foreach($Sets as $Expected => $Set) {
-			$Time->Set($Set[0], $Set[1]);
+			$Time->Span($Set[0], $Set[1]);
 
 			$this->AssertEquals(
 				$Expected,

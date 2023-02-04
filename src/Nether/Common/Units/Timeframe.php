@@ -3,8 +3,10 @@
 namespace Nether\Common\Units;
 
 use DateTime;
+use Stringable;
 
-class Timeframe {
+class Timeframe
+implements Stringable {
 
 	const
 	FormatLong = [
@@ -18,7 +20,7 @@ class Timeframe {
 	];
 
 	const
-	FormatNormal = [
+	FormatDefault = [
 		'sign' => '%r',
 		'y' => '%yyr',
 		'm' => '%mmo',
@@ -62,6 +64,12 @@ class Timeframe {
 	protected bool
 	$SkipZero = TRUE;
 
+	protected array
+	$Format = self::FormatDefault;
+
+	protected string
+	$Join = ' ';
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -71,35 +79,62 @@ class Timeframe {
 		$Now = time();
 
 		($this)
-		->SetStart($Start ?? "@{$Now}")
-		->SetStop($Stop ?? "@{$Now}");
+		->SetStart($Start)
+		->SetStop($Stop);
 
 		return;
+	}
+
+	public function
+	__Invoke(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL):
+	string {
+
+		($this)
+		->SetStart($Start)
+		->SetStop($Stop);
+
+		return $this->Get(
+			Format: $Format,
+			Join: $Join
+		);
+	}
+
+	public function
+	__ToString():
+	string {
+
+		return $this->Get();
 	}
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
 	public function
-	SetStart(mixed $Start):
+	SetStart(mixed $When):
 	static {
 
-		if(is_int($Start))
-		$Start = "@{$Start}";
+		$When = match(TRUE) {
+			(is_int($When))=> "@{$When}",
+			($When === NULL)=> 'now',
+			default=> $When
+		};
 
-		$this->Start = new DateTime($Start);
+		$this->Start = new DateTime($When);
 
 		return $this;
 	}
 
 	public function
-	SetStop(mixed $Stop):
+	SetStop(mixed $When):
 	static {
 
-		if(is_int($Stop))
-		$Stop = "@{$Stop}";
+		$When = match(TRUE) {
+			(is_int($When))=> "@{$When}",
+			($When === NULL)=> 'now',
+			default=> $When
+		};
 
-		$this->Stop = new DateTime($Stop);
+		$this->Stop = new DateTime($When);
 
 		return $this;
 	}
@@ -113,11 +148,29 @@ class Timeframe {
 		return $this;
 	}
 
+	public function
+	SetFormat(?array $Format=NULL):
+	static {
+
+		$this->Format = $Format ?? static::FormatDefault;
+
+		return $this;
+	}
+
+	public function
+	SetJoin(?string $Join=NULL):
+	static {
+
+		$this->Join = $Join ?? ' ';
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
 	public function
-	Set(mixed $Start, mixed $Stop):
+	Span(mixed $Start, mixed $Stop):
 	static {
 
 		($this)
@@ -128,8 +181,11 @@ class Timeframe {
 	}
 
 	public function
-	Get(array $Format=self::FormatNormal):
+	Get(?array $Format=NULL, ?string $Join=NULL):
 	string {
+
+		$Format ??= $this->Format;
+		$Join ??= $this->Join;
 
 		$Diff = $this->Start->Diff($this->Stop);
 		$Key = NULL;
@@ -148,7 +204,14 @@ class Timeframe {
 			$Dataset[] = $Diff->Format($Fmt);
 		}
 
-		return trim(join(' ', $Dataset));
+
+
+		$Dataset = array_filter(
+			$Dataset,
+			fn(string $Data)=> !!trim($Data)
+		);
+
+		return trim(join($Join, $Dataset));
 	}
 
 	public function
