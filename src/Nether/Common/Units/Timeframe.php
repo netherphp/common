@@ -120,8 +120,9 @@ class Timeframe {
 	Set(mixed $Start, mixed $Stop):
 	static {
 
-		$this->SetStart($Start);
-		$this->SetStop($Stop);
+		($this)
+		->SetStart($Start)
+		->SetStop($Stop);
 
 		return $this;
 	}
