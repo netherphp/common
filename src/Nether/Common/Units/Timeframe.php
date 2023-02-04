@@ -119,6 +119,42 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Get(?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL):
+	string {
+
+		$Format ??= $this->Format;
+		$Join ??= $this->Join;
+		$Precision ??= $this->Precision;
+
+		$Diff = $this->Start->Diff($this->Stop);
+		$Key = NULL;
+		$Fmt = NULL;
+		$Dataset = [];
+
+		foreach($Format as $Key => $Fmt) {
+			if(strlen($Key) === 1)
+			if(property_exists($Diff, $Key)) {
+				if($this->SkipZero && $Diff->{$Key} === 0)
+				continue;
+
+				$Fmt = $this->ParseFormat($Fmt, $Key, $Diff->{$Key});
+			}
+
+			$Dataset[] = $Diff->Format($Fmt);
+		}
+
+		$Dataset = array_filter(
+			$Dataset,
+			fn(string $Data)=> !!trim($Data)
+		);
+
+		if($Precision !== NULL)
+		$Dataset = array_slice($Dataset, 0, $Precision);
+
+		return trim(join($Join, $Dataset));
+	}
+
+	public function
 	SetStart(mixed $When):
 	static {
 
@@ -184,9 +220,6 @@ implements Stringable {
 		return $this;
 	}
 
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
 	public function
 	Span(mixed $Start, mixed $Stop):
 	static {
@@ -198,43 +231,10 @@ implements Stringable {
 		return $this;
 	}
 
-	public function
-	Get(?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL):
-	string {
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
-		$Format ??= $this->Format;
-		$Join ??= $this->Join;
-		$Precision ??= $this->Precision;
-
-		$Diff = $this->Start->Diff($this->Stop);
-		$Key = NULL;
-		$Fmt = NULL;
-		$Dataset = [];
-
-		foreach($Format as $Key => $Fmt) {
-			if(strlen($Key) === 1)
-			if(property_exists($Diff, $Key)) {
-				if($this->SkipZero && $Diff->{$Key} === 0)
-				continue;
-
-				$Fmt = $this->ParseFormat($Fmt, $Key, $Diff->{$Key});
-			}
-
-			$Dataset[] = $Diff->Format($Fmt);
-		}
-
-		$Dataset = array_filter(
-			$Dataset,
-			fn(string $Data)=> !!trim($Data)
-		);
-
-		if($Precision !== NULL)
-		$Dataset = array_slice($Dataset, 0, $Precision);
-
-		return trim(join($Join, $Dataset));
-	}
-
-	public function
+	protected function
 	ParseFormat(string $Fmt, string $Key, int $Val):
 	string {
 
