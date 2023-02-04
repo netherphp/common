@@ -77,13 +77,16 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(mixed $Start=NULL, mixed $Stop=NULL) {
+	__Construct(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL) {
 
 		$Now = time();
 
 		($this)
 		->SetStart($Start)
-		->SetStop($Stop);
+		->SetStop($Stop)
+		->SetFormat($Format)
+		->SetJoin($Join)
+		->SetPrecision($Precision);
 
 		return;
 	}
