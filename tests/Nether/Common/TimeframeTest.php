@@ -131,6 +131,19 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestFormat():
+	void {
+
+		$Time = new Units\Timeframe(0, 61);
+
+		$this->AssertEquals('1m 1s', $Time->SetFormat($Time::FormatShort)->Get());
+		$this->AssertEquals('1 minute 1 second', $Time->SetFormat($Time::FormatLong)->Get());
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestStringable():
 	void {
 
