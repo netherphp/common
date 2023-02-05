@@ -7,6 +7,52 @@ use Stringable;
 
 class Timeframe
 implements Stringable {
+/*//
+@date 2023-02-03
+Provides means of getting how long it has been between two points in time with
+some built in formatting, and handling of how specific you really want to be.
+
+## Typical Usage:
+
+Providing a Start time without a Stop time assumes it should compare against
+right now. Same as if provided a Stop time without an end time. The start and
+stop times can be any format that PHP's strtotime/DateInterval can consume.
+
+	$Time = strtotime('+ 1 day 3 hour 5min 42sec');
+
+	$Since = new Timeframe($Time);
+	echo $Since->Get(); // 1d 3hr 5min 42sec
+
+	$Since = new Timeframe(Stop: $Time);
+	echo $Since->Get(); // - 1d 3hr 5min 42sec
+
+Formatting can be changed instancewide or for a single invocation. Using the
+setters will update the instance, using invocation args will only apply to that
+one call.
+
+	echo $Since->SetFormat($Since::FormatLong)->Get();
+	echo $Since->Get(Format: $Since::FormatLong);
+	// 1 day 3 hours 5 minutes 42 seconds
+
+	echo $Since->SetJoin(', )->Get();
+	echo $Since->Get(Join: ', ');
+	// 1 day, 3 hours, 5 minutes, 42 seconds
+
+Printing via Invokable will print using all the current instance settings and
+can take the same arguments as the main Get() method with the addition of a
+Start and Stop argument. Providing either a Start or Stop will trigger the same
+rules as when providing either a Start or Stop to the constructor.
+
+	echo $Since(1, 2); // 1 second
+	echo $Since(Stop: '+1 second'); // 1 second
+	echo $Since(Start: '+1 second'); // -1 second
+	echo $Since(Format: $Since::FormatShort); // - 1s
+
+Printing via Stringable will print using all the current instance settings.
+
+	echo $Since; // -1 second
+
+//*/
 
 	const
 	FormatLong = [
