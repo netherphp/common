@@ -79,6 +79,15 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Get(?string $Format=NULL):
+	string {
+
+		$Format = $Format ?? $this->DateFormat;
+
+		return $this->DateTime->Format($Format);
+	}
+
+	public function
 	GetDateFormat():
 	string {
 

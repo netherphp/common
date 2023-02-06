@@ -196,6 +196,32 @@ class Datafilters {
 	}
 
 	static public function
+	EncodedText(mixed $Item):
+	string {
+	/*//
+	@date 2020-06-01
+	//*/
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return htmlspecialchars(trim($Item));
+	}
+
+	static public function
+	StrippedText(mixed $Item):
+	string {
+	/*//
+	@date 2020-06-01
+	//*/
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return strip_tags(trim($Item));
+	}
+
+	static public function
 	Email(mixed $Item):
 	string {
 	/*//
@@ -260,6 +286,10 @@ class Datafilters {
 	static public function
 	PathableKeySingle(mixed $Input):
 	string {
+	/*//
+	same as PathableKey except it doesn't allow directory separators so its
+	only cool with single "slot" keys.
+	//*/
 
 		if($Input instanceof DatafilterItem)
 		$Input = $Input->Value;
@@ -291,6 +321,31 @@ class Datafilters {
 			'#[\-]{2,}#', '',
 			$Output
 		);
+
+		return $Output;
+	}
+
+	static public function
+	PascalFromKey(mixed $Input):
+	string {
+	/*//
+	generate a pascal formatted thing from a key formatted thing.
+	//*/
+
+		if($Input instanceof DatafilterItem)
+		$Input = $Input->Value;
+
+		// drop all the unsavoury stuff and the case.
+
+		$Output = strtolower(preg_replace('/[^a-zA-Z0-9-]/', '', $Input));
+
+		// replace dashes with spaces and allow ucwords to recase it.
+
+		$Output = ucwords(str_replace('-', ' ', $Output));
+
+		// then drop the spaces. pascal case.
+
+		$Output = str_replace(' ', '', $Output);
 
 		return $Output;
 	}
