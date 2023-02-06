@@ -953,7 +953,7 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 			$Output[key($Result)] = current($Result);
 		}
 
-		return new Datastore($Output);
+		return new static($Output);
 	}
 
 	public function
