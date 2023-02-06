@@ -163,7 +163,7 @@ extends TestCase {
 		$Time = new Units\Timeframe;
 
 		$this->AssertEquals('', $Time());
-		$this->AssertEquals('- 4d 23hr 59min 59sec', $Time(Start: '+5 days'));
+		$this->AssertEquals('- 5d', $Time(Start: '+5 days'));
 		$this->AssertEquals('5d', $Time(Stop: '+5 days'));
 
 		return;
@@ -206,7 +206,8 @@ extends TestCase {
 					'%s::%s',
 					Units\Timeframe::class,
 					$Format
-				)))
+				))),
+				json_encode($Set)
 			);
 		}
 
