@@ -11,6 +11,8 @@ implements Stringable {
 @date 2023-02-03
 Provides means of getting how long it has been between two points in time with
 some built in formatting, and handling of how specific you really want to be.
+Note we primarily work with unix time integers, so if you start passing strings
+in you will need to begin to take responsiblity for formats and timezones.
 
 ## Typical Usage:
 
