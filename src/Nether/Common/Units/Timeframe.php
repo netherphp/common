@@ -204,11 +204,7 @@ Printing via Stringable will print using all the current instance settings.
 	SetStart(mixed $When):
 	static {
 
-		$When = match(TRUE) {
-			(is_int($When))=> "@{$When}",
-			($When === NULL)=> 'now',
-			default=> $When
-		};
+		$When = $this->HandleTimeInput($When);
 
 		$this->Start = new DateTime($When);
 
@@ -219,11 +215,7 @@ Printing via Stringable will print using all the current instance settings.
 	SetStop(mixed $When):
 	static {
 
-		$When = match(TRUE) {
-			(is_int($When))=> "@{$When}",
-			($When === NULL)=> 'now',
-			default=> $When
-		};
+		$When = $this->HandleTimeInput($When);
 
 		$this->Stop = new DateTime($When);
 
@@ -279,6 +271,22 @@ Printing via Stringable will print using all the current instance settings.
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
+
+	protected function
+	HandleTimeInput(mixed $When):
+	mixed {
+
+		return match(TRUE) {
+			(is_int($When))
+			=> sprintf('@%d', $When),
+
+			($When === NULL)
+			=> sprintf('@%d', time()),
+
+			default
+			=> $When
+		};
+	}
 
 	protected function
 	ParseFormat(string $Fmt, string $Key, int $Val):
