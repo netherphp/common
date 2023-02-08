@@ -33,46 +33,98 @@ class MethodInfo {
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(ReflectionMethod $Method) {
+	__Construct(ReflectionMethod $RefMethod) {
 	/*//
 	@date 2022-08-10
 	//*/
 
-		$Type = $Method->GetReturnType();
-		$StrType = 'mixed';
-		$Attrib = NULL;
-		$AttribName = NULL;
-		$Inst = NULL;
+		$this->DigestBasic($RefMethod);
+		$this->DigestArgs($RefMethod);
+		$this->DigestAttribs($RefMethod);
 
-		// get some various info.
+		return;
+	}
 
-		if($Type instanceof ReflectionNamedType) {
-			$StrType = $Type->GetName();
-		}
+	protected function
+	DigestBasic(ReflectionMethod $RefMethod):
+	void {
 
-		$this->Class = $Method->GetDeclaringClass()->GetName();
-		$this->Name = $Method->GetName();
-		$this->Type = $StrType;
-		$this->Static = $Method->IsStatic();
+		$RefType = $RefMethod->GetReturnType();
+
+		$this->Class = $RefMethod->GetDeclaringClass()->GetName();
+		$this->Name = $RefMethod->GetName();
+		$this->Static = $RefMethod->IsStatic();
+
+		$this->Type = match(TRUE) {
+			$RefType instanceof ReflectionNamedType
+			=> $RefType->GetName(),
+
+			default
+			=> 'mixed'
+		};
+
 		$this->Access = match(TRUE) {
-			($Method->IsProtected())
+			($RefMethod->IsProtected())
 			=> 'protected',
 
-			($Method->IsPrivate())
+			($RefMethod->IsPrivate())
 			=> 'private',
 
 			default
 			=> 'public'
 		};
 
-		foreach($Method->GetAttributes() as $Attrib) {
+		return;
+	}
+
+	protected function
+	DigestArgs(ReflectionMethod $RefMethod):
+	void {
+
+		$RefParam = NULL;
+		$RefParamType = NULL;
+		$RefParamName = NULL;
+		$RefParamTypeStr = NULL;
+
+		// check what args this method expects.
+
+		foreach($RefMethod->GetParameters() as $RefParam) {
+			$RefParamName = $RefParam->GetName();
+			$RefParamType = $RefParam->GetType();
+
+			if($RefParamType instanceof ReflectionNamedType) {
+				if($RefParamType->IsBuiltIn())
+				$RefParamTypeStr = $RefParamType->GetName();
+				else
+				$RefParamTypeStr = 'mixed';
+			}
+
+			else {
+				$RefParamTypeStr = 'mixed';
+			}
+
+			$this->Args[$RefParamName] = $RefParamTypeStr;
+		}
+
+		return;
+	}
+
+	protected function
+	DigestAttribs(ReflectionMethod $RefMethod):
+	void {
+
+		$Attrib = NULL;
+		$AttribName = NULL;
+		$Inst = NULL;
+
+		foreach($RefMethod->GetAttributes() as $Attrib) {
 			$AttribName = $Attrib->GetName();
 			$Inst = $Attrib->NewInstance();
 
 			////////
 
 			if($Inst instanceof MethodInfoInterface)
-			$Inst->OnMethodInfo($this, $Method, $Attrib);
+			$Inst->OnMethodInfo($this, $RefMethod, $Attrib);
 
 			////////
 
@@ -107,7 +159,6 @@ class MethodInfo {
 
 		return NULL;
 	}
-
 
 	public function
 	GetAttributes(?string $Type=NULL):
