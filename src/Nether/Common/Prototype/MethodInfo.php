@@ -18,7 +18,7 @@ class MethodInfo {
 	$Type;
 
 	public array
-	$Args;
+	$Args = [];
 
 	public string
 	$Access;
