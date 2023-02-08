@@ -17,14 +17,14 @@ class MethodInfo {
 	public string
 	$Type;
 
-	public array
-	$Args = [];
-
 	public string
 	$Access;
 
 	public bool
 	$Static;
+
+	public array
+	$Args = [];
 
 	public array
 	$Attributes = [];
