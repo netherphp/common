@@ -2,6 +2,11 @@
 
 namespace Nether\Common\Filesystem;
 
+use Exception;
+use SplFileInfo;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+
 class Util {
 
 	static public function
@@ -46,6 +51,42 @@ class Util {
 		$Input = str_replace('/', '\\', $Input);
 
 		return $Input;
+	}
+
+	static public function
+	RmDir(string $Path):
+	void {
+
+		if(!is_dir($Path))
+		throw new Exception("{$Path} is not a directory.");
+
+		////////
+
+		$Scan = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($Path, (
+				0
+				| RecursiveDirectoryIterator::SKIP_DOTS
+				| RecursiveDirectoryIterator::CURRENT_AS_FILEINFO
+			))
+		);
+
+		$Info = NULL;
+
+		foreach($Scan as $Info) {
+			/** @var SplFileInfo $Info */
+
+			if($Info->IsDir()) {
+				static::RmDir($Info->GetPathname());
+				rmdir($Info->GetPathname());
+				continue;
+			}
+
+			unlink($Info->GetPathname());
+		}
+
+		rmdir($Path);
+
+		return;
 	}
 
 }

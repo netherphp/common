@@ -13,4 +13,11 @@ class UUID {
 		return Ramsey\Uuid\Uuid::UUID4()->ToString();
 	}
 
+	static public function
+	V7():
+	string {
+
+		return Ramsey\Uuid\Uuid::UUID7()->ToString();
+	}
+
 }
