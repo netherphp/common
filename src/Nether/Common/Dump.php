@@ -23,7 +23,7 @@ class Dump {
 
 		$Output = preg_replace_callback(
 			'/^[\s\h]+/ms',
-			fn($Found)=> str_repeat(chr(9), (strlen($Found[0]) / 2)),
+			fn($Found)=> str_repeat(chr(9), (int)(strlen($Found[0]) / 2)),
 			$Output
 		);
 
