@@ -1,6 +1,6 @@
 <?php
 
-namespace NetherTestSuite\Common\Datafilter;
+namespace Nether\Common;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -74,7 +74,7 @@ extends TestCase {
 		$this->AssertIsFloat($Filter->Two);
 		$this->AssertTrue($Filter->Two === 2.0);
 
-		$this->AssertNull($Filter->Zero);
+		$this->AssertTrue($Filter->Zero);
 
 		ob_start();
 		var_dump($Filter);
@@ -209,6 +209,208 @@ extends TestCase {
 		$Filter->SetCacheOutput(FALSE);
 		$this->AssertEquals(1, $Filter->One);
 		$this->AssertFalse($Filter->CacheHas('One'));
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	/** @test */
+	public function
+	TestFiltersNumeric():
+	void {
+
+		$Data = new Datafilter([
+			'Zero' => '0',
+			'One' =>  '1',
+			'Two' =>  '2'
+		], Cache: FALSE);
+
+		$this->AssertIsString($Data->Zero);
+		$this->AssertIsString($Data->One);
+		$this->AssertIsString($Data->Two);
+		$this->AssertNull($Data->Three);
+
+		////////
+
+		$Data
+		->Zero(Datafilters::TypeInt(...))
+		->One(Datafilters::TypeInt(...))
+		->Two(Datafilters::TypeInt(...))
+		->Three(Datafilters::TypeInt(...));
+
+
+		$this->AssertIsInt($Data->Zero);
+		$this->AssertIsInt($Data->One);
+		$this->AssertIsInt($Data->Two);
+		$this->AssertIsInt($Data->Three);
+		$this->AssertEquals(0, $Data->Three);
+
+		$Data
+		->Zero(Datafilters::TypeIntNullable(...))
+		->One(Datafilters::TypeIntNullable(...))
+		->Two(Datafilters::TypeIntNullable(...))
+		->Three(Datafilters::TypeIntNullable(...));
+
+		$this->AssertNull($Data->Zero);
+		$this->AssertIsInt($Data->One);
+		$this->AssertIsInt($Data->Two);
+		$this->AssertNull($Data->Three);
+
+		////////
+
+		$Data
+		->Zero(Datafilters::TypeFloat(...))
+		->One(Datafilters::TypeFloat(...))
+		->Two(Datafilters::TypeFloat(...))
+		->Three(Datafilters::TypeFloat(...));
+
+		$this->AssertIsFloat($Data->Zero);
+		$this->AssertIsFloat($Data->One);
+		$this->AssertIsFloat($Data->Two);
+		$this->AssertIsFloat($Data->Three);
+		$this->AssertEquals(0.0, $Data->Three);
+
+		$Data
+		->Zero(Datafilters::TypeFloatNullable(...))
+		->One(Datafilters::TypeFloatNullable(...))
+		->Two(Datafilters::TypeFloatNullable(...))
+		->Three(Datafilters::TypeFloatNullable(...));
+
+		$this->AssertNull($Data->Zero);
+		$this->AssertIsFloat($Data->One);
+		$this->AssertIsFloat($Data->Two);
+		$this->AssertNull($Data->Three);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersTrulean():
+	void {
+
+		$Dataset = [
+			'TrueC'     => TRUE,
+			'FalseC'    => FALSE,
+			'NullC'     => NULL,
+			'TrueOne1'  => '1',
+			'TrueOne2'  => 1,
+			'TrueT1'    => 'T',
+			'TrueT2'    => 't',
+			'TrueTRUE1' => 'TRUE',
+			'TrueTRUE2' => 'true',
+			'TrueY1'    => 'Y',
+			'TrueY2'    => 'y',
+			'TrueYes1'  => 'YES',
+			'TrueYes2'  => 'yes',
+			'FalseOne1'  => '0',
+			'FalseOne2'  => 0,
+			'FalseT1'    => 'f',
+			'FalseT2'    => 'f',
+			'FalseTRUE1' => 'FALSE',
+			'FalseTRUE2' => 'false',
+			'FalseY1'    => 'n',
+			'FalseY2'    => 'n',
+			'FalseYes1'  => 'NO',
+			'FalseYes2'  => 'no',
+			'NullNULL1'  => 'NULL',
+			'NullNULL2'  => 'null'
+
+		];
+
+		$Data = new Datafilter($Dataset, Cache: FALSE);
+		$Key = NULL;
+		$Val = NULL;
+
+		////////
+
+		foreach($Data as $Key => $Val)
+		$Data->SetFilter($Key, Datafilters::TypeBool(...));
+
+		foreach($Data as $Key => $Val) {
+			if(str_starts_with($Key, 'true'))
+			$this->AssertTrue($Val);
+
+			if(str_starts_with($Key, 'false'))
+			$this->AssertFalse($Val);
+
+			if(str_starts_with($Key, 'null'))
+			$this->AssertFalse($Val);
+		}
+
+		////////
+
+		foreach($Data as $Key => $Val)
+		$Data->SetFilter($Key, Datafilters::TypeBoolNullable(...));
+
+		foreach($Data as $Key => $Val) {
+			if(str_starts_with($Key, 'true'))
+			$this->AssertTrue($Val);
+
+			if(str_starts_with($Key, 'false'))
+			$this->AssertFalse($Val);
+
+			if(str_starts_with($Key, 'null'))
+			$this->AssertNull($Val);
+		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersStrings():
+	void {
+
+		$Data = new Datafilter([
+			'One1'   => 1,
+			'One2'   => 1.0,
+			'One3'   => 1.25,
+			'Zero1'  => 0,
+			'Zero2'  => 0.0,
+			'Zero3'  => '0.0',
+			'True1'  => TRUE,
+			'False1' => FALSE,
+			'Null1'  => NULL
+		], Cache: FALSE);
+
+		$Key = NULL;
+		$Val = NULL;
+
+		////////
+
+		foreach($Data as $Key => $Val)
+		$Data->SetFilter($Key, Datafilters::TypeString(...));
+
+		foreach($Data as $Key => $Val)
+		$this->AssertIsString($Val);
+
+		$this->AssertEquals('1', $Data->One1);
+		$this->AssertEquals('1', $Data->One2);
+		$this->AssertEquals('1.25', $Data->One3);
+		$this->AssertEquals('0', $Data->Zero1);
+		$this->AssertEquals('0', $Data->Zero2);
+		$this->AssertEquals('0.0', $Data->Zero3);
+		$this->AssertEquals('1', $Data->True1);
+		$this->AssertEquals('', $Data->False1);
+		$this->AssertEquals('', $Data->Null1);
+
+		////////
+
+		foreach($Data as $Key => $Val)
+		$Data->SetFilter($Key, Datafilters::TypeStringNullable(...));
+
+		$this->AssertEquals('1', $Data->One1);
+		$this->AssertEquals('1', $Data->One2);
+		$this->AssertEquals('1.25', $Data->One3);
+		$this->AssertNull($Data->Zero1);
+		$this->AssertNull($Data->Zero2);
+		$this->AssertEquals('0.0', $Data->Zero3);
+		$this->AssertEquals('1', $Data->True1);
+		$this->AssertNull($Data->False1);
+		$this->AssertNull($Data->Null1);
 
 		return;
 	}

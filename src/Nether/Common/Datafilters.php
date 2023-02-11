@@ -6,6 +6,16 @@ use Nether\Common\Struct\DatafilterItem;
 
 class Datafilters {
 
+	static public function
+	Prepare(mixed &$Item):
+	mixed {
+
+		if($Item instanceof DatafilterItem)
+		$Item = $Item->Value;
+
+		return $Item;
+	}
+
 	////////////////////////////////////////////////////////////////
 	// primative type filters //////////////////////////////////////
 
@@ -13,8 +23,7 @@ class Datafilters {
 	TypeInt(mixed $Item):
 	int {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return (int)$Item;
 	}
@@ -23,8 +32,7 @@ class Datafilters {
 	TypeIntNullable(mixed $Item):
 	?int {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		if(!$Item)
 		return NULL;
@@ -34,20 +42,18 @@ class Datafilters {
 
 	static public function
 	TypeFloat(mixed $Item):
-	int {
+	float {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return (float)$Item;
 	}
 
 	static public function
 	TypeFloatNullable(mixed $Item):
-	?int {
+	?float {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		if(!$Item)
 		return NULL;
@@ -59,10 +65,10 @@ class Datafilters {
 	TypeBool(mixed $Item):
 	bool {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
-		// scale back the number of things we need to test for.
+		if(is_bool($Item))
+		return $Item;
 
 		$Item = strtoupper(trim(
 			(string)($Item ?: '')
@@ -81,10 +87,12 @@ class Datafilters {
 	TypeBoolNullable(mixed $Item):
 	?bool {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
-		if(!$Item)
+		if(is_bool($Item))
+		return $Item;
+
+		if($Item === NULL)
 		return NULL;
 
 		$Item = strtoupper(trim(
@@ -95,6 +103,9 @@ class Datafilters {
 			'1', 'T', 'TRUE', 'Y', 'YES'
 			=> TRUE,
 
+			'NULL',
+			=> NULL,
+
 			default
 			=> FALSE
 		};
@@ -104,8 +115,7 @@ class Datafilters {
 	TypeString(mixed $Item):
 	string {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return (string)$Item;
 	}
@@ -114,10 +124,9 @@ class Datafilters {
 	TypeStringNullable(mixed $Item):
 	?string {
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
-		if(!$Item)
+		if($Item === NULL)
 		return NULL;
 
 		return (string)$Item ?: NULL;

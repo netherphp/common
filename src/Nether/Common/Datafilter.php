@@ -80,7 +80,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	OffsetGet(mixed $Key):
 	mixed {
 
-		return $this->{$Key};
+		return $this->Get($Key);
 	}
 
 	public function
@@ -139,7 +139,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 		// actually gets ran over.
 
 		return new ArrayIterator(array_map(
-			(fn(mixed $Key)=> $this->__Get($Key)),
+			(fn(mixed $Key)=> $this->Get($Key)),
 			array_combine(
 				array_keys($this->__Data),
 				array_keys($this->__Data)
@@ -192,13 +192,19 @@ implements ArrayAccess, Countable, IteratorAggregate {
 
 		////////
 
-		if(array_key_exists($Key, $this->__Data)) {
-			$Output = $this->__Data[$Key];
+		$Output = (
+			(array_key_exists($Key, $this->__Data))
+			? $Output = $this->__Data[$Key]
+			: NULL
+		);
+
+		//if(array_key_exists($Key, $this->__Data)) {
+		//	$Output = $this->__Data[$Key];
 
 			if(array_key_exists($Key, $this->__Filters))
 			if(is_callable($this->__Filters[$Key]))
 			$Output = ($this->__Filters[$Key])($Output, $Key, $this);
-		}
+		//}
 
 		if(isset($this->__Cache))
 		$this->__Cache[$Key] = $Output;
