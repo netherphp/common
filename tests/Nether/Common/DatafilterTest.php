@@ -485,7 +485,7 @@ extends TestCase {
 
 			$this->AssertEquals(
 				(strlen($Dataset[$Key]) - 2),
-				strlen($Val)
+				strlen($Val ?: '')
 			);
 
 			if($Key === 2)

@@ -195,10 +195,7 @@ class Datafilters {
 
 		static::Prepare($Item);
 
-		if(!$Item)
-		return NULL;
-
-		return trim($Item) ?: NULL;
+		return trim($Item ?: '') ?: NULL;
 	}
 
 	static public function
