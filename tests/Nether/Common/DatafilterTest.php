@@ -445,4 +445,56 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	FiltersTrimmedText():
+	void {
+
+		$Dataset = [
+			'This is text with end space.  ',
+			'  This is text with start space.',
+			'  '
+		];
+
+		$Data = new Datafilter($Dataset, Cache: FALSE);
+
+		$Key = NULL;
+		$Val = NULL;
+
+		////////
+
+		foreach($Data as $Key => $Val)
+		$Data->SetFilter($Key, Datafilters::TrimmedText(...));
+
+		foreach($Data as $Key => $Val) {
+			$this->AssertTrue(!str_starts_with($Val, ' '));
+			$this->AssertTrue(!str_ends_with($Val, ' '));
+
+			$this->AssertEquals(
+				(strlen($Dataset[$Key]) - 2),
+				strlen($Val)
+			);
+		}
+
+		foreach($Data as $Key => $Val)
+		$Data->SetFilter($Key, Datafilters::TrimmedTextNullable(...));
+
+		foreach($Data as $Key => $Val) {
+			$this->AssertTrue(!str_starts_with($Val, ' '));
+			$this->AssertTrue(!str_ends_with($Val, ' '));
+
+			$this->AssertEquals(
+				(strlen($Dataset[$Key]) - 2),
+				strlen($Val)
+			);
+
+			if($Key === 2)
+			$this->AssertNull($Val);
+			else
+			$this->AssertNotNull($Val);
+		}
+
+		return;
+	}
+
 }
