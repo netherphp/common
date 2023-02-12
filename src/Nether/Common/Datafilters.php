@@ -142,15 +142,15 @@ class Datafilters {
 	encode into base64 safe for urls omitting the trailing padding as it is
 	not needed tbh.
 	https://en.wikipedia.org/wiki/Base64#URL_applications
+	https://datatracker.ietf.org/doc/html/rfc4648#section-5
 	//*/
 
-		if($Val instanceof DatafilterItem)
-		$Val = $Val->Value;
+		static::Prepare($Val);
 
 		return str_replace(
-			['+','/'],
-			['-','_'],
-			rtrim(base64_encode($Val),'=')
+			['+', '/'],
+			['-', '_'],
+			rtrim(base64_encode($Val), '=')
 		);
 	}
 
@@ -162,8 +162,7 @@ class Datafilters {
 	https://en.wikipedia.org/wiki/Base64#URL_applications
 	//*/
 
-		if($Val instanceof DatafilterItem)
-		$Val = $Val->Value;
+		static::Prepare($Val);
 
 		return base64_decode(str_replace(
 			['-','_'],
@@ -180,8 +179,7 @@ class Datafilters {
 	trim whitespace from either end of the input.
 	//*/
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return trim((string)$Item ?: '');
 	}

@@ -415,4 +415,34 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestFiltersBase64():
+	void {
+
+		$StringOG = 'yee dudes this is an test';
+		$StringEnc = 'eWVlIGR1ZGVzIHRoaXMgaXMgYW4gdGVzdA==';
+		$StringGud = 'eWVlIGR1ZGVzIHRoaXMgaXMgYW4gdGVzdA';
+
+		$this->AssertEquals($StringEnc, base64_encode($StringOG));
+		$this->AssertEquals($StringGud, Datafilters::Base64Encode($StringOG));
+		$this->AssertEquals($StringOG, Datafilters::Base64Decode($StringEnc));
+		$this->AssertEquals($StringOG, Datafilters::Base64Decode($StringGud));
+
+		$StringOGB = sprintf(
+			'%s%s%s%s',
+			chr(0b11111100), chr(0), chr(0),
+			chr(0b11111000), chr(0), chr(0)
+		);
+		$StringEncB = '/AAA+A==';
+		$StringGudB = '_AAA-A';
+
+		$this->AssertEquals($StringEncB, base64_encode($StringOGB));
+		$this->AssertEquals($StringGudB, Datafilters::Base64Encode($StringOGB));
+		$this->AssertEquals($StringOGB, Datafilters::Base64Decode($StringEncB));
+		$this->AssertEquals($StringOGB, Datafilters::Base64Decode($StringGudB));
+
+		return;
+	}
+
 }
