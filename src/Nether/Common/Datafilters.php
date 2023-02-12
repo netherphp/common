@@ -193,8 +193,7 @@ class Datafilters {
 	is falsy.
 	//*/
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		if(!$Item)
 		return NULL;
@@ -209,8 +208,7 @@ class Datafilters {
 	@date 2020-06-01
 	//*/
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return htmlspecialchars(trim($Item));
 	}
@@ -222,27 +220,25 @@ class Datafilters {
 	@date 2020-06-01
 	//*/
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return strip_tags(trim($Item));
 	}
 
 	static public function
 	Email(mixed $Item):
-	string {
+	?string {
 	/*//
 	@date 2022-11-14
 	//*/
 
-		if($Item instanceof DatafilterItem)
-		$Item = $Item->Value;
+		static::Prepare($Item);
 
 		return strtolower(filter_var(
 			trim($Item),
 			FILTER_VALIDATE_EMAIL,
 			[ 'options' => [ 'default' => '' ]]
-		));
+		)) ?: NULL;
 	}
 
 	static public function
@@ -256,12 +252,7 @@ class Datafilters {
 	to prevent traversal foolery.
 	//*/
 
-		if($Input instanceof DatafilterItem)
-		$Input = $Input->Value;
-
-		////////
-
-		$Output = strtolower(trim($Input));
+		$Output = strtolower(trim(static::Prepare($Input)));
 
 		// allow things that could be nice clean file names.
 
@@ -273,17 +264,22 @@ class Datafilters {
 		// disallow traversal foolery.
 
 		$Output = preg_replace(
-			'#[\.]{2,}#', '',
+			'#[\.]{2,}#', '.',
 			$Output
 		);
 
 		$Output = preg_replace(
-			'#[\/]{2,}#', '/',
+			'#[\-]{2,}#', '-',
 			$Output
 		);
 
 		$Output = preg_replace(
-			'#[\-]{2,}#', '',
+			'#(?:\.*/-*)|(?:-*/-*)#', '/',
+			$Output
+		);
+
+		$Output = preg_replace(
+			'#(?:[/]{2,})#', '/',
 			$Output
 		);
 
@@ -291,43 +287,11 @@ class Datafilters {
 	}
 
 	static public function
-	PathableKeySingle(mixed $Input):
+	SlottableKey(mixed $Input):
 	string {
-	/*//
-	same as PathableKey except it doesn't allow directory separators so its
-	only cool with single "slot" keys.
-	//*/
 
-		if($Input instanceof DatafilterItem)
-		$Input = $Input->Value;
-
-		////////
-
-		$Output = strtolower(trim($Input));
-
-		// allow things that could be nice clean file names.
-
-		$Output = preg_replace(
-			'#[^a-zA-Z0-9\-\.]#', '',
-			str_replace(' ', '-', $Output)
-		);
-
-		// disallow traversal foolery.
-
-		$Output = preg_replace(
-			'#[\.]{2,}#', '',
-			$Output
-		);
-
-		$Output = preg_replace(
-			'#[\/]{2,}#', '/',
-			$Output
-		);
-
-		$Output = preg_replace(
-			'#[\-]{2,}#', '',
-			$Output
-		);
+		$Output = static::PathableKey($Input);
+		$Output = str_replace('/', '-', $Output);
 
 		return $Output;
 	}
@@ -339,20 +303,12 @@ class Datafilters {
 	generate a pascal formatted thing from a key formatted thing.
 	//*/
 
-		if($Input instanceof DatafilterItem)
-		$Input = $Input->Value;
+		static::Prepare($Input);
 
-		// drop all the unsavoury stuff and the case.
-
-		$Output = strtolower(preg_replace('/[^a-zA-Z0-9-]/', '', $Input));
-
-		// replace dashes with spaces and allow ucwords to recase it.
-
+		$Output = preg_replace('#([A-Z])#', ' \\1', $Input);
+		$Output = static::SlottableKey($Output);
 		$Output = ucwords(str_replace('-', ' ', $Output));
-
-		// then drop the spaces. pascal case.
-
-		$Output = str_replace(' ', '', $Output);
+		$Output = preg_replace('#[^A-Za-z0-9]#', '', $Output);
 
 		return $Output;
 	}

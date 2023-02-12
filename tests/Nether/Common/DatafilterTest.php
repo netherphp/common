@@ -447,7 +447,7 @@ extends TestCase {
 
 	/** @test */
 	public function
-	FiltersTrimmedText():
+	TestFiltersTrimmedText():
 	void {
 
 		$Dataset = [
@@ -493,6 +493,140 @@ extends TestCase {
 			else
 			$this->AssertNotNull($Val);
 		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersEncodedText():
+	void {
+
+		$StringOG = '<script type="module">jQuery(function(){});</script>';
+		$StringEnc = '&lt;script type=&quot;module&quot;&gt;jQuery(function(){});&lt;/script&gt;';
+
+		$this->AssertEquals(
+			$StringEnc,
+			Datafilters::EncodedText($StringOG)
+		);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersStrippedText():
+	void {
+
+		$StringOG = '<script type="module">jQuery(function(){});</script>';
+		$StringEnc = 'jQuery(function(){});';
+
+		$this->AssertEquals(
+			$StringEnc,
+			Datafilters::StrippedText($StringOG)
+		);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersEmail():
+	void {
+
+		$Dataset = [
+			'bmajdak@php.net' => TRUE,
+			'bob@localhost'   => FALSE, // grr.
+			'bob'             => FALSE,
+			'@php.net'        => FALSE,
+			'@localhost'      => FALSE,
+			'42'              => FALSE
+		];
+
+		$Email = NULL;
+		$Valid = NULL;
+
+		foreach($Dataset as $Email => $Valid) {
+			if($Valid)
+			$this->AssertEquals($Email, Datafilters::Email($Email));
+			else
+			$this->AssertNull(Datafilters::Email($Email));
+		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersPathableKey():
+	void {
+
+		$Dataset = [
+			'This Is An Test'       => 'this-is-an-test',
+			'this is an test'       => 'this-is-an-test',
+			'this is/an test'       => 'this-is/an-test',
+			'this  is / an  test'   => 'this-is/an-test',
+			'this-is-an-test.jpg'   => 'this-is-an-test.jpg',
+			'this-is-an-test..jpg'  => 'this-is-an-test.jpg',
+			'this/../../is-an-test' => 'this/is-an-test',
+			'this/../is-an-test'    => 'this/is-an-test',
+			'this/is//an///test.ok' => 'this/is/an/test.ok'
+		];
+
+		$Old = NULL;
+		$New = NULL;
+
+		foreach($Dataset as $Old => $New)
+		$this->AssertEquals($New, Datafilters::PathableKey($Old));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersSlottableKey():
+	void {
+
+		$Dataset = [
+			'This Is An Test'       => 'this-is-an-test',
+			'this is an test'       => 'this-is-an-test',
+			'this is/an test'       => 'this-is-an-test',
+			'this  is / an  test'   => 'this-is-an-test',
+			'this-is-an-test.jpg'   => 'this-is-an-test.jpg',
+			'this-is-an-test..jpg'  => 'this-is-an-test.jpg',
+			'this/../../is-an-test' => 'this-is-an-test',
+			'this/../is-an-test'    => 'this-is-an-test',
+			'this/is//an///test.ok' => 'this-is-an-test.ok'
+		];
+
+		$Old = NULL;
+		$New = NULL;
+
+		foreach($Dataset as $Old => $New)
+		$this->AssertEquals($New, Datafilters::SlottableKey($Old));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersPascalFromKey():
+	void {
+
+		$Dataset = [
+			'this-is-an-test'   => 'ThisIsAnTest',
+			'thisIsAnTest'      => 'ThisIsAnTest',
+			'ThisIsAnTest'      => 'ThisIsAnTest',
+			'This Is An Test'   => 'ThisIsAnTest',
+			'This Is. An Test.' => 'ThisIsAnTest'
+
+		];
+
+		$Old = NULL;
+		$New = NULL;
+
+		foreach($Dataset as $Old => $New)
+		$this->AssertEquals($New, Datafilters::PascalFromKey($Old));
 
 		return;
 	}
