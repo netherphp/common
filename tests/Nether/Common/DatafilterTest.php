@@ -20,6 +20,9 @@ extends TestCase {
 
 		// basic reading.
 
+		$this->AssertTrue($Filter->Exists('One'));
+		$this->AssertFalse($Filter->Exists('Three'));
+
 		$this->AssertIsInt($Filter->One);
 		$this->AssertIsInt($Filter->Two);
 		$this->AssertEquals(1, $Filter->One);
@@ -209,6 +212,24 @@ extends TestCase {
 		$Filter->SetCacheOutput(FALSE);
 		$this->AssertEquals(1, $Filter->One);
 		$this->AssertFalse($Filter->CacheHas('One'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestQueryString():
+	void {
+
+		$Data = new Datafilter([
+			'One'   => 1,
+			'Two'   => 2,
+			'Three' => 'Three'
+		]);
+
+		$Exp = 'one=1&two=2&three=Three';
+
+		$this->AssertEquals($Exp, $Data->GetQueryString());
 
 		return;
 	}
