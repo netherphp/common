@@ -413,16 +413,16 @@ extends PHPUnit\Framework\TestCase {
 
 		// test alternative input.
 
-		$Store->BlendLeft(new Datastore([ 'five' => 'cinco' ]));
+		$Store->BlendRight(new Datastore([ 'five' => 'cinco' ]));
 		$this->AssertTrue($Store['five'] === 'five');
 
-		$Store->BlendLeft(json_decode("{ \"five\": \"funf\" }"));
+		$Store->BlendRight(json_decode("{ \"five\": \"funf\" }"));
 		$this->AssertTrue($Store['five'] === 'five');
 
-		$Store->BlendLeft(new Datastore([ 'six' => 'six' ]));
+		$Store->BlendRight(new Datastore([ 'six' => 'six' ]));
 		$this->AssertTrue($Store['six'] === 'six');
 
-		$Store->BlendLeft(json_decode("{ \"six\": \"seis\" }"));
+		$Store->BlendRight(json_decode("{ \"six\": \"seis\" }"));
 		$this->AssertTrue($Store['six'] === 'six');
 
 		return;
