@@ -652,4 +652,71 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestFiltersArrayOf():
+	void {
+
+		$Array = Datafilters::ArrayOf(NULL);
+		$this->AssertTrue(is_array($Array));
+		$this->AssertEquals(0, count($Array));
+
+		$Array = Datafilters::ArrayOf('');
+		$this->AssertTrue(is_array($Array));
+		$this->AssertEquals(0, count($Array));
+
+		$Array = Datafilters::ArrayOf(0);
+		$this->AssertTrue(is_array($Array));
+		$this->AssertEquals(0, count($Array));
+
+		$Array = Datafilters::ArrayOf('42');
+		$this->AssertTrue(is_array($Array));
+		$this->AssertEquals(0, count($Array));
+
+		////////
+
+		$Array = Datafilters::ArrayOf(['42']);
+		$this->AssertTrue(is_array($Array));
+		$this->AssertEquals(1, count($Array));
+		$this->AssertIsString($Array[0]);
+
+		$Array = Datafilters::ArrayOf(['42'], Datafilters::TypeInt(...));
+		$this->AssertTrue(is_array($Array));
+		$this->AssertEquals(1, count($Array));
+		$this->AssertIsInt($Array[0]);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersUUID():
+	void {
+
+		$Dataset = [
+			42                                     => FALSE,
+			'fourty-two'                           => FALSE,
+			'1eb04d3f-4302-69d8-95a7-b39455551a19' => TRUE
+		];
+
+		$Dataset[UUID::V4()] = TRUE;
+		$Dataset[UUID::V7()] = TRUE;
+
+		$Input = NULL;
+		$Expect = NULL;
+
+		foreach($Dataset as $Input => $Expect) {
+			$UUID = Datafilters::UUID($Input);
+
+			if(!$Expect) {
+				$this->AssertNull($UUID);
+				continue;
+			}
+
+			$this->AssertEquals($Input, $UUID);
+		}
+
+		return;
+	}
+
 }

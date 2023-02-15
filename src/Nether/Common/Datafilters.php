@@ -239,6 +239,21 @@ class Datafilters {
 	}
 
 	static public function
+	UUID(mixed $Item):
+	?string {
+
+		static::Prepare($Item);
+
+		if(strlen($Item) !== 36)
+		return NULL;
+
+		if(preg_match('/[^a-fA-F0-9\-]/', $Item))
+		return NULL;
+
+		return $Item;
+	}
+
+	static public function
 	PathableKey(mixed $Input):
 	string {
 	/*//
