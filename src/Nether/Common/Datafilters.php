@@ -310,4 +310,23 @@ class Datafilters {
 		return $Output;
 	}
 
+	static public function
+	ArrayOf(mixed $Input, ?callable $Filter=NULL):
+	array {
+
+		$Output = static::Prepare($Input);
+
+		if(!is_array($Output))
+		$Output = [ ];
+
+		////////
+
+		if(is_callable($Filter))
+		$Output = array_map($Filter(...), $Output);
+
+		////////
+
+		return $Output;
+	}
+
 }

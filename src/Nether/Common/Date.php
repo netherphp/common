@@ -34,7 +34,7 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(mixed $Input) {
+	__Construct(mixed $Input='now') {
 
 		$this->DateTime = new DateTime($Input);
 
