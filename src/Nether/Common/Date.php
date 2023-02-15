@@ -126,6 +126,17 @@ implements
 		);
 	}
 
+	public function
+	SetTimezone(mixed $TZ):
+	static {
+
+		$this->DateTime->SetTimezone(
+			new DateTimeZone($TZ)
+		);
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
