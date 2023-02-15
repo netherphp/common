@@ -696,7 +696,8 @@ extends TestCase {
 		$Dataset = [
 			42                                     => FALSE,
 			'fourty-two'                           => FALSE,
-			'1eb04d3f-4302-69d8-95a7-b39455551a19' => TRUE
+			'1eb04d3f-4302-69d8-95a7-b39455551a19' => TRUE,
+			'1eb04d3f-4302-69d8-95a7-z39455551a19' => FALSE
 		];
 
 		$Dataset[UUID::V4()] = TRUE;
