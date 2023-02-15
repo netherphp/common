@@ -57,6 +57,10 @@ extends TestCase {
 		foreach($Dataset as $Format)
 		$this->AssertEquals(date($Format, $Time), $DateObj($Format));
 
+		$DateObj->SetDateFormat('Y.m.d');
+		$this->AssertEquals(date('Y-m-d', $Time), $DateObj('Y-m-d'));
+		$this->AssertEquals(date('Y.m.d', $Time), $DateObj());
+
 		return;
 	}
 
@@ -111,7 +115,7 @@ extends TestCase {
 
 		$DateObj = Date::FromDateString($When);
 		$DateObj->SetDateFormat('Y.m.d');
-		$DateObj->SetDateFormat('H.i.s');
+		$DateObj->SetTimeFormat('H.i.s');
 
 		$Data = json_decode(json_encode($DateObj), TRUE);
 

@@ -58,9 +58,9 @@ implements
 	?string {
 
 		if(count($Argv) === 1)
-		return $this->DateTime->Format($Argv[0]);
+		return $this->Get($Argv[0]);
 
-		return NULL;
+		return $this->Get();
 	}
 
 	public function
