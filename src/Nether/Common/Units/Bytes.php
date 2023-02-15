@@ -87,7 +87,7 @@ format. it can be used both one off or as like a printing/filter provider.
 	}
 
 	public function
-	SetLabelCase(?int $How=0):
+	SetLabelCase(?int $How=NULL):
 	static {
 
 		if($How === NULL)
