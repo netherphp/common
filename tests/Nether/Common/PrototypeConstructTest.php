@@ -448,19 +448,21 @@ extends PHPUnit\Framework\TestCase {
 	where wanted.
 	//*/
 
-		$Object = new class() extends Prototype {
+		$Obj = new class() extends Prototype {
 			public array $Input = [ 1, 2, 3];
 
 			#[PropertyFactory( 'NewMerged', 'Input' )]
-			public Datastore $Data;
+			public Datastore $Data1;
+
+			#[PropertyFactory( 'NewMerged', 'Input', [ 4, 5, 6 ] )]
+			public Datastore $Data2;
 		};
 
-		$this->AssertInstanceOf(
-			'Nether\\Common\\Datastore',
-			$Object->Data
-		);
+		$this->AssertInstanceOf('Nether\\Common\\Datastore', $Obj->Data1);
+		$this->AssertEquals(3, $Obj->Data1->Count());
 
-		$this->AssertEquals(3, $Object->Data->Count());
+		$this->AssertInstanceOf('Nether\\Common\\Datastore', $Obj->Data2);
+		$this->AssertEquals(6, $Obj->Data2->Count());
 
 		return;
 	}
