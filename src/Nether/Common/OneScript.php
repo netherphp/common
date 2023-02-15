@@ -61,7 +61,7 @@ class OneScript {
 	AddDir(string $Path):
 	static {
 
-		$Find = new Filesystem\RecursiveIterator($Path);
+		$Find = new Filesystem\Indexer($Path);
 		$Files = new Datastore;
 		$File = NULL;
 
