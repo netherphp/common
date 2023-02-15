@@ -38,6 +38,8 @@ format. it can be used both one off or as like a printing/filter provider.
 	__Construct(int $Bytes=0) {
 
 		$this->Set($Bytes);
+		$this->SetStyleIEC();
+
 		return;
 	}
 
@@ -49,11 +51,10 @@ format. it can be used both one off or as like a printing/filter provider.
 	}
 
 	public function
-	__Invoke(int $Bytes):
+	__Invoke():
 	?string {
 
-		$this->Set($Bytes);
-		return $this->__ToString();
+		return $this->Get();
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -102,7 +103,7 @@ format. it can be used both one off or as like a printing/filter provider.
 	SetLabelSep(?string $What=NULL):
 	static {
 
-		$this->LabelSep = $What ?? '';
+		$this->LabelSep = $What ?? ' ';
 		return $this;
 	}
 
