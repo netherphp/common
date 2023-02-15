@@ -236,7 +236,13 @@ extends PHPUnit\Framework\TestCase {
 		*/
 
 		$Store = new Datastore;
-		$Store->SetData([1,2,3,'one'=>'one','two'=>'two','three'=>'three']);
+
+		$Store->SetData([
+			1, 2, 3,
+			'one'=>'one',
+			'two'=>'two',
+			'three'=>'three'
+		]);
 
 		$Store->MergeRight([
 			4, 5, 6,
@@ -245,12 +251,16 @@ extends PHPUnit\Framework\TestCase {
 			'five'  => 'five'
 		]);
 
-		$Data = $Store->GetData();
+		// test various data points.
 
-		$this->AssertTrue($Data[0] === 1);
-		$this->AssertTrue($Data[3] === 4);
-		$this->AssertTrue($Data['three'] === 'tres');
-		$this->AssertTrue($Data['five'] === 'five');
+		$this->AssertTrue($Store[0] === 1);
+		$this->AssertTrue($Store[3] === 4);
+		$this->AssertTrue($Store['three'] === 'tres');
+		$this->AssertTrue($Store['five'] === 'five');
+
+		// test dataset edges.
+
+		$Data = $Store->GetData();
 
 		reset($Data);
 		$this->AssertTrue(key($Data) === 0);
@@ -260,11 +270,20 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue(key($Data) === 'five');
 		$this->AssertTrue(current($Data) === 'five');
 
-		$Data = array_values($Data);
+		// test various data points.
+
+		$Data = $Store->Values();
 		$this->AssertTrue($Data[5] === 'tres');
 		$this->AssertTrue($Data[6] === 4);
-
 		$this->AssertTrue(count($Data) === $Store->Count(FALSE));
+
+		// test alternate inputs.
+
+		$Store->MergeRight(new Datastore([ 'five' => 'cinco' ]));
+		$this->AssertTrue($Store['five'] === 'cinco');
+
+		$Store->MergeRight(json_decode("{ \"five\": \"funf\" }"));
+		$this->AssertTrue($Store['five'] === 'funf');
 
 		return;
 	}
@@ -323,6 +342,19 @@ extends PHPUnit\Framework\TestCase {
 
 		$this->AssertTrue(count($Data) === $Store->Count(FALSE));
 
+		// test alternate inputs.
+
+		$Data = $Store->Values();
+
+		$Store->MergeLeft(new Datastore([ 'five' => 'cinco' ]));
+		$this->AssertTrue($Store['five'] === 'cinco');
+
+		$Store->MergeLeft(json_decode("{ \"five\": \"funf\" }"));
+		$this->AssertTrue($Store['five'] === 'funf');
+
+		$this->AssertTrue($Data[4] === 'five');
+
+
 		return;
 	}
 
@@ -378,6 +410,20 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue($Data[6] === 4);
 
 		$this->AssertTrue(count($Data) === $Store->Count(FALSE));
+
+		// test alternative input.
+
+		$Store->BlendLeft(new Datastore([ 'five' => 'cinco' ]));
+		$this->AssertTrue($Store['five'] === 'five');
+
+		$Store->BlendLeft(json_decode("{ \"five\": \"funf\" }"));
+		$this->AssertTrue($Store['five'] === 'five');
+
+		$Store->BlendLeft(new Datastore([ 'six' => 'six' ]));
+		$this->AssertTrue($Store['six'] === 'six');
+
+		$Store->BlendLeft(json_decode("{ \"six\": \"seis\" }"));
+		$this->AssertTrue($Store['six'] === 'six');
 
 		return;
 	}
@@ -435,6 +481,20 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue($Data[10] === 'three');
 
 		$this->AssertTrue(count($Data) === $Store->Count(FALSE));
+
+		// test alternative input.
+
+		$Store->BlendLeft(new Datastore([ 'five' => 'cinco' ]));
+		$this->AssertTrue($Store['five'] === 'five');
+
+		$Store->BlendLeft(json_decode("{ \"five\": \"funf\" }"));
+		$this->AssertTrue($Store['five'] === 'five');
+
+		$Store->BlendLeft(new Datastore([ 'six' => 'six' ]));
+		$this->AssertTrue($Store['six'] === 'six');
+
+		$Store->BlendLeft(json_decode("{ \"six\": \"seis\" }"));
+		$this->AssertTrue($Store['six'] === 'six');
 
 		return;
 	}
@@ -1663,6 +1723,88 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue($Store->IsTrueEnough('TrueUndef'));
 		$this->AssertTrue($Store->IsFalseEnough('FalseUndef'));
 
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestSortByKeys():
+	void {
+
+		$Dataset = [
+			'One'   => 1,
+			'Two'   => 2,
+			'Three' => 3
+		];
+
+		$Store = new Datastore;
+
+		// ksort will do a normal sort by default.
+
+		$Store->SetData($Dataset);
+		$Store->SortKeys();
+		$Array = $Store->Values();
+		$this->AssertEquals(1, $Array[0]);
+		$this->AssertEquals(3, $Array[1]);
+		$this->AssertEquals(2, $Array[2]);
+
+		// test a passed in sort for reverse.
+
+		$Store->SetData($Dataset);
+		$Store->SortKeys(fn($A, $B)=> $B <=> $A);
+		$Array = $Store->Values();
+		$this->AssertEquals(2, $Array[0]);
+		$this->AssertEquals(3, $Array[1]);
+		$this->AssertEquals(1, $Array[2]);
+
+		// test a defined sorter.
+
+		$Store->SetData($Dataset);
+		$Store->SetSorter(fn($A, $B)=> $B <=> $A);
+		$Array = $Store->SortKeys()->Values();
+		$this->AssertEquals(2, $Array[0]);
+		$this->AssertEquals(3, $Array[1]);
+		$this->AssertEquals(1, $Array[2]);
+
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestDataRef():
+	void {
+
+		$Store = new Datastore([1, 2, 3]);
+
+		$Ref = &$Store->GetDataRef();
+		$Ref[1] = 9;
+
+		$this->AssertEquals(9, $Store[1]);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestNewMergeBlend():
+	void {
+
+		$Num = [ 'one'=> 1, 'two'=> 2 ];
+		$Rom = [ 'two'=> 'ii', 'three'=> 'iii' ];
+
+		$ExpectedMerge = [ 'one'=> 1, 'two'=> 'ii', 'three'=> 'iii' ];
+		$ExpectedBlend = [ 'one'=> 1, 'two'=> '2', 'three'=> 'iii' ];
+
+		$Merge = Datastore::NewMerged($Num, $Rom);
+		$Blend = Datastore::NewBlended($Num, $Rom);
+		$Key = 0;
+
+		foreach([ 'one', 'two', 'three' ] as $Key) {
+			$this->AssertEquals($ExpectedMerge[$Key], $Merge[$Key]);
+			$this->AssertEquals($ExpectedBlend[$Key], $Blend[$Key]);
+		}
 
 		return;
 	}
