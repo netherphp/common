@@ -13,6 +13,7 @@ use Nether\Common\Prototype\MethodInfo;
 use Nether\Common\Prototype\ConstructArgs;
 use Nether\Common\Meta\PropertyOrigin;
 use Nether\Common\Meta\PropertyObjectify;
+use Nether\Common\Meta\PropertyFactory;
 
 class LocalTest2
 extends Prototype {
@@ -64,6 +65,15 @@ extends Prototype {
 		$this->Args = $Args;
 		return;
 	}
+
+}
+
+class LocalTest5
+extends Prototype {
+
+	#[PropertyFactory]
+	public Datastore
+	$Datastore;
 
 }
 
@@ -425,6 +435,32 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue(property_exists($Test2, 'One'));
 		$this->AssertTrue(property_exists($Test2, 'Two'));
 		$this->AssertTrue(property_exists($Test2, 'Three'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestPropertyFactory():
+	void {
+	/*//
+	check that methods attributed with PropertyFactory create new instances
+	where wanted.
+	//*/
+
+		$Object = new class() extends Prototype {
+			public array $Input = [ 1, 2, 3];
+
+			#[PropertyFactory( 'NewMerged', 'Input' )]
+			public Datastore $Data;
+		};
+
+		$this->AssertInstanceOf(
+			'Nether\\Common\\Datastore',
+			$Object->Data
+		);
+
+		$this->AssertEquals(3, $Object->Data->Count());
 
 		return;
 	}

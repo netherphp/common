@@ -16,6 +16,9 @@ extends PropertyObjectify {
 	public string
 	$Callable;
 
+	public string
+	$Source;
+
 	public function
 	__Construct(string $Callable, string $Source, ...$Args) {
 
