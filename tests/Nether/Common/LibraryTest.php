@@ -11,6 +11,7 @@ extends Library {
 	OnLoad(...$Argv):
 	void {
 
+		parent::OnLoad(...$Argv);
 		static::Set('Loaded', TRUE);
 		static::Set('Prepared', FALSE);
 
@@ -21,6 +22,7 @@ extends Library {
 	OnPrepare(...$Argv):
 	void {
 
+		parent::OnPrepare(...$Argv);
 		static::Set('Prepared', TRUE);
 		static::Set('Neat', 'Neat');
 
@@ -31,6 +33,7 @@ extends Library {
 	OnReady(...$Argv):
 	void {
 
+		parent::OnReady(...$Argv);
 		static::Set('Ready', TRUE);
 
 		return;

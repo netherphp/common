@@ -16,10 +16,7 @@ class Library {
 	public function
 	__Construct(...$Argv) {
 
-		static::$Config = (
-			$Argv['Config']
-			?? new Nether\Common\Datastore
-		);
+		static::$Config = $Argv['Config'] ?? new Nether\Common\Datastore;
 
 		$this->OnLoad(...$Argv);
 
