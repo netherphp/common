@@ -3,6 +3,7 @@
 namespace Nether\Common;
 
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 class FilesystemUtilTest
 extends TestCase {
@@ -127,12 +128,23 @@ extends TestCase {
 	void {
 
 		$Dir = './here';
+		$Exceptional = FALSE;
 
 		Filesystem\Util::MkDir($Dir);
 		$this->AssertTrue(is_dir($Dir));
 
 		Filesystem\Util::RmDir($Dir);
 		$this->AssertFalse(is_dir($Dir));
+
+		try {
+			Filesystem\Util::RmDir('lkadjflkjaldfafdfa');
+		}
+
+		catch(Exception $Err) {
+			$Exceptional = TRUE;
+		}
+
+		$this->AssertTrue($Exceptional);
 
 		return;
 	}
