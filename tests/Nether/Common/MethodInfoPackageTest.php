@@ -78,6 +78,17 @@ extends Prototype {
 		return;
 	}
 
+	#[TestMethodAttribThereCanBeOnlyOne]
+	#[TestMethodAttribHousePartyProtocol]
+	#[TestMethodAttribHousePartyProtocol]
+	#[TestMethodAttribHousePartyProtocol]
+	public function
+	OtherMethod():
+	void {
+
+		return;
+	}
+
 }
 
 class TestClassMethod4
@@ -250,6 +261,12 @@ extends PHPUnit\Framework\TestCase {
 
 		foreach($Methods as $Info)
 		$this->AssertTrue($Info instanceof MethodInfo);
+
+		// check fetching multiuse attribs.
+
+		$Methods = TestClassMethod2::GetMethodsWithAttribute(TestMethodAttribHousePartyProtocol::class);
+
+		$this->AssertCount(2, $Methods);
 
 		return;
 	}
