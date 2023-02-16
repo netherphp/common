@@ -142,6 +142,7 @@ extends TestCase {
 
 		catch(Exception $Err) {
 			$Exceptional = TRUE;
+			$this->AssertInstanceOf(Error\DirNotFound::class, $Err);
 		}
 
 		$this->AssertTrue($Exceptional);

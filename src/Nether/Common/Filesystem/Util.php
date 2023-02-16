@@ -2,10 +2,10 @@
 
 namespace Nether\Common\Filesystem;
 
+use Nether\Common;
+
 use Exception;
 use SplFileInfo;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 
 class Util {
 
@@ -29,7 +29,7 @@ class Util {
 	void {
 
 		if(!is_dir($Path))
-		throw new Exception("{$Path} is not a directory.");
+		throw new Common\Error\DirNotFound($Path);
 
 		////////
 
