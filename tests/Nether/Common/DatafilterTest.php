@@ -63,22 +63,23 @@ extends TestCase {
 	TestFiltering():
 	void {
 
-		$Data = [ 'One'=> 1, 'Two'=> 2 ];
+		$Data = [ 'One'=> 1, 'Two'=> 2, 'Three'=> 3 ];
 		$Filter = new Datafilter($Data);
 
 		$Filter
 		->Zero(fn(DatafilterItem $Item): bool => TRUE)
 		->One(fn(DatafilterItem $Item): string => (string)$Item->Value)
 		->Two(fn(DatafilterItem $Item): float => (float)$Item->Value)
-		->One2(fn(DatafilterItem $Item): string => (string)$Item);
+		->Three(fn(DatafilterItem $Item): int => $Item());
 
 		$this->AssertIsString($Filter->One);
 		$this->AssertTrue($Filter->One === '1');
-		$this->AssertIsString($Filter->One2);
-		$this->AssertTrue($Filter->One2 === '1');
 
 		$this->AssertIsFloat($Filter->Two);
 		$this->AssertTrue($Filter->Two === 2.0);
+
+		$this->AssertIsInt($Filter->Three);
+		$this->AssertTrue($Filter->Three === 3);
 
 		$this->AssertTrue($Filter->Zero);
 
