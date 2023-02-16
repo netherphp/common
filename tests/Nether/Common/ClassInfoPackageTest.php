@@ -171,6 +171,16 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertIsArray($Class->GetAttribute($A3));
 		$this->AssertCount(3, $Class->GetAttribute($A3));
 
+		$this->AssertIsArray($Class->GetAttributes($A1));
+		$this->AssertCount(1, $Class->GetAttributes($A1));
+		$this->AssertIsArray($Class->GetAttributes($A3));
+		$this->AssertCount(3, $Class->GetAttributes($A3));
+		$this->AssertIsArray($Class->GetAttributes('ThisDoesNotExist'));
+		$this->AssertCount(0, $Class->GetAttributes('ThisDoesNotExist'));
+
+		$this->AssertIsArray($Class->GetAttributes());
+		$this->AssertCount(2, $Class->GetAttributes());
+
 		foreach($Class->GetAttribute($A3) as $Attrib)
 		$this->AssertInstanceOf($A3, $Attrib);
 
