@@ -133,8 +133,9 @@ class PasswordTester {
 		////////
 
 		$Output = sprintf(
-			'Must contain at least %d characters with %s.',
+			'Must contain at least %d characters%s%s.',
 			$this->MinLength,
+			(count($Types) ? ' with ' : ''),
 			$TypeStr
 		);
 
