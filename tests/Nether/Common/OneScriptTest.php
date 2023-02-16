@@ -3,6 +3,7 @@
 namespace Nether\Common;
 
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 class OneScriptTest
 extends TestCase {
@@ -128,6 +129,27 @@ extends TestCase {
 		$Filedata = file_get_contents('./styles.css');
 		$this->AssertEquals($Filedata, $Outdata);
 		unlink('./styles.css');
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestCrappyFilename():
+	void {
+
+		$Exceptional = FALSE;
+
+		try {
+			// onescript demands file extensions.
+			$OneScript = new OneScript('.', 'derp');
+		}
+
+		catch(Exception $Error) {
+			$Exceptional = TRUE;
+		}
+
+		$this->AssertTrue($Exceptional);
 
 		return;
 	}
