@@ -45,11 +45,11 @@ extends TestCase {
 		$this->AssertEquals($Filedata1, $Scripts->GetOutput());
 		$this->AssertEquals($Filedata1, $Filedata2);
 
-		$this->AssertTrue(str_contains($Filedata1, 'testdata/css/one.css'));
-		$this->AssertTrue(str_contains($Filedata1, 'testdata/css/two.css'));
+		$this->AssertTrue(str_contains($Filedata1, 'one.css'));
+		$this->AssertTrue(str_contains($Filedata1, 'two.css'));
 
-		$this->AssertFalse(str_contains($Filedata1, 'testdata/css/one.txt'));
-		$this->AssertFalse(str_contains($Filedata1, 'testdata/css/two.txt'));
+		$this->AssertFalse(str_contains($Filedata1, 'one.txt'));
+		$this->AssertFalse(str_contains($Filedata1, 'two.txt'));
 
 		return;
 	}
@@ -68,11 +68,11 @@ extends TestCase {
 
 		$this->AssertEquals($Filedata, $Scripts->GetOutput());
 
-		$this->AssertTrue(str_contains($Filedata, 'testdata/css/one.txt'));
-		$this->AssertTrue(str_contains($Filedata, 'testdata/css/two.txt'));
+		$this->AssertTrue(str_contains($Filedata, 'one.txt'));
+		$this->AssertTrue(str_contains($Filedata, 'two.txt'));
 
-		$this->AssertFalse(str_contains($Filedata, 'testdata/css/one.css'));
-		$this->AssertFalse(str_contains($Filedata, 'testdata/css/two.css'));
+		$this->AssertFalse(str_contains($Filedata, 'one.css'));
+		$this->AssertFalse(str_contains($Filedata, 'two.css'));
 
 		return;
 	}
