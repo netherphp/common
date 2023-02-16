@@ -116,6 +116,13 @@ class OneScript {
 	}
 
 	public function
+	GetOutput():
+	string {
+
+		return $this->Output;
+	}
+
+	public function
 	TransmitHeaders():
 	static {
 
