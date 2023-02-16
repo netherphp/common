@@ -15,18 +15,40 @@ extends TestCase {
 		$Scripts = new OneScript(dirname(__FILE__, 4), 'styles.css');
 		$Scripts->AddFile('testdata/css/one.css');
 		$Scripts->AddFile('testdata/css/two.css');
-		$Scripts->Render();
 
-		$Filedata = file_get_contents('./styles.css');
+		////////
+
+		$Scripts->Render();
+		$Filedata1 = file_get_contents('./styles.css');
+
+		$Scripts->Render();
+		$Filedata2 = file_get_contents('./styles.css');
+
+		////////
+
+		// the files should be exact including the timestamp as the second
+		// render should have bailed on its own having seen no updates.
+
+		$this->AssertEquals(
+			$Scripts->GetFileSize('styles.css'),
+			strlen($Filedata1)
+		);
+
+		$this->AssertEquals(
+			$Scripts->GetFileSize('styles.css'),
+			strlen($Filedata2)
+		);
+
 		unlink('./styles.css');
 
-		$this->AssertEquals($Filedata, $Scripts->GetOutput());
+		$this->AssertEquals($Filedata1, $Scripts->GetOutput());
+		$this->AssertEquals($Filedata1, $Filedata2);
 
-		$this->AssertTrue(str_contains($Filedata, 'testdata/css/one.css'));
-		$this->AssertTrue(str_contains($Filedata, 'testdata/css/two.css'));
+		$this->AssertTrue(str_contains($Filedata1, 'testdata/css/one.css'));
+		$this->AssertTrue(str_contains($Filedata1, 'testdata/css/two.css'));
 
-		$this->AssertFalse(str_contains($Filedata, 'testdata/css/one.txt'));
-		$this->AssertFalse(str_contains($Filedata, 'testdata/css/two.txt'));
+		$this->AssertFalse(str_contains($Filedata1, 'testdata/css/one.txt'));
+		$this->AssertFalse(str_contains($Filedata1, 'testdata/css/two.txt'));
 
 		return;
 	}
@@ -62,15 +84,16 @@ extends TestCase {
 		$Scripts = new OneScript(dirname(__FILE__, 4), 'styles.css');
 		$Scripts->AddFile('testdata/css/one.css');
 		$Scripts->AddFile('testdata/css/two.css');
-		$Scripts->Render();
 
 		ob_start();
 		$Scripts->Print();
 		$Outdata = ob_get_clean();
 
-		$Headers = new Datastore(headers_list());
-		$Headers->Remap(fn($Line)=> strtolower(explode(':', $Line)[0]));
-		$this->AssertFalse($Headers->HasValue('content-type'));
+		if(function_exists('xdebug_get_headers')) {
+			$Headers = new Datastore(xdebug_get_headers());
+			$Headers->Remap(fn($Line)=> strtolower(explode(':', $Line)[0]));
+			$this->AssertFalse($Headers->HasValue('content-type'));
+		}
 
 		$Filedata = file_get_contents('./styles.css');
 		$this->AssertEquals($Filedata, $Outdata);
