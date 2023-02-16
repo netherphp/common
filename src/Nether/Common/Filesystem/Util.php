@@ -47,7 +47,21 @@ class Util {
 	Repath(string $Input):
 	string {
 
-		if(PHP_OS_FAMILY === 'Windows')
+		return static::RepathFor(PHP_OS_FAMILY, $Input);
+	}
+
+	static public function
+	RepathFor(string $OS, string $Input):
+	string {
+
+		// windows does not allow forward slash in filenames. so any
+		// forward slashes can be assumed to be directory separators.
+
+		// linux does allow backslash in filenames. so converting any
+		// backslashes into forward slashes would not really be a promise
+		// of having a good path after.
+
+		if($OS === 'Windows')
 		$Input = str_replace('/', '\\', $Input);
 
 		return $Input;
@@ -62,14 +76,7 @@ class Util {
 
 		////////
 
-		$Scan = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($Path, (
-				0
-				| RecursiveDirectoryIterator::SKIP_DOTS
-				| RecursiveDirectoryIterator::CURRENT_AS_FILEINFO
-			))
-		);
-
+		$Scan = new Indexer($Path);
 		$Info = NULL;
 
 		foreach($Scan as $Info) {
@@ -77,7 +84,6 @@ class Util {
 
 			if($Info->IsDir()) {
 				static::RmDir($Info->GetPathname());
-				rmdir($Info->GetPathname());
 				continue;
 			}
 
