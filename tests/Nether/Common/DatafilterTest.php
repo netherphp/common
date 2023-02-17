@@ -724,4 +724,65 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestFiltersPageNumber():
+	void {
+
+		$Dataset = [
+			-42         => 1,
+			-1          => 1,
+			0           => 1,
+			1           => 1,
+			42          => 42,
+			'-300'      => 1,
+			'cheese'    => 1,
+			'false'     => 1,
+			'0'         => 1,
+			'1'         => 1,
+			'42'        => 42,
+			PHP_INT_MAX => PHP_INT_MAX
+		];
+
+		$Input = NULL;
+		$Expect = NULL;
+		$Result = NULL;
+
+		foreach($Dataset as $Input => $Expect)
+		$this->AssertEquals($Expect, Datafilters::PageNumber($Input));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFiltersTypeIntRange():
+	void {
+
+		$Dataset = [
+			-42         => -32,
+			-1          => -1,
+			0           => 0,
+			1           => 1,
+			42          => 32,
+			'-300'      => -32,
+			'cheese'    => 0,
+			'false'     => 0,
+			'0'         => 0,
+			'1'         => 1,
+			'42'        => 42,
+			'900d9'     => 32,
+			PHP_INT_MAX => 32
+		];
+
+		$Input = NULL;
+		$Expect = NULL;
+		$Result = NULL;
+
+		foreach($Dataset as $Input => $Expect)
+		$this->AssertEquals($Expect, Datafilters::TypeIntRange($Input, -32, 32, 42));
+
+		return;
+	}
+
 }

@@ -52,6 +52,17 @@ class Util {
 		return;
 	}
 
+	static public function
+	Chmod(string $Path, int $Mode):
+	void {
+
+		$UMask = umask(0);
+		chmod($Path, $Mode);
+		umask($UMask);
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

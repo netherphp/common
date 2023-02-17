@@ -41,6 +41,18 @@ class Datafilters {
 	}
 
 	static public function
+	TypeIntRange(mixed $Input, int $Min=PHP_INT_MIN, int $Max=PHP_INT_MAX, ?int $Or=NULL):
+	int {
+
+		$Input = static::TypeInt(static::Prepare($Input));
+
+		if($Or !== NULL && $Input === $Or)
+		return $Input;
+
+		return max($Min, min($Max, $Input));
+	}
+
+	static public function
 	TypeFloat(mixed $Item):
 	float {
 
@@ -130,6 +142,20 @@ class Datafilters {
 		return NULL;
 
 		return (string)$Item ?: NULL;
+	}
+
+	static public function
+	PageNumber(mixed $Item):
+	int {
+
+		$Item = static::TypeInt(static::Prepare(
+			$Item
+		));
+
+		if($Item <= 0)
+		return 1;
+
+		return $Item;
 	}
 
 	////////////////////////////////////////////////////////////////
