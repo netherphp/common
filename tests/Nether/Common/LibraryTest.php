@@ -14,6 +14,7 @@ extends Library {
 		parent::OnLoad(...$Argv);
 		static::Set('Loaded', TRUE);
 		static::Set('Prepared', FALSE);
+		static::Set('OKThen', NULL);
 
 		return;
 	}
@@ -99,6 +100,19 @@ extends TestCase {
 		$this->AssertNull($Lib::Get('Ready'));
 		$this->AssertNull($Lib::Get('Neat'));
 		$this->AssertTrue($Lib::Get('DataFromOtherThings'));
+
+		$this->AssertTrue($Lib::Has('Loaded'));
+		$this->AssertTrue($Lib::Has('Prepared'));
+
+		// test a null value set in the load.
+
+		$this->AssertFalse($Lib::Has('OKThen'));
+		$this->AssertTrue($Lib::Has('OKThen', TRUE));
+
+		// test a value never set because we never prepared the lib.
+
+		$this->AssertFalse($Lib::Has('Neat'));
+		$this->AssertFalse($Lib::Has('Neat'), TRUE);
 
 		return;
 	}

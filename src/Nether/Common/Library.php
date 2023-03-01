@@ -89,11 +89,20 @@ class Library {
 	Has(string $Key, bool $NullBeFine=FALSE):
 	bool {
 
+		// if the key does not exist then its a fail no matter what as we
+		// clearly cannot has it.
+
 		if(!static::$Config->HasKey($Key))
 		return FALSE;
 
+		// if the key is set to null that is a fail unless we are cool
+		// with having nulls around.
+
 		if(static::$Config[$Key] === NULL && !$NullBeFine)
 		return FALSE;
+
+		// else we have it, and its *something* so that is all we wanted
+		// to know.
 
 		return TRUE;
 	}
