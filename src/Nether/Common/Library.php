@@ -85,4 +85,17 @@ class Library {
 		return static::$Config[$Key] = $Val;
 	}
 
+	static public function
+	Has(string $Key, bool $NullBeFine=FALSE):
+	bool {
+
+		if(!static::$Config->HasKey($Key))
+		return FALSE;
+
+		if(static::$Config[$Key] === NULL && !$NullBeFine)
+		return FALSE;
+
+		return TRUE;
+	}
+
 }
