@@ -58,7 +58,27 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	__Call(string $Key, array $Argv):
 	static {
 
-		return $this->SetFilter($Key, ...$Argv);
+		// $Filter->Key([ ... ]);
+		if(isset($Argv[0]) && is_array($Argv[0])) {
+			foreach($Argv[0] as $Input) {
+
+				// $Filter->Key([ callable, ... ]);
+				if(is_callable($Input))
+				$this->AddFilter($Key, $Input);
+
+				// $Filter->Key([ [ callable, args ], ... ]);
+				if(is_array($Input))
+				$this->AddFilter($Key, array_shift($Input), ...$Input);
+
+			}
+
+			return $this;
+		}
+
+		// $Filter->Key(callable, ...args);
+		$this->AddFilter($Key, ...$Argv);
+
+		return $this;
 	}
 
 	public function
@@ -67,7 +87,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 
 		$Output = [
 			'Filters' => $this->__Filters,
-			'Data' => $this->__Data
+			'Data'    => $this->__Data
 		];
 
 		return $Output;
@@ -184,6 +204,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 
 		$Key = $this->PrepareKey($Key);
 		$Output = NULL;
+		$Func = NULL;
 
 		////////
 
@@ -198,13 +219,11 @@ implements ArrayAccess, Countable, IteratorAggregate {
 			: NULL
 		);
 
-		//if(array_key_exists($Key, $this->__Data)) {
-		//	$Output = $this->__Data[$Key];
-
-			if(array_key_exists($Key, $this->__Filters))
-			if(is_callable($this->__Filters[$Key]))
-			$Output = ($this->__Filters[$Key])($Output, $Key, $this);
-		//}
+		if(array_key_exists($Key, $this->__Filters))
+		foreach($this->__Filters[$Key] as $Func) {
+			if(is_callable($Func))
+			$Output = ($Func)($Output, $Key, $this);
+		}
 
 		if(isset($this->__Cache))
 		$this->__Cache[$Key] = $Output;
@@ -317,15 +336,42 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	}
 
 	public function
-	SetFilter(string $Key, callable|string $Func, ...$Argv):
+	SetFilter(string $Key, callable|string|array $Func, ...$Argv):
+	static {
+
+		$this->ResetFilters($Key);
+		$this->AddFilter($Key, $Func, ...$Argv);
+
+		return $this;
+	}
+
+	public function
+	AddFilter(string $Key, callable|string $Func, ...$Argv):
 	static {
 
 		$Key = $this->PrepareKey($Key);
 
 		if(!is_callable($Func))
-		throw new Exception('supplied filter is not callable.');
+		throw new Exception('supplied filter not callable.');
 
-		$this->__Filters[$Key] = new DatafilterCallable($Func, $Argv);
+		////////
+
+		if(!array_key_exists($Key, $this->__Filters))
+		$this->__Filters[$Key] = [];
+
+		$this->__Filters[$Key][] = new DatafilterCallable($Func, $Argv);
+
+		return $this;
+	}
+
+	public function
+	ResetFilters(string $Key):
+	static {
+
+		$Key = $this->PrepareKey($Key);
+
+		if(isset($this->__Filters[$Key]))
+		unset($this->__Filters[$Key]);
 
 		return $this;
 	}
