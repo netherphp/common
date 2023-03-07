@@ -238,6 +238,85 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestStackedFilters():
+	void {
+
+		$Dataset = [ 'Who'=> 'Geordi' ];
+		$Filters = new Datafilter($Dataset);
+
+		$Filters
+		->Who(fn(DatafilterItem $V)=> strtolower($V->Value))
+		->Who(fn(DatafilterItem $V)=> strrev($V->Value));
+
+		$this->AssertEquals('idroeg', $Filters->Who);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestStackedFilters2():
+	void {
+
+		$Dataset = [ 'Who'=> 'Geordi' ];
+		$Filters = new Datafilter($Dataset);
+
+		// handle giving it an array of callables.
+
+		$Filters
+		->Who([
+			fn(DatafilterItem $V)=> strtolower($V->Value),
+			fn(DatafilterItem $V)=> strrev($V->Value)
+		]);
+
+		$this->AssertEquals('idroeg', $Filters->Who);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestStackedFilters3():
+	void {
+
+		$Dataset = [ 'Who'=> 'Geordi' ];
+		$Filters = new Datafilter($Dataset);
+
+		// handle giving it an array of array descripters of callables with args.
+
+		$Filters
+		->Who([
+			[ fn(DatafilterItem $V, string $L)=> strtolower("{$L}: {$V->Value}"), 'Person' ],
+			[ fn(DatafilterItem $V)=> strrev($V->Value) ]
+		]);
+
+		$this->AssertEquals('idroeg :nosrep', $Filters->Who);
+
+		return;
+	}
+
+	public function
+	TestStackedFilters4():
+	void {
+
+		$Dataset = [ 'Who'=> 'Geordi' ];
+		$Filters = new Datafilter($Dataset);
+
+		// handle mix-matching the verbose inputs.
+
+		$Filters
+		->Who([
+			[ fn(DatafilterItem $V, string $L)=> strtolower("{$L}: {$V->Value}"), 'Person' ],
+			fn(DatafilterItem $V)=> strrev($V->Value)
+		]);
+
+		$this->AssertEquals('idroeg :nosrep', $Filters->Who);
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -351,8 +430,10 @@ extends TestCase {
 
 		////////
 
-		foreach($Data as $Key => $Val)
-		$Data->SetFilter($Key, Datafilters::TypeBool(...));
+		foreach($Data as $Key => $Val) {
+			$Data->ResetFilters($Key);
+			$Data->SetFilter($Key, Datafilters::TypeBool(...));
+		}
 
 		foreach($Data as $Key => $Val) {
 			if(str_starts_with($Key, 'true'))
@@ -367,8 +448,10 @@ extends TestCase {
 
 		////////
 
-		foreach($Data as $Key => $Val)
-		$Data->SetFilter($Key, Datafilters::TypeBoolNullable(...));
+		foreach($Data as $Key => $Val) {
+			$Data->ResetFilters($Key);
+			$Data->SetFilter($Key, Datafilters::TypeBoolNullable(...));
+		}
 
 		foreach($Data as $Key => $Val) {
 			if(str_starts_with($Key, 'true'))
