@@ -184,6 +184,38 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestEmptyString():
+	void {
+
+		$Time = new Units\Timeframe(Start: 0, Stop: 0);
+
+		$this->AssertEquals('', $Time->Get());
+		$this->AssertEquals('OK', $Time->Get(EmptyString: 'OK'));
+
+		$Time->SetEmptyString('YO');
+		$this->AssertEquals('YO', $Time->Get());
+		$this->AssertEquals('JO', $Time->Get(EmptyString: 'JO'));
+
+		////////
+
+		$Time = new Units\Timeframe(Start: 0, Stop: 0, EmptyString: 'KO');
+		$this->AssertEquals('KO', $Time->Get());
+		$this->AssertEquals('BO', $Time->Get(EmptyString: 'BO'));
+
+		$Time->SetEmptyDiff(60);
+		$this->AssertEquals('KO', $Time->Get());
+
+		$Time->SetStop(60);
+		$this->AssertEquals('KO', $Time->Get());
+
+		$Time->SetStop(61);
+		$this->AssertEquals('1min 1sec', $Time->Get());
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

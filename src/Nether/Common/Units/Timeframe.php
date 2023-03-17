@@ -2,6 +2,7 @@
 
 namespace Nether\Common\Units;
 
+use DateInterval;
 use DateTime;
 use Stringable;
 
@@ -121,11 +122,17 @@ Printing via Stringable will print using all the current instance settings.
 	protected ?int
 	$Precision = NULL;
 
+	protected ?string
+	$EmptyString = NULL;
+
+	public int
+	$EmptyDiff = 0;
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL) {
+	__Construct(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL, ?string $EmptyString=NULL, int $EmptyDiff=0) {
 
 		$Now = time();
 
@@ -134,14 +141,24 @@ Printing via Stringable will print using all the current instance settings.
 		->SetStop($Stop)
 		->SetFormat($Format)
 		->SetJoin($Join)
-		->SetPrecision($Precision);
+		->SetPrecision($Precision)
+		->SetEmptyString($EmptyString)
+		->SetEmptyDiff($EmptyDiff);
 
 		return;
 	}
 
 	public function
-	__Invoke(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL):
+	__Invoke(mixed $Start=NULL, mixed $Stop=NULL, ?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL, ?string $EmptyString=NULL, ?int $EmptyDiff=NULL):
 	string {
+
+		// @todo 2023-03-17
+		// consider pulling start and stop out of this invoke style call
+		// since they are not temporary overrides to the object like all
+		// the other args are. that or consider making them passable to
+		// the get method as temporary overrides as well. case for that
+		// being you have a single start date but want to roll against a
+		// series of various end dates.
 
 		if($Start || $Stop) {
 			($this)
@@ -152,7 +169,9 @@ Printing via Stringable will print using all the current instance settings.
 		return $this->Get(
 			Format: $Format,
 			Join: $Join,
-			Precision: $Precision
+			Precision: $Precision,
+			EmptyString: $EmptyString,
+			EmptyDiff: $EmptyDiff
 		);
 	}
 
@@ -167,12 +186,14 @@ Printing via Stringable will print using all the current instance settings.
 	////////////////////////////////////////////////////////////////
 
 	public function
-	Get(?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL):
+	Get(?array $Format=NULL, ?string $Join=NULL, ?int $Precision=NULL, ?string $EmptyString=NULL, ?int $EmptyDiff=NULL):
 	string {
 
 		$Format ??= $this->Format;
 		$Join ??= $this->Join;
 		$Precision ??= $this->Precision;
+		$EmptyString ??= $this->EmptyString;
+		$EmptyDiff ??= $this->EmptyDiff;
 
 		$Diff = $this->Start->Diff($this->Stop);
 		$Key = NULL;
@@ -198,6 +219,14 @@ Printing via Stringable will print using all the current instance settings.
 
 		if($Precision !== NULL)
 		$Dataset = array_slice($Dataset, 0, $Precision);
+
+		////////
+
+		if($EmptyString)
+		if($this->IntervalToSeconds($Diff) <= $EmptyDiff)
+		return $EmptyString;
+
+		////////
 
 		return trim(join($Join, $Dataset));
 	}
@@ -261,6 +290,22 @@ Printing via Stringable will print using all the current instance settings.
 	}
 
 	public function
+	SetEmptyDiff(int $Diff):
+	string {
+
+		$this->EmptyDiff = $Diff;
+		return $this;
+	}
+
+	public function
+	SetEmptyString(?string $Str=NULL):
+	static {
+
+		$this->EmptyString = $Str;
+		return $this;
+	}
+
+	public function
 	Span(mixed $Start, mixed $Stop):
 	static {
 
@@ -304,6 +349,16 @@ Printing via Stringable will print using all the current instance settings.
 		}
 
 		return $Fmt;
+	}
+
+	protected function
+	IntervalToSeconds(DateInterval $Diff):
+	int {
+
+		$DT = new DateTime('@0');
+		$DT->Add($Diff);
+
+		return (int)abs($DT->GetTimestamp());
 	}
 
 }
