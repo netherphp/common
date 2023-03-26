@@ -95,6 +95,10 @@ class MethodInfo {
 			if($RefParamType instanceof ReflectionNamedType) {
 				if($RefParamType->IsBuiltIn())
 				$RefParamTypeStr = $RefParamType->GetName();
+
+				elseif(class_exists($RefParamType->GetName()))
+				$RefParamTypeStr = $RefParamType->GetName();
+
 				else
 				$RefParamTypeStr = 'mixed';
 			}
@@ -178,6 +182,26 @@ class MethodInfo {
 		return [ $Output ];
 
 		return [ ];
+	}
+
+	public function
+	GetArgsOfType(string $ArgType):
+	array {
+
+		return array_keys(array_filter(
+			$this->Args,
+			(fn(string $Type)=> $Type === $ArgType)
+		));
+	}
+
+	public function
+	CountArgsOfType(string $ArgType):
+	int {
+
+		return count(array_filter(
+			$this->Args,
+			(fn(string $Type)=> $Type === $ArgType)
+		));
 	}
 
 }
