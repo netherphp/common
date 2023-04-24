@@ -118,12 +118,31 @@ implements
 	}
 
 	public function
-	GetUnixtime():
+	GetUnixtime(bool $Normalise=TRUE):
 	int {
+	/*//
+	@date 2023-04-17
+	get the unix timestamp. by default it will normalise the value to utc
+	before returning it, making this the primary method that should be used
+	when storing it in a database - the library config about the default
+	timezone should be used for display purposes only. as long as this method
+	is used to get the timestamp for storage it should more or less be magic.
+	//*/
 
-		return (int)$this->DateTime->Format(
-			Common\Values::DateFormatUnix
+		// if not asking to normalise then just return the asked format.
+
+		if(!$Normalise)
+		return (int)$this->DateTime->Format(Common\Values::DateFormatUnix);
+
+		// else convert the time to utc first then return it.
+
+		$Normal = new DateTime(
+			$this->DateTime->Format(DateTime::RFC822)
 		);
+
+		$Normal->SetTimezone(new DateTimeZone('UTC'));
+
+		return $Normal->Format(Common\Values::DateFormatUnix);
 	}
 
 	public function
@@ -167,7 +186,7 @@ implements
 	@date 2021-08-26
 	//*/
 
-		return new static("@{$Time}");
+		return new static("@{$Time} UTC");
 	}
 
 }

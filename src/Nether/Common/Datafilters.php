@@ -206,6 +206,7 @@ class Datafilters {
 	//*/
 
 		static::Prepare($Item);
+		return (string)$Item ?: '';
 
 		return trim((string)$Item ?: '');
 	}
@@ -258,7 +259,7 @@ class Datafilters {
 		static::Prepare($Item);
 
 		return strtolower(filter_var(
-			trim($Item),
+			trim($Item ?: ''),
 			FILTER_VALIDATE_EMAIL,
 			[ 'options' => [ 'default' => '' ]]
 		)) ?: NULL;

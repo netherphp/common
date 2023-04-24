@@ -929,7 +929,7 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	//*/
 
 		return new static(
-			array_map($FilterFunc,$this->Data)
+			array_map($FilterFunc, $this->Data)
 		);
 	}
 
@@ -1079,6 +1079,19 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	//*/
 
 		$this->Data = array_values($this->Data);
+		return $this;
+	}
+
+	public function
+	Reverse():
+	static {
+	/*//
+	@date 2023-04-20
+	quick flip of the ordering.
+	//*/
+
+		$this->Data = array_reverse($this->Data);
+
 		return $this;
 	}
 
