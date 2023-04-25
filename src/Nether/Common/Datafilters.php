@@ -206,7 +206,6 @@ class Datafilters {
 	//*/
 
 		static::Prepare($Item);
-		return (string)$Item ?: '';
 
 		return trim((string)$Item ?: '');
 	}
