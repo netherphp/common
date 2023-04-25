@@ -216,6 +216,18 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestTimeDiff():
+	void {
+
+		$Time = new Units\Timeframe(1, 10);
+
+		$this->AssertEquals(9, $Time->GetTimeDiff());
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
