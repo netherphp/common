@@ -129,20 +129,19 @@ implements
 	is used to get the timestamp for storage it should more or less be magic.
 	//*/
 
-		// if not asking to normalise then just return the asked format.
+		// it appears using the unix format flag alone is enough to have
+		// the php datetime adjust for the timezone automatically without
+		// the need to normalise the date. there are three unit tests
+		// making sure this remains the case with various use styles.
 
-		if(!$Normalise)
-		return (int)$this->DateTime->Format(Common\Values::DateFormatUnix);
-
-		// else convert the time to utc first then return it.
-
-		$Normal = new DateTime(
-			$this->DateTime->Format(DateTime::RFC822)
-		);
-
+		/*
+		$Normal = new DateTime($this->DateTime->Format(DateTime::RFC822));
 		$Normal->SetTimezone(new DateTimeZone('UTC'));
 
 		return $Normal->Format(Common\Values::DateFormatUnix);
+		*/
+
+		return $this->DateTime->Format(Common\Values::DateFormatUnix);
 	}
 
 	public function

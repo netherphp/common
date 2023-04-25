@@ -3,7 +3,9 @@
 namespace Nether\Common;
 
 use PHPUnit\Framework\TestCase;
+
 use DateTime;
+use DateTimeZone;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -151,4 +153,79 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestUnixtime1():
+	void {
+
+		$When = 'January 1 1970 00:00:00 +0000';
+		$Date = new Date($When);
+		$Before = -1;
+		$After = -2;
+
+		$Date->SetTimezone('UTC');
+		$Before = $Date->GetUnixtime();
+
+		$Date->SetTimezone('+0600');
+		$After = $Date->GetUnixtime();
+
+		$this->AssertEquals(0, $Before);
+		$this->AssertEquals(0, $After);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestUnixtime2():
+	void {
+
+		$When = 'January 1 1970 06:00:00 +0600';
+		$Date = new Date($When);
+		$Before = -1;
+		$After = -2;
+
+		$Date->SetTimezone('UTC');
+		$Before = $Date->GetUnixtime();
+
+		$Date->SetTimezone('+0600');
+		$After = $Date->GetUnixtime();
+
+		$this->AssertEquals(0, $Before);
+		$this->AssertEquals(0, $After);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestUnixtime3():
+	void {
+
+		Library::Set(Date::ConfDefaultTimezone, '+0600');
+
+		$When = 'January 1 1970 00:00:00';
+		$Date = new Date($When);
+
+		$DateBefore = '-1';
+		$TimeBefore = -1;
+		$DateAfter = '-1';
+		$TimeAfter = -2;
+
+		$DateBefore = $Date->Get(DateTime::RFC822);
+		$TimeBefore = $Date->GetUnixtime();
+
+		$Date->SetTimezone('UTC');
+		$DateAfter = $Date->Get(DateTime::RFC822);
+		$TimeAfter = $Date->GetUnixtime();
+
+		$this->AssertEquals('Thu, 01 Jan 70 06:00:00 +0600', $DateBefore);
+		$this->AssertEquals(0, $TimeBefore);
+		$this->AssertEquals('Thu, 01 Jan 70 00:00:00 +0000', $DateAfter);
+		$this->AssertEquals(0, $TimeAfter);
+
+		Library::Set(Date::ConfDefaultTimezone, NULL);
+
+		return;
+	}
 }
