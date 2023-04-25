@@ -232,6 +232,16 @@ Printing via Stringable will print using all the current instance settings.
 	}
 
 	public function
+	GetTimeDiff():
+	int {
+
+		$TimeStart = $this->Start->GetTimestamp();
+		$TimeStop = $this->Stop->GetTimestamp();
+
+		return ($TimeStop - $TimeStart);
+	}
+
+	public function
 	SetStart(mixed $When):
 	static {
 
