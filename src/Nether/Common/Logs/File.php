@@ -53,6 +53,15 @@ class File {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Flush():
+	static {
+
+		$this->MBuffer->Flush();
+
+		return $this;
+	}
+
+	public function
 	Write(string $Message, array $Context=[], Monolog\Level $Level=self::Info):
 	static {
 
