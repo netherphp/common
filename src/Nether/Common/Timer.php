@@ -30,10 +30,12 @@ class Timer {
 	}
 
 	public function
-	__Invoke(callable $Thing, ...$Argv):
+	__Invoke(?callable $Thing, ...$Argv):
 	float {
 
+		if(is_callable($Thing))
 		$this->Set($Thing);
+
 		$this->Run(...$Argv);
 
 		return $this->Time;
