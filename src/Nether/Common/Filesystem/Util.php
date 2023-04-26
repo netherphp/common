@@ -25,7 +25,7 @@ class Util {
 	}
 
 	static public function
-	MkTempFile(?string $Prefix='tmp', ?string $Path=NULL):
+	MkTempFile(?string $Prefix='nt', ?string $Path=NULL):
 	string {
 
 		$Path ??= sys_get_temp_dir();

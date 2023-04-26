@@ -182,18 +182,22 @@ extends TestCase {
 	TestTempFile():
 	void {
 
+		// discovery note:
+		// on windows, the prefix is truncated to max of 3 char.
+
 		$Filename = Filesystem\Util::MkTempFile();
 		$this->AssertTrue(file_exists($Filename));
-		$this->AssertTrue(str_contains($Filename, 'tmp-'));
+		$this->AssertTrue(str_contains($Filename, 'nt-'));
+
 
 		unlink($Filename);
 		$this->AssertFalse(file_exists($Filename));
 
 		////////
 
-		$Filename = Filesystem\Util::MkTempFile('geordi');
+		$Filename = Filesystem\Util::MkTempFile('gd');
 		$this->AssertTrue(file_exists($Filename));
-		$this->AssertTrue(str_contains($Filename, 'geordi-'));
+		$this->AssertTrue(str_contains($Filename, 'gd-'));
 
 		unlink($Filename);
 		$this->AssertFalse(file_exists($Filename));
