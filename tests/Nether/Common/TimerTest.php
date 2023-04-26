@@ -13,7 +13,19 @@ extends TestCase {
 	ThingToDo(float $Time=0.1):
 	void {
 
-		usleep($Time * 1000000);
+		if(PHP_OS_FAMILY === 'Windows') {
+			// on github actions windows i am seeing lots of instances
+			// where usleep is somehow returning *before* the time that
+			// was asked for.
+
+			// for these tests i do not care that the number is bliblical.
+			// only that there is a clear representation that the class
+			// is oBViOuSLy WoRKiNg.
+
+			$Time += 0.01;
+		}
+
+		usleep((int)($Time * 1000000));
 		return;
 	}
 

@@ -588,6 +588,11 @@ extends TestCase {
 		$Data->SetFilter($Key, Datafilters::TrimmedTextNullable(...));
 
 		foreach($Data as $Key => $Val) {
+			if(trim($Dataset[$Key]) === '') {
+				$this->AssertNull($Val);
+				continue;
+			}
+
 			$this->AssertTrue(!str_starts_with($Val, ' '));
 			$this->AssertTrue(!str_ends_with($Val, ' '));
 
