@@ -62,6 +62,13 @@ class TestClassMethod1 {
 		return;
 	}
 
+	public function
+	MethodWithArgs(int $One, int $Two, string $Three):
+	void {
+
+		return;
+	}
+
 }
 
 class TestClassMethod2
@@ -276,7 +283,8 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
-	TestMethodIndexFetchMethodAttribs() {
+	TestMethodIndexFetchMethodAttribs():
+	void {
 
 		$Methods = TestClassMethod1::FetchMethodIndex();
 		$AttribYep = $Methods['MethodWithAttrib'];
@@ -300,7 +308,8 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
-	TestMethodInfoInterface() {
+	TestMethodInfoInterface():
+	void {
 
 		$Methods = TestClassMethod1::FetchMethodIndex();
 		$Method = $Methods['MethodWithAttrib'];
@@ -318,7 +327,8 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
-	TestPropertyInfoAttributeManageMulti() {
+	TestPropertyInfoAttributeManageMulti():
+	void {
 
 		$Methods = TestClassMethod2::GetMethodIndex();
 		$Method = $Methods['Method'];
@@ -363,7 +373,8 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
-	TestMethodInfoAccess() {
+	TestMethodInfoAccess():
+	void {
 
 		$Methods = TestClassMethod4::GetMethodIndex();
 		$Method = NULL;
@@ -378,6 +389,28 @@ extends PHPUnit\Framework\TestCase {
 			if($Method->Name === 'PrivateMethod')
 			$this->AssertEquals('private', $Method->Access);
 		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestMethodArgThings():
+	void {
+
+		$Info = TestClassMethod1::GetMethodInfo('MethodWithArgs');
+
+		$this->AssertEquals(2, $Info->CountArgsOfType('int'));
+		$this->AssertEquals(1, $Info->CountArgsOfType('string'));
+
+		$Ints = $Info->GetArgsOfType('int');
+		$this->AssertCount(2, $Ints);
+		$this->AssertEquals('One', $Ints[0]);
+		$this->AssertEquals('Two', $Ints[1]);
+
+		$Strs = $Info->GetArgsOfType('string');
+		$this->AssertCount(1, $Strs);
+		$this->AssertEquals('Three', $Strs[0]);
 
 		return;
 	}
