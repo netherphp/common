@@ -1809,4 +1809,21 @@ extends PHPUnit\Framework\TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestReverse():
+	void {
+
+		$Data = new Datastore([ 1, 2, 3 ]);
+		$Key = NULL;
+		$Val = NULL;
+
+		$Data->Reverse();
+
+		foreach([ 3, 2, 1 ] as $Key => $Val)
+		$this->AssertEquals($Val, $Data[$Key]);
+
+		return;
+	}
+
 }
