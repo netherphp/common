@@ -4,6 +4,7 @@ namespace Nether\Common;
 
 use PHPUnit\Framework\TestCase;
 use Exception;
+use Throwable;
 
 class FilesystemUtilTest
 extends TestCase {
@@ -196,6 +197,38 @@ extends TestCase {
 
 		unlink($Filename);
 		$this->AssertFalse(file_exists($Filename));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestTempFileFail():
+	void {
+
+		$Exceptional = FALSE;
+		$Error = NULL;
+		$Filename = NULL;
+
+		////////
+
+		try {
+			$Filename = Filesystem\Util::MkTempFile(Path: '/zomgwtfbbq');
+		}
+
+		catch(Throwable $Error) {
+			$Exceptional = TRUE;
+
+			$this->AssertInstanceOf(
+				Error\DirUnwritable::class,
+				$Error
+			);
+		}
+
+		if($Filename && file_exists($Filename))
+		unlink($Filename);
+
+		$this->AssertTrue($Exceptional);
 
 		return;
 	}

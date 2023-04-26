@@ -25,22 +25,20 @@ class Util {
 	}
 
 	static public function
-	MkTempFile(string $Prefix='tmp'):
+	MkTempFile(?string $Prefix='tmp', ?string $Path=NULL):
 	string {
 
-		$Filename = tempnam(
-			sys_get_temp_dir(),
-			"{$Prefix}-"
-		);
+		$Path ??= sys_get_temp_dir();
 
-		////////
+		if(!is_writable($Path))
+		throw new Common\Error\DirUnwritable($Path);
 
-		if(!$Filename)
-		throw new Common\Error\DirUnwritable(
-			sys_get_temp_dir()
-		);
+		// was having a tough time coming up with a method that could
+		// purposely cause tempnam to fail since it auto falls back to
+		// system dir when you give it trash. so we bail if the path is
+		// failpath and keep fingers crossed that tempnam will be fine.
 
-		////////
+		$Filename = tempnam($Path, "{$Prefix}-");
 
 		return $Filename;
 	}
