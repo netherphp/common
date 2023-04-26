@@ -53,6 +53,13 @@ class File {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	GetFilename():
+	string {
+
+		return $this->Filename;
+	}
+
+	public function
 	Flush():
 	static {
 
