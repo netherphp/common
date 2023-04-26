@@ -72,5 +72,49 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestBasicHelperMethod():
+	void {
+
+
+		$Patchable = Meta\PropertyPatchable::FromClass(
+			PatchableTest1::class
+		);
+
+		$this->AssertCount(2, $Patchable);
+
+		////////
+
+		$Prop = NULL;
+		$Filters = NULL;
+		$Filter = NULL;
+		$Value = NULL;
+
+		foreach($Patchable as $Prop => $Filters) {
+
+			if($Prop === 'Name') {
+				$this->AssertCount(1, $Filters);
+				$Value = ' Bob ';
+
+				foreach($Filters as $Filter)
+				$Value = $Filter($Value);
+
+				$this->AssertEquals('Bob', $Value);
+			}
+
+			if($Prop === 'Food') {
+				$this->AssertCount(2, $Filters);
+				$Value = ' <b>Bob</b> ';
+
+				foreach($Filters as $Filter)
+				$Value = $Filter($Value);
+
+				$this->AssertEquals('Bob', $Value);
+			}
+		}
+
+		return;
+	}
 
 }
