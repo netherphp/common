@@ -4,6 +4,8 @@ namespace Nether\Common;
 
 use PHPUnit\Framework\TestCase;
 
+use Throwable;
+
 class TimerTest
 extends TestCase {
 
@@ -16,7 +18,7 @@ extends TestCase {
 	}
 
 	public function
-	OtherThingToDo(float $Time=0.2):
+	OtherThingToDo(float $Time=0.0):
 	void {
 
 		$this->ThingToDo($Time);
@@ -68,5 +70,30 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestYouFailed():
+	void {
+
+		$Timer = new Timer;
+		$Exceptional = FALSE;
+
+		try {
+			$Timer->Run(0);
+		}
+
+		catch(Throwable $Error) {
+			$Exceptional = TRUE;
+
+			$this->AssertInstanceOf(
+				Error\MissingCallableFunc::class,
+				$Error
+			);
+		}
+
+		$this->AssertTrue($Exceptional);
+
+		return;
+	}
 
 }
