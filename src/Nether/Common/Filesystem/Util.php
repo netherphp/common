@@ -25,6 +25,27 @@ class Util {
 	}
 
 	static public function
+	MkTempFile(string $Prefix='tmp'):
+	string {
+
+		$Filename = tempnam(
+			sys_get_temp_dir(),
+			"{$Prefix}-"
+		);
+
+		////////
+
+		if(!$Filename)
+		throw new Common\Error\DirUnwritable(
+			sys_get_temp_dir()
+		);
+
+		////////
+
+		return $Filename;
+	}
+
+	static public function
 	RmDir(string $Path):
 	void {
 

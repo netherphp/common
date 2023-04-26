@@ -176,4 +176,66 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestTempFile():
+	void {
+
+		$Filename = Filesystem\Util::MkTempFile();
+		$this->AssertTrue(file_exists($Filename));
+		$this->AssertTrue(str_contains($Filename, 'tmp-'));
+
+		unlink($Filename);
+		$this->AssertFalse(file_exists($Filename));
+
+		////////
+
+		$Filename = Filesystem\Util::MkTempFile('geordi');
+		$this->AssertTrue(file_exists($Filename));
+		$this->AssertTrue(str_contains($Filename, 'geordi-'));
+
+		unlink($Filename);
+		$this->AssertFalse(file_exists($Filename));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestChmod():
+	void {
+
+		if(PHP_OS_FAMILY !== 'Windows') {
+			$Filename = Filesystem\Util::MkTempFile();
+			$this->AssertTrue(is_readable($Filename));
+			$this->AssertTrue(is_writable($Filename));
+
+			Filesystem\Util::Chmod($Filename, 0o000);
+			$this->AssertFalse(is_readable($Filename));
+			$this->AssertFalse(is_writable($Filename));
+
+			Filesystem\Util::Chmod($Filename, 0o222);
+			$this->AssertFalse(is_readable($Filename));
+			$this->AssertTrue(is_writable($Filename));
+
+			Filesystem\Util::Chmod($Filename, 0o444);
+			$this->AssertTrue(is_readable($Filename));
+			$this->AssertFalse(is_writable($Filename));
+
+			Filesystem\Util::Chmod($Filename, 0o666);
+			$this->AssertTrue(is_readable($Filename));
+			$this->AssertTrue(is_writable($Filename));
+
+			unlink($Filename);
+		}
+
+		else {
+			// still have not mastered the crap to emulate
+			// this type of permission stuff on windows.
+			$this->AssertFalse(FALSE);
+		}
+
+		return;
+	}
+
 }
