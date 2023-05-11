@@ -14,11 +14,17 @@ class Util {
 	bool {
 
 		$Path = self::Repath($Path);
+		$Mode = 0777;
 
 		if(!file_exists($Path)) {
 			$UMask = umask(0);
-			mkdir($Path, 0777, TRUE);
+			mkdir($Path, $Mode, TRUE);
 			umask($UMask);
+		}
+
+		else {
+			static::Chmod($Path, $Mode);
+			// var_dump(decoct(fileperms($Path)));
 		}
 
 		return is_dir($Path);
