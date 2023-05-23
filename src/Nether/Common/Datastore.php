@@ -1500,4 +1500,21 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return (new static)->Read($Filename);
 	}
 
+	static public function
+	NewFromJSON(?string $JSON):
+	static {
+	/*//
+	@date 2023-05-10
+	//*/
+
+		$JSON ??= '[]';
+		$Data = json_decode($JSON, TRUE);
+		$Output = new static;
+
+		if(is_array($Data))
+		$Output->SetData($Data);
+
+		return $Output;
+	}
+
 }
