@@ -271,109 +271,42 @@ class Datafilters {
 	WebsiteURL($Val):
 	string {
 
-		static::Prepare($Val);
-
-		$Val = trim(strip_tags($Val));
-		if(!$Val) return '';
-
-		if(!preg_match('/^https?:\/\//',$Val))
-		return "http://{$Val}";
-
-		return $Val;
+		return Filters\Links::WebsiteURL($Val);
 	}
 
 	static public function
 	FacebookURL($Val):
 	string {
 
-		static::Prepare($Val);
-
-		$Val = trim(strip_tags($Val));
-		if(!$Val) return '';
-
-		if(strpos($Val,'/') === FALSE)
-		return sprintf(
-			'https://facebook.com/%s',
-			ltrim($Val,'@')
-		);
-
-		return static::WebsiteURL($Val);
+		return Filters\Links::FacebookURL($Val);
 	}
 
 	static public function
 	TwitterURL($Val):
 	string {
 
-		static::Prepare($Val);
-
-		$Val = trim(strip_tags($Val));
-		if(!$Val) return '';
-
-		if(strpos($Val,'/') === FALSE)
-		return sprintf(
-			'https://twitter.com/%s',
-			ltrim($Val,'@')
-		);
-
-		return static::WebsiteURL($Val);
+		return Filters\Links::TwitterURL($Val);
 	}
 
 	static public function
 	InstagramURL($Val):
 	string {
 
-		static::Prepare($Val);
-
-		$Val = trim(strip_tags($Val));
-		if(!$Val) return '';
-
-		if(strpos($Val,'/') === FALSE)
-		return sprintf(
-			'https://instagram.com/%s',
-			ltrim($Val,'@')
-		);
-
-		return static::WebsiteURL($Val);
+		return Filters\Links::InstagramURL($Val);
 	}
 
 	static public function
 	TikTokURL($Val):
 	string {
 
-		static::Prepare($Val);
-
-		$Val = trim(strip_tags($Val));
-		if(!$Val) return '';
-
-		if(strpos($Val,'/') === FALSE) {
-			if(!str_starts_with($Val, '@'))
-			$Val = "@{$Val}";
-
-			return sprintf(
-				'https://tiktok.com/%s',
-				$Val
-			);
-		}
-
-		return static::WebsiteURL($Val);
+		return Filters\Links::TikTokURL($Val);
 	}
 
 	static public function
 	YouTubeURL($Val):
 	string {
 
-		static::Prepare($Val);
-
-		$Val = trim(strip_tags($Val));
-		if(!$Val) return '';
-
-		if(strpos($Val,'/') === FALSE)
-		return sprintf(
-			'https://youtube.com/channel/%s',
-			ltrim($Val,'@')
-		);
-
-		return static::WebsiteURL($Val);
+		return Filters\Links::YouTubeURL($Val);
 	}
 
 	////////////////////////////////////////////////////////////////
