@@ -247,13 +247,24 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	}
 
 	public function
-	SetData(array $Input):
+	SetData(?iterable $Input):
 	static {
 	/*//
 	@date 2015-12-02
 	//*/
 
-		$this->Data = $Input;
+		if($Input)
+		$this->Data = (
+			is_array($Input)
+			? $Input
+			: iterator_to_array($Input, TRUE)
+		);
+
+		else
+		$this->Data = [];
+
+		////////
+
 		return $this;
 	}
 

@@ -79,6 +79,58 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Modify(string $What):
+	static {
+
+		$this->DateTime->Modify($What);
+
+		return $this;
+	}
+
+	public function
+	IsAfter(self|int $When):
+	bool {
+
+		if(is_int($When))
+		$When = static::FromTime($When);
+
+		////////
+
+		$Then = $When->GetUnixtime();
+		$Now = $this->GetUnixtime();
+
+		if($Then < $Now)
+		return FALSE;
+
+		////////
+
+		return TRUE;
+	}
+
+	public function
+	IsBefore(self|int $When):
+	bool {
+
+		if(is_int($When))
+		$When = static::FromTime($When);
+
+		////////
+
+		$Then = $When->GetUnixtime();
+		$Now = $this->GetUnixtime();
+
+		if($Then > $Now)
+		return FALSE;
+
+		////////
+
+		return TRUE;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	public function
 	Get(?string $Format=NULL):
 	string {
 
@@ -186,6 +238,18 @@ implements
 	//*/
 
 		return new static("@{$Time} UTC");
+	}
+
+	static public function
+	CurrentUnixtime():
+	int {
+	/*//
+	@date 2023-05-31
+	//*/
+
+		$Now = new static;
+
+		return $Now->GetUnixtime();
 	}
 
 }
