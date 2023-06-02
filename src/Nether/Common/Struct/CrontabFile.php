@@ -7,6 +7,38 @@ use Nether\Common;
 class CrontabFile
 extends Common\Datastore {
 
+	public function
+	Write(?string $Filename = NULL):
+	static {
+
+		if($Filename !== NULL)
+		return parent::Write($Filename);
+
+		////////
+
+		$Data = $this->Join(PHP_EOL);
+		$TmpFile = Common\Filesystem\Util::MkTempFile();
+
+		file_put_contents(
+			$TmpFile,
+			sprintf('%s%s', trim($Data), PHP_EOL)
+		);
+
+		system(sprintf('crontab - < %s', $TmpFile));
+		unlink($TmpFile);
+
+		return $this;
+	}
+
+	public function
+	Clean():
+	static {
+
+		$this->Filter($this::CleanCrontabLine(...));
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

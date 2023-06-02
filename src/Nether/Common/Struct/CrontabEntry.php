@@ -92,13 +92,14 @@ implements Stringable {
 
 		$Now = new Common\Date;
 		$Output = NULL;
+		$UseLocal = TRUE;
 
 		$Min = $this->Minute ?? $Now->Get('i');
 		$Hour = $this->Hour ?? $Now->Get('H');
 		$Day = $this->Day ?? $Now->Get('d');
 		$Month = $this->Month ?? $Now->Get('m');
 		$Year = $Now->Get('Y');
-		$TZ = $Now->Get('O');
+		$TZ = Common\Date::FetchTimezoneFromSystem();
 
 		$Output = new Common\Date(sprintf(
 			"%s-%s-%s %s:%s %s",
@@ -147,16 +148,25 @@ implements Stringable {
 	}
 
 	public function
+	GetTimerAsInt():
+	int {
+
+		$Date = $this->GetTimerAsObject();
+
+		return $Date->GetUnixtime();
+	}
+
+	public function
 	GetTimerAsTimeframe():
 	Common\Units\Timeframe {
 
-		$Date = $this->GetTimerAsObject();
-		$Start = $Date->GetUnixtime();
+		$Start = $this->GetTimerAsInt();
 		$Now = Common\Date::CurrentUnixtime();
 
 		return new Common\Units\Timeframe(
 			$Now,
-			$Start
+			$Start,
+			Precision: 2
 		);
 	}
 
@@ -297,8 +307,8 @@ implements Stringable {
 	//*/
 
 		$this->ResetTimer();
-		$this->Minute = $Minute;
 		$this->Hour = $Hour;
+		$this->Minute = $Minute;
 
 		return $this;
 	}

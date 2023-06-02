@@ -241,6 +241,16 @@ implements
 	}
 
 	static public function
+	FetchTimezoneFromSystem():
+	string {
+	/*//
+	@date 2023-06-01
+	//*/
+
+		return trim(`date +"%z"`);
+	}
+
+	static public function
 	CurrentUnixtime():
 	int {
 	/*//
