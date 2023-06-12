@@ -236,17 +236,29 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	}
 
 	public function
-	GetQueryString():
+	GetQueryString(?array $Overwrite=NULL):
 	string {
 
-		$Key = NULL;
-		$Val = NULL;
+		$Data = new Datastore($this->__Data);
 		$Output = [];
 
-		foreach($this->__Data as $Key => $Val)
-		$Output[] = sprintf('%s=%s', urlencode($Key), urlencode($Val));
+		////////
 
-		return join('&', $Output);
+		if($Overwrite !== NULL)
+		$Data->MergeRight($Overwrite);
+
+		$Data->Each(function($Val, $Key, $Self) {
+
+			$Self[$Key] = sprintf(
+				'%s=%s',
+				urlencode($Key),
+				urlencode($Val)
+			);
+
+			return;
+		});
+
+		return $Data->Join('&');
 	}
 
 	public function
