@@ -26,6 +26,24 @@ extends Prototype {
 	public int
 	$Two;
 
+	static public function
+	New(int $One=NULL, int $Two=NULL, int $Three=NULL):
+	static {
+
+		return parent::New($One, $Two, $Three);
+	}
+
+	static public function
+	NewRelaxed(int $One=NULL, int $Two=NULL, int $Three=NULL):
+	static {
+
+		return new static([
+			'One'   => $One,
+			'Two'   => $Two,
+			'Three' => $Three
+		], NULL, 0);
+	}
+
 }
 
 class LocalTest3
