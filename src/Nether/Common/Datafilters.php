@@ -158,6 +158,18 @@ class Datafilters {
 		return $Item;
 	}
 
+	static public function
+	Nullable(mixed $Item):
+	mixed {
+	/*//
+	if the input evals to FALSE, its now a NULL.
+	//*/
+
+		static::Prepare($Item);
+
+		return $Item ?: NULL;
+	}
+
 	////////////////////////////////////////////////////////////////
 	// generic text filters ////////////////////////////////////////
 
@@ -338,7 +350,7 @@ class Datafilters {
 	to prevent traversal foolery.
 	//*/
 
-		$Output = strtolower(trim(static::Prepare($Input)));
+		$Output = strtolower(trim(static::Prepare($Input) ?? ''));
 
 		// allow things that could be nice clean file names.
 
@@ -375,6 +387,10 @@ class Datafilters {
 	static public function
 	SlottableKey(mixed $Input):
 	string {
+	/*//
+	same as pathable key except drops pathability by replacing all forward
+	slashes with dashes.
+	//*/
 
 		$Output = static::PathableKey($Input);
 		$Output = str_replace('/', '-', $Output);

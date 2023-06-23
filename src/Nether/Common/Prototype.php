@@ -163,7 +163,7 @@ impact i can find while packing in as many features as possible.
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	New(...$Argv):
+	New():
 	static {
 	/*//
 	@date 2021-09-09
@@ -175,14 +175,14 @@ impact i can find while packing in as many features as possible.
 	//*/
 
 		return new static(
-			$Argv,
+			func_get_args(),
 			NULL,
 			Prototype\Flags::StrictInput
 		);
 	}
 
 	static public function
-	NewRelaxed(...$Argv):
+	NewRelaxed():
 	static {
 	/*//
 	@date 2021-09-09
@@ -191,7 +191,7 @@ impact i can find while packing in as many features as possible.
 	//*/
 
 		return new static(
-			$Argv,
+			func_get_args(),
 			NULL,
 			0
 		);
