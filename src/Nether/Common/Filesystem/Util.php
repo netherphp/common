@@ -10,11 +10,11 @@ use SplFileInfo;
 class Util {
 
 	static public function
-	MkDir(string $Path):
+	MkDir(string $Path, int $Mode=0777):
 	bool {
 
 		$Path = self::Repath($Path);
-		$Mode = 0777;
+		$Mode ??= 0777;
 
 		if(!file_exists($Path)) {
 			$UMask = umask(0);
@@ -102,6 +102,23 @@ class Util {
 		////////
 
 		return FALSE;
+	}
+
+	static public function
+	IsAbsolutePath(string $Path):
+	bool {
+
+		return static::IsAbsolutePathFor(PHP_OS_FAMILY, $Path);
+	}
+
+	static public function
+	IsAbsolutePathFor(string $OS, string $Path):
+	bool {
+
+		if($OS === 'Windows')
+		return preg_match('^#([A-Z]:){0,1}\\', $Path);
+
+		return str_starts_with($Path, DIRECTORY_SEPARATOR);
 	}
 
 	////////////////////////////////////////////////////////////////

@@ -30,6 +30,9 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	$Format = self::FormatPHP;
 
 	protected bool
+	$PrettyJSON = TRUE;
+
+	protected bool
 	$FullJSON = FALSE;
 
 	protected bool
@@ -1427,9 +1430,14 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		$Dirname = $File->GetPath();
 		$Format = $this->Format;
+		$FlagsJSON = 0;
+		$Data = NULL;
 
-		if($Filename !== $this->Filename)
+		if($this->Filename !== $Filename)
 		$Format = $this->DetermineFormatByFilename($Filename);
+
+		if($this->PrettyJSON)
+		$FlagsJSON |= JSON_PRETTY_PRINT;
 
 		////////
 
@@ -1454,17 +1462,23 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		////////
 
-		$Data = match(TRUE) {
-			($Format === static::FormatJSON)
-			=> json_encode($this->Data, JSON_PRETTY_PRINT),
+		$Data = new Overbuffer;
 
-			default
-			=> serialize($this->Data)
-		};
+		switch($Format) {
+			case static::FormatJSON:
+				$Data->Exec(fn()=> print( json_encode($this->Data, $FlagsJSON)) );
+			break;
+			default:
+				$Data->Exec(fn()=> print( serialize($this->Data)) );
+			break;
+		}
+
+		$Data
+		->Filter(Filters\Text::Tabbify(...));
 
 		////////
 
-		file_put_contents($Filename, $Data);
+		file_put_contents($Filename, $Data->Get());
 
 		return $this;
 	}
@@ -1508,7 +1522,11 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	@date 2022-08-15
 	//*/
 
-		return (new static)->Read($Filename);
+		$Store = new static;
+		$Store->Read($Filename);
+		$Store->SetFilename($Filename);
+
+		return $Store;
 	}
 
 	static public function
