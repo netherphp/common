@@ -751,19 +751,23 @@ extends TestCase {
 
 		$Array = Datafilters::ArrayOf(NULL);
 		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(0, count($Array));
+		$this->AssertEquals(1, count($Array));
+		$this->AssertEquals(NULL, $Array[0]);
 
 		$Array = Datafilters::ArrayOf('');
 		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(0, count($Array));
+		$this->AssertEquals(1, count($Array));
+		$this->AssertEquals('', $Array[0]);
 
 		$Array = Datafilters::ArrayOf(0);
 		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(0, count($Array));
+		$this->AssertEquals(1, count($Array));
+		$this->AssertEquals(0, $Array[0]);
 
 		$Array = Datafilters::ArrayOf('42');
 		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(0, count($Array));
+		$this->AssertEquals(1, count($Array));
+		$this->AssertEquals('42', $Array[0]);
 
 		////////
 

@@ -330,7 +330,7 @@ class Datafilters {
 
 		static::Prepare($Item);
 
-		if(strlen($Item) !== 36)
+		if(!$Item || strlen($Item) !== 36)
 		return NULL;
 
 		if(preg_match('/[^a-fA-F0-9\-]/', $Item))
@@ -416,22 +416,49 @@ class Datafilters {
 	}
 
 	static public function
-	ArrayOf(mixed $Input, ?callable $Filter=NULL):
+	ArrayOf(mixed $Input, callable|iterable $Filter=NULL):
 	array {
+	/*//
+	@date 2023-07-07
+	makes sure what was given to it was a list of items. if it was just a
+	single item turn it into a list of items. optionally if a list of filters
+	is provided, run them on each item of this array.
+	//*/
 
 		$Output = static::Prepare($Input);
-
-		if(!is_array($Output))
-		$Output = [ ];
+		$Func = NULL;
 
 		////////
 
-		if(is_callable($Filter))
-		$Output = array_map($Filter(...), $Output);
+		if(!is_array($Output))
+		$Output = [ $Output ];
+
+		if(!is_iterable($Filter))
+		$Filter = [ $Filter ];
+
+		foreach($Filter as $Func)
+		if(is_callable($Func))
+		$Output = array_map($Func(...), $Output);
 
 		////////
 
 		return $Output;
+	}
+
+	static public function
+	ArrayOfNullable(mixed $Input, callable|iterable $Filter=NULL):
+	?array {
+	/*//
+	@date 2023-07-07
+	if given null it will return null instead of an array with an null.
+	//*/
+
+		$Output = static::Prepare($Input);
+
+		if($Output === NULL)
+		return NULL;
+
+		return static::ArrayOf($Input, $Filter);
 	}
 
 }
