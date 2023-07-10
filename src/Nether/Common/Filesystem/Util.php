@@ -116,7 +116,7 @@ class Util {
 	bool {
 
 		if($OS === 'Windows')
-		return preg_match('#^([A-Za-z]:){0,1}\\#', $Path);
+		return preg_match('#^([A-Za-z]:){0,1}\\\\#', $Path);
 
 		return str_starts_with($Path, DIRECTORY_SEPARATOR);
 	}
