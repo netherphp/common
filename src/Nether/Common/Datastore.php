@@ -1486,41 +1486,11 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Meta\DateAdded('2023-07-10')]
+	#[Meta\Info('Load a datastore from a file on disk.')]
 	static public function
-	NewBlended(iterable $OG, ...$Adds):
+	FromFile(string $Filename):
 	static {
-
-		$Store = new static($OG);
-		$AddOn = NULL;
-
-		foreach($Adds as $AddOn)
-		$Store->BlendRight($AddOn);
-
-		return $Store;
-	}
-
-	static public function
-	NewMerged(iterable $OG, ...$Updates):
-	static {
-
-		$Store = new static($OG);
-		$Overwrite = NULL;
-
-		foreach($Updates as $Overwrite)
-		$Store->MergeRight($Overwrite);
-
-		return $Store;
-	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
-	static public function
-	NewFromFile(string $Filename):
-	static {
-	/*//
-	@date 2022-08-15
-	//*/
 
 		$Store = new static;
 		$Store->Read($Filename);
@@ -1529,12 +1499,11 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return $Store;
 	}
 
+	#[Meta\DateAdded('2023-07-10')]
+	#[Meta\Info('Load a datastore from a JSON string.')]
 	static public function
-	NewFromJSON(?string $JSON):
+	FromJSON(?string $JSON):
 	static {
-	/*//
-	@date 2023-05-10
-	//*/
 
 		$JSON ??= '[]';
 		$Data = json_decode($JSON, TRUE);
@@ -1545,5 +1514,81 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		return $Output;
 	}
+
+	#[Meta\DateAdded('2023-07-10')]
+	#[Meta\Info('Perform a BlendRight upon all the arguments and return the final result.')]
+	static public function
+	FromStackBlended(iterable $OG, ...$Sets):
+	static {
+
+		$Store = new static($OG);
+		$More = NULL;
+
+		foreach($Sets as $More)
+		if($More !== NULL)
+		$Store->BlendRight($More);
+
+		return $Store;
+	}
+
+	#[Meta\DateAdded('2023-07-10')]
+	#[Meta\Info('Perform a MergeRight upon all the arguments and return the final result.')]
+	static public function
+	FromStackMerged(iterable $OG, ...$Updates):
+	static {
+
+		$Store = new static($OG);
+		$More = NULL;
+
+		foreach($Updates as $More)
+		if($More !== NULL)
+		$Store->MergeRight($More);
+
+		return $Store;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Deprecated('2023-07-10', 'use FromStackBlended instead')]
+	static public function
+	NewBlended(iterable $OG, ...$Adds):
+	static {
+
+		return static::FromStackBlended($OG, ...$Adds);
+	}
+
+	#[Meta\Deprecated('2023-07-10', 'use FromStackMerged instead')]
+	static public function
+	NewMerged(iterable $OG, ...$Updates):
+	static {
+
+		return static::FromStackMerged($OG, ...$Updates);
+	}
+
+	#[Meta\DateAdded('2022-08-15')]
+	#[Meta\Deprecated('2023-07-10', 'use FromFile instead')]
+	static public function
+	NewFromFile(string $Filename):
+	static {
+
+		return static::FromFile($Filename);
+	}
+
+	#[Meta\DateAdded('2022-08-15')]
+	#[Meta\Deprecated('2023-07-10', 'use FromJSON instead')]
+	static public function
+	NewFromJSON(?string $JSON):
+	static {
+
+		return static::FromJSON($JSON);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 }
