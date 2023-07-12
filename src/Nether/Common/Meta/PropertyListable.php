@@ -3,17 +3,19 @@
 namespace Nether\Common\Meta;
 
 use Attribute;
-use Nether\Common\Prototype\PropertyInfo;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
+#[DateAdded('2023-02-02')]
+#[Info('For marking properties as publically listable.')]
 class PropertyListable {
-/*//
-@date 2023-02-02
-for marking properties as publically listable.
-//*/
+
+	public ?string
+	$MethodName;
 
 	public function
-	__Construct() {
+	__Construct(string $MethodName=NULL) {
+
+		$this->MethodName = $MethodName;
 
 		return;
 	}
@@ -25,9 +27,7 @@ for marking properties as publically listable.
 	FromClass(string $CName):
 	array {
 
-		$Props = ($CName)::GetPropertiesWithAttribute(
-			static::class
-		);
+		$Props = ($CName)::GetPropertiesWithAttribute(static::class);
 
 		return $Props;
 	}
