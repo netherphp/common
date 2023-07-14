@@ -192,7 +192,7 @@ extends Common\Datafilters {
 		static::Prepare($Input);
 
 		if(!is_string($Input))
-		$Input = $Input;
+		$Input = (string)$Input;
 
 		// trim up and force to lower case.
 
