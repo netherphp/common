@@ -12,10 +12,14 @@ class PropertyListable {
 	public ?string
 	$MethodName;
 
+	public array
+	$MethodArgs;
+
 	public function
-	__Construct(string $MethodName=NULL) {
+	__Construct(string $MethodName=NULL, ...$MethodArgs) {
 
 		$this->MethodName = $MethodName;
+		$this->MethodArgs = $MethodArgs;
 
 		return;
 	}
