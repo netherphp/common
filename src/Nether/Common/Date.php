@@ -269,4 +269,13 @@ implements
 		return $Now->GetUnixtime();
 	}
 
+	static public function
+	Unixtime(?string $Input=NULL):
+	int {
+
+		$Date = static::FromDateString($Input ?? 'now');
+
+		return $Date->GetUnixtime();
+	}
+
 }
