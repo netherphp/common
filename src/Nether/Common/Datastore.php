@@ -942,9 +942,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	return a new datastore of the result of an array map.
 	//*/
 
-		return new static(
-			array_map($FilterFunc, $this->Data, array_keys($this->Data))
-		);
+		return new static(array_map(
+			$FilterFunc,
+			$this->Data
+		));
 	}
 
 	public function
