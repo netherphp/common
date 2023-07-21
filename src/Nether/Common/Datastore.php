@@ -943,7 +943,7 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	//*/
 
 		return new static(
-			array_map($FilterFunc, $this->Data)
+			array_map($FilterFunc, $this->Data, array_keys($this->Data))
 		);
 	}
 
