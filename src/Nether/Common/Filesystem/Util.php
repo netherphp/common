@@ -167,4 +167,37 @@ class Util {
 		return $Input;
 	}
 
+	static public function
+	ReplaceFileExtension(string $Input, string $ExtNew, string $ExtDelim='.', int $ExtDepth=1):
+	string {
+
+		$Path = dirname($Input);
+		$Base = basename($Input);
+
+		// extensionless files gain one.
+		// whatever -> whatever.txt
+
+		if(!str_contains($Base, $ExtDelim))
+		$Base = sprintf('%s%s%s', $Base, $ExtDelim, $ExtNew);
+
+		// extensioned files get theirs swapped.
+		// whatever.txt -> whatever.md
+
+		else
+		$Base = substr_replace(
+			$Base,
+			sprintf('%s%s', $ExtDelim, $ExtNew),
+			strrpos($Base, $ExtDelim)
+		);
+
+		////////
+
+		if(!$Path || $Path === '.')
+		return $Base;
+
+		////////
+
+		return Common\Filesystem\Util::Pathify($Path, $Base);
+	}
+
 }

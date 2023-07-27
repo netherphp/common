@@ -2,6 +2,8 @@
 
 namespace Nether\Common\Units;
 
+use Nether\Common;
+
 use Stringable;
 
 class Bytes
@@ -110,6 +112,42 @@ format. it can be used both one off or as like a printing/filter provider.
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Common\Meta\Date('2023-07-26')]
+	public function
+	IsHeavierThan(int|self $What):
+	bool {
+
+		if($What instanceof self)
+		$What = $What->GetBytes();
+
+		return ($this->Bytes > $What);
+	}
+
+	#[Common\Meta\Date('2023-07-26')]
+	public function
+	IsLighterThan(int|self $What):
+	bool {
+
+		if($What instanceof self)
+		$What = $What->GetBytes();
+
+		return ($this->Bytes > $What);
+	}
+
+	#[Common\Meta\Date('2023-07-26')]
+	public function
+	IsTheSameAs(int|self $What):
+	bool {
+
+		if($What instanceof self)
+		$What = $What->GetBytes();
+
+		return ($this->Bytes === $What);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	public function
 	Get():
 	string {
@@ -139,6 +177,14 @@ format. it can be used both one off or as like a printing/filter provider.
 		);
 	}
 
+	#[Common\Meta\Date('2023-07-26')]
+	public function
+	GetBytes():
+	int {
+
+		return $this->Bytes;
+	}
+
 	public function
 	GetLabelByMag(int $Mag):
 	string {
@@ -163,6 +209,17 @@ format. it can be used both one off or as like a printing/filter provider.
 		$Output = strtolower($Output);
 
 		return $Output;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Common\Meta\Date('2023-07-26')]
+	static public function
+	FromInt(int $Bytes):
+	static {
+
+		return new static($Bytes);
 	}
 
 }

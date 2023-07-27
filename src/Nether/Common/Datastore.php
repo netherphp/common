@@ -1548,6 +1548,17 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return $Store;
 	}
 
+	#[Meta\Date('2023-07-26')]
+	#[Meta\Info('Load a datastore from an array.')]
+	static public function
+	FromArray(iterable $Input):
+	static {
+
+		$Store = new static($Input);
+
+		return $Store;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////

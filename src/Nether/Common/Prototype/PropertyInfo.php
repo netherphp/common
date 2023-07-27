@@ -5,6 +5,7 @@ namespace Nether\Common\Prototype;
 use Attribute;
 use ReflectionProperty;
 use ReflectionNamedType;
+use ReflectionUnionType;
 use Nether\Common\Meta\PropertyObjectify;
 use Nether\Common\Prototype\PropertyInfoInterface;
 
@@ -61,10 +62,34 @@ the prototype system will want to know about.
 		$Inst = NULL;
 		$StrType = 'mixed';
 		$Nullable = TRUE;
+		$UTypes = NULL;
 
 		// get some various info.
 
-		if($Type instanceof ReflectionNamedType) {
+		if($Type instanceof ReflectionUnionType) {
+			$UTypes = $Type->GetTypes();
+
+			// for now the only union supported are super basic ones for
+			// property promotion support. things like array|Datastore.
+			// ReflectionUnionType::getTypes does not return in the same
+			// order as they are written for some reason so filter out
+			// the builtins and the remainder must be the promotion type.
+
+			if(count($UTypes) === 2) {
+				$UTypes = array_values(array_filter(
+					$UTypes,
+					fn(ReflectionNamedType $T)=> !$T->IsBuiltIn()
+				));
+
+				if(count($UTypes) === 1)
+				if($UTypes[0] instanceof ReflectionNamedType) {
+					$StrType = $UTypes[0]->GetName();
+					$Nullable = $UTypes[0]->AllowsNull();
+				}
+			}
+		}
+
+		elseif($Type instanceof ReflectionNamedType) {
 			$StrType = $Type->GetName();
 			$Nullable = $Type->AllowsNull();
 		}
