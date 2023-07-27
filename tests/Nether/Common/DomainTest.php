@@ -120,4 +120,17 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestFuckery():
+	void {
+
+		$Domain = new Struct\Domain('');
+
+		$this->AssertEquals('', $Domain->GetInput());
+		$this->AssertEquals('', $Domain->Get());
+
+		return;
+	}
+
 }
