@@ -129,7 +129,7 @@ extends Common\Datafilters {
 
 		static::Prepare($UUID);
 
-		if(!$UUID || strlen($UUID) !== 36)
+		if(!$UUID || !is_string($UUID) || strlen($UUID) !== 36)
 		return NULL;
 
 		if(preg_match('/[^a-fA-F0-9\-]/', $UUID))
