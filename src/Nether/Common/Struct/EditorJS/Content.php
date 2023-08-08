@@ -94,7 +94,7 @@ extends Common\Prototype {
 
 		$Class = sprintf(
 			'Nether\Common\Struct\EditorJS\Blocks\%s',
-			Common\Datafilters::PascalFromKey(
+			Common\Filters\Text::PascalFromKey(
 				is_array($Block)
 				? $Block['type']
 				: $Block->type

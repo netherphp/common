@@ -46,7 +46,7 @@ extends Common\Datastore {
 	CleanCrontabLine(mixed $Line):
 	bool {
 
-		$Line = trim(Common\Datafilters::Prepare($Line));
+		$Line = trim(Common\Filters\Text::Prepare($Line));
 
 		if(!$Line)
 		return FALSE;

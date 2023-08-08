@@ -264,7 +264,7 @@ class Text {
 	Tabbify(mixed $Val, int $Spaces=4):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		if(!is_string($Val))
 		$Val = '';

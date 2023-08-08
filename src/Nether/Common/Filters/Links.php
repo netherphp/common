@@ -4,8 +4,7 @@ namespace Nether\Common\Filters;
 
 use Nether\Common;
 
-class Links
-extends Common\Datafilters {
+class Links {
 
 	#[Common\Meta\DateAdded('2023-08-07')]
 	static public function
@@ -28,7 +27,7 @@ extends Common\Datafilters {
 	FacebookURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -39,14 +38,14 @@ extends Common\Datafilters {
 			ltrim($Val, '@')
 		);
 
-		return Common\Datafilters::WebsiteURL($Val);
+		return static::WebsiteURL($Val);
 	}
 
 	static public function
 	InstagramURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -57,14 +56,14 @@ extends Common\Datafilters {
 			ltrim($Val, '@')
 		);
 
-		return Common\Datafilters::WebsiteURL($Val);
+		return static::WebsiteURL($Val);
 	}
 
 	static public function
 	LinkedInURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -75,14 +74,14 @@ extends Common\Datafilters {
 			ltrim($Val, '@')
 		);
 
-		return Common\Datafilters::WebsiteURL($Val);
+		return static::WebsiteURL($Val);
 	}
 
 	static public function
 	TikTokURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -97,14 +96,14 @@ extends Common\Datafilters {
 			);
 		}
 
-		return Common\Datafilters::WebsiteURL($Val);
+		return static::WebsiteURL($Val);
 	}
 
 	static public function
 	TwitterURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -115,14 +114,14 @@ extends Common\Datafilters {
 			ltrim($Val, '@')
 		);
 
-		return Common\Datafilters::WebsiteURL($Val);
+		return static::WebsiteURL($Val);
 	}
 
 	static public function
 	WebsiteURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -137,7 +136,7 @@ extends Common\Datafilters {
 	YouTubeURL($Val):
 	string {
 
-		Common\Datafilters::Prepare($Val);
+		static::Prepare($Val);
 
 		$Val = trim(strip_tags($Val));
 		if(!$Val) return '';
@@ -148,7 +147,7 @@ extends Common\Datafilters {
 			ltrim($Val, '@')
 		);
 
-		return Common\Datafilters::WebsiteURL($Val);
+		return static::WebsiteURL($Val);
 	}
 
 }

@@ -13,7 +13,7 @@ extends Common\Struct\EditorJS\Block {
 		parent::OnReady($Argv);
 
 		($this->Data)
-		->Mode(Common\Datafilters::StrippedText(...));
+		->Mode(Common\Filters\Text::Stripped(...));
 
 		return;
 	}

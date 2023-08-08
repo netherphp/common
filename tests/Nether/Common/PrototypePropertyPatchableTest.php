@@ -10,12 +10,12 @@ extends Prototype {
 	public int $ID;
 
 	#[Meta\PropertyPatchable]
-	#[Meta\PropertyFilter([ 'Nether\\Common\\Datafilters', 'TrimmedText' ])]
+	#[Meta\PropertyFilter([ Filters\Text::class, 'Trimmed' ])]
 	public string $Name;
 
 	#[Meta\PropertyPatchable]
-	#[Meta\PropertyFilter([ 'Nether\\Common\\Datafilters', 'TrimmedText' ])]
-	#[Meta\PropertyFilter([ 'Nether\\Common\\Datafilters', 'StrippedText' ])]
+	#[Meta\PropertyFilter([ Filters\Text::class, 'Trimmed' ])]
+	#[Meta\PropertyFilter([ Filters\Text::class, 'Stripped' ])]
 	public string $Food;
 
 }
