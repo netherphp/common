@@ -339,11 +339,10 @@ extends TestCase {
 		////////
 
 		$Data
-		->Zero(Datafilters::TypeInt(...))
-		->One(Datafilters::TypeInt(...))
-		->Two(Datafilters::TypeInt(...))
-		->Three(Datafilters::TypeInt(...));
-
+		->Zero(Filters\Numbers::IntType(...))
+		->One(Filters\Numbers::IntType(...))
+		->Two(Filters\Numbers::IntType(...))
+		->Three(Filters\Numbers::IntType(...));
 
 		$this->AssertIsInt($Data->Zero);
 		$this->AssertIsInt($Data->One);
@@ -352,10 +351,10 @@ extends TestCase {
 		$this->AssertEquals(0, $Data->Three);
 
 		$Data
-		->Zero(Datafilters::TypeIntNullable(...))
-		->One(Datafilters::TypeIntNullable(...))
-		->Two(Datafilters::TypeIntNullable(...))
-		->Three(Datafilters::TypeIntNullable(...));
+		->Zero(Filters\Numbers::IntNullable(...))
+		->One(Filters\Numbers::IntNullable(...))
+		->Two(Filters\Numbers::IntNullable(...))
+		->Three(Filters\Numbers::IntNullable(...));
 
 		$this->AssertNull($Data->Zero);
 		$this->AssertIsInt($Data->One);
@@ -365,10 +364,10 @@ extends TestCase {
 		////////
 
 		$Data
-		->Zero(Datafilters::TypeFloat(...))
-		->One(Datafilters::TypeFloat(...))
-		->Two(Datafilters::TypeFloat(...))
-		->Three(Datafilters::TypeFloat(...));
+		->Zero(Filters\Numbers::FloatType(...))
+		->One(Filters\Numbers::FloatType(...))
+		->Two(Filters\Numbers::FloatType(...))
+		->Three(Filters\Numbers::FloatType(...));
 
 		$this->AssertIsFloat($Data->Zero);
 		$this->AssertIsFloat($Data->One);
@@ -377,10 +376,10 @@ extends TestCase {
 		$this->AssertEquals(0.0, $Data->Three);
 
 		$Data
-		->Zero(Datafilters::TypeFloatNullable(...))
-		->One(Datafilters::TypeFloatNullable(...))
-		->Two(Datafilters::TypeFloatNullable(...))
-		->Three(Datafilters::TypeFloatNullable(...));
+		->Zero(Filters\Numbers::FloatNullable(...))
+		->One(Filters\Numbers::FloatNullable(...))
+		->Two(Filters\Numbers::FloatNullable(...))
+		->Three(Filters\Numbers::FloatNullable(...));
 
 		$this->AssertNull($Data->Zero);
 		$this->AssertIsFloat($Data->One);
@@ -432,7 +431,7 @@ extends TestCase {
 
 		foreach($Data as $Key => $Val) {
 			$Data->ResetFilters($Key);
-			$Data->SetFilter($Key, Datafilters::TypeBool(...));
+			$Data->SetFilter($Key, Filters\Numbers::BoolType(...));
 		}
 
 		foreach($Data as $Key => $Val) {
@@ -450,7 +449,7 @@ extends TestCase {
 
 		foreach($Data as $Key => $Val) {
 			$Data->ResetFilters($Key);
-			$Data->SetFilter($Key, Datafilters::TypeBoolNullable(...));
+			$Data->SetFilter($Key, Filters\Numbers::BoolNullable(...));
 		}
 
 		foreach($Data as $Key => $Val) {
@@ -490,7 +489,7 @@ extends TestCase {
 		////////
 
 		foreach($Data as $Key => $Val)
-		$Data->SetFilter($Key, Datafilters::TypeString(...));
+		$Data->SetFilter($Key, Filters\Text::StringType(...));
 
 		foreach($Data as $Key => $Val)
 		$this->AssertIsString($Val);
@@ -508,7 +507,7 @@ extends TestCase {
 		////////
 
 		foreach($Data as $Key => $Val)
-		$Data->SetFilter($Key, Datafilters::TypeStringNullable(...));
+		$Data->SetFilter($Key, Filters\Text::StringNullable(...));
 
 		$this->AssertEquals('1', $Data->One1);
 		$this->AssertEquals('1', $Data->One2);
@@ -533,9 +532,9 @@ extends TestCase {
 		$StringGud = 'eWVlIGR1ZGVzIHRoaXMgaXMgYW4gdGVzdA';
 
 		$this->AssertEquals($StringEnc, base64_encode($StringOG));
-		$this->AssertEquals($StringGud, Datafilters::Base64Encode($StringOG));
-		$this->AssertEquals($StringOG, Datafilters::Base64Decode($StringEnc));
-		$this->AssertEquals($StringOG, Datafilters::Base64Decode($StringGud));
+		$this->AssertEquals($StringGud, Filters\Text::Base64Encode($StringOG));
+		$this->AssertEquals($StringOG, Filters\Text::Base64Decode($StringEnc));
+		$this->AssertEquals($StringOG, Filters\Text::Base64Decode($StringGud));
 
 		$StringOGB = sprintf(
 			'%s%s%s%s',
@@ -546,9 +545,9 @@ extends TestCase {
 		$StringGudB = '_AAA-A';
 
 		$this->AssertEquals($StringEncB, base64_encode($StringOGB));
-		$this->AssertEquals($StringGudB, Datafilters::Base64Encode($StringOGB));
-		$this->AssertEquals($StringOGB, Datafilters::Base64Decode($StringEncB));
-		$this->AssertEquals($StringOGB, Datafilters::Base64Decode($StringGudB));
+		$this->AssertEquals($StringGudB, Filters\Text::Base64Encode($StringOGB));
+		$this->AssertEquals($StringOGB, Filters\Text::Base64Decode($StringEncB));
+		$this->AssertEquals($StringOGB, Filters\Text::Base64Decode($StringGudB));
 
 		return;
 	}
@@ -572,7 +571,7 @@ extends TestCase {
 		////////
 
 		foreach($Data as $Key => $Val)
-		$Data->SetFilter($Key, Datafilters::TrimmedText(...));
+		$Data->SetFilter($Key, Filters\Text::Trimmed(...));
 
 		foreach($Data as $Key => $Val) {
 			$this->AssertTrue(!str_starts_with($Val, ' '));
@@ -585,7 +584,7 @@ extends TestCase {
 		}
 
 		foreach($Data as $Key => $Val)
-		$Data->SetFilter($Key, Datafilters::TrimmedTextNullable(...));
+		$Data->SetFilter($Key, Filters\Text::TrimmedNullable(...));
 
 		foreach($Data as $Key => $Val) {
 			if(trim($Dataset[$Key]) === '') {
@@ -620,7 +619,7 @@ extends TestCase {
 
 		$this->AssertEquals(
 			$StringEnc,
-			Datafilters::EncodedText($StringOG)
+			Filters\Text::Encoded($StringOG)
 		);
 
 		return;
@@ -636,7 +635,7 @@ extends TestCase {
 
 		$this->AssertEquals(
 			$StringEnc,
-			Datafilters::StrippedText($StringOG)
+			Filters\Text::Stripped($StringOG)
 		);
 
 		return;
@@ -661,9 +660,9 @@ extends TestCase {
 
 		foreach($Dataset as $Email => $Valid) {
 			if($Valid)
-			$this->AssertEquals($Email, Datafilters::Email($Email));
+			$this->AssertEquals($Email, Filters\Text::Email($Email));
 			else
-			$this->AssertNull(Datafilters::Email($Email));
+			$this->AssertNull(Filters\Text::Email($Email));
 		}
 
 		return;
@@ -690,7 +689,7 @@ extends TestCase {
 		$New = NULL;
 
 		foreach($Dataset as $Old => $New)
-		$this->AssertEquals($New, Datafilters::PathableKey($Old));
+		$this->AssertEquals($New, Filters\Text::PathableKey($Old));
 
 		return;
 	}
@@ -716,7 +715,7 @@ extends TestCase {
 		$New = NULL;
 
 		foreach($Dataset as $Old => $New)
-		$this->AssertEquals($New, Datafilters::SlottableKey($Old));
+		$this->AssertEquals($New, Filters\Text::SlottableKey($Old));
 
 		return;
 	}
@@ -739,7 +738,7 @@ extends TestCase {
 		$New = NULL;
 
 		foreach($Dataset as $Old => $New)
-		$this->AssertEquals($New, Datafilters::PascalFromKey($Old));
+		$this->AssertEquals($New, Filters\Text::PascalFromKey($Old));
 
 		return;
 	}
@@ -749,34 +748,34 @@ extends TestCase {
 	TestFiltersArrayOf():
 	void {
 
-		$Array = Datafilters::ArrayOf(NULL);
+		$Array = Filters\Lists::ArrayOf(NULL);
 		$this->AssertTrue(is_array($Array));
 		$this->AssertEquals(1, count($Array));
 		$this->AssertEquals(NULL, $Array[0]);
 
-		$Array = Datafilters::ArrayOf('');
+		$Array = Filters\Lists::ArrayOf('');
 		$this->AssertTrue(is_array($Array));
 		$this->AssertEquals(1, count($Array));
 		$this->AssertEquals('', $Array[0]);
 
-		$Array = Datafilters::ArrayOf(0);
+		$Array = Filters\Lists::ArrayOf(0);
 		$this->AssertTrue(is_array($Array));
 		$this->AssertEquals(1, count($Array));
 		$this->AssertEquals(0, $Array[0]);
 
-		$Array = Datafilters::ArrayOf('42');
+		$Array = Filters\Lists::ArrayOf('42');
 		$this->AssertTrue(is_array($Array));
 		$this->AssertEquals(1, count($Array));
 		$this->AssertEquals('42', $Array[0]);
 
 		////////
 
-		$Array = Datafilters::ArrayOf(['42']);
+		$Array = Filters\Lists::ArrayOf(['42']);
 		$this->AssertTrue(is_array($Array));
 		$this->AssertEquals(1, count($Array));
 		$this->AssertIsString($Array[0]);
 
-		$Array = Datafilters::ArrayOf(['42'], Datafilters::TypeInt(...));
+		$Array = Filters\Lists::ArrayOf(['42'], Filters\Numbers::IntType(...));
 		$this->AssertTrue(is_array($Array));
 		$this->AssertEquals(1, count($Array));
 		$this->AssertIsInt($Array[0]);
@@ -803,7 +802,7 @@ extends TestCase {
 		$Expect = NULL;
 
 		foreach($Dataset as $Input => $Expect) {
-			$UUID = Datafilters::UUID($Input);
+			$UUID = Filters\Text::UUID($Input);
 
 			if(!$Expect) {
 				$this->AssertNull($UUID);
@@ -841,7 +840,7 @@ extends TestCase {
 		$Result = NULL;
 
 		foreach($Dataset as $Input => $Expect)
-		$this->AssertEquals($Expect, Datafilters::PageNumber($Input));
+		$this->AssertEquals($Expect, Filters\Numbers::Page($Input));
 
 		return;
 	}
@@ -872,7 +871,7 @@ extends TestCase {
 		$Result = NULL;
 
 		foreach($Dataset as $Input => $Expect)
-		$this->AssertEquals($Expect, Datafilters::TypeIntRange($Input, -32, 32, 42));
+		$this->AssertEquals($Expect, Filters\Numbers::IntRange($Input, -32, 32, 42));
 
 		return;
 	}
@@ -892,7 +891,7 @@ extends TestCase {
 		$Out = NULL;
 
 		foreach($Dataset as $In => $Out)
-		$this->AssertEquals($Out, Datafilters::WebsiteURL($In));
+		$this->AssertEquals($Out, Filters\Links::WebsiteURL($In));
 
 		return;
 	}
@@ -912,7 +911,7 @@ extends TestCase {
 		$Out = NULL;
 
 		foreach($Dataset as $In => $Out)
-		$this->AssertEquals($Out, Datafilters::FacebookURL($In));
+		$this->AssertEquals($Out, Filters\Links::FacebookURL($In));
 
 		return;
 	}
@@ -933,7 +932,7 @@ extends TestCase {
 		$Out = NULL;
 
 		foreach($Dataset as $In => $Out)
-		$this->AssertEquals($Out, Datafilters::TwitterURL($In));
+		$this->AssertEquals($Out, Filters\Links::TwitterURL($In));
 
 		return;
 	}
@@ -954,7 +953,7 @@ extends TestCase {
 		$Out = NULL;
 
 		foreach($Dataset as $In => $Out)
-		$this->AssertEquals($Out, Datafilters::InstagramURL($In));
+		$this->AssertEquals($Out, Filters\Links::InstagramURL($In));
 
 		return;
 	}
@@ -975,7 +974,7 @@ extends TestCase {
 		$Out = NULL;
 
 		foreach($Dataset as $In => $Out)
-		$this->AssertEquals($Out, Datafilters::TikTokURL($In));
+		$this->AssertEquals($Out, Filters\Links::TikTokURL($In));
 
 		return;
 	}
@@ -996,7 +995,7 @@ extends TestCase {
 		$Out = NULL;
 
 		foreach($Dataset as $In => $Out)
-		$this->AssertEquals($Out, Datafilters::YouTubeURL($In));
+		$this->AssertEquals($Out, Filters\Links::YouTubeURL($In));
 
 		return;
 	}

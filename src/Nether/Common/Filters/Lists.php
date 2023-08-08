@@ -5,8 +5,24 @@ namespace Nether\Common\Filters;
 use Nether\Common;
 
 #[Common\Meta\DateAdded('2023-07-07')]
-class Lists
-extends Common\Datafilters {
+class Lists {
+
+	#[Common\Meta\DateAdded('2023-08-07')]
+	static public function
+	Prepare(mixed &$Item):
+	mixed {
+
+		// @todo 2023-08-07 rebase class off Datafilters after all the old
+		// methods are removed, then remove this method.
+
+		if($Item instanceof Common\Struct\DatafilterItem)
+		$Item = $Item->Value;
+
+		return $Item;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	#[Common\Meta\DateAdded('2023-07-07')]
 	#[Common\Meta\Info('Run a set of filters over a list of items. If a single item is provided it will be wrapped in an array.')]

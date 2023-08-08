@@ -24,6 +24,9 @@ class Datafilters {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Misc::Nullable')]
 	static public function
 	Nullable(mixed $Item):
@@ -32,6 +35,9 @@ class Datafilters {
 		return Filters\Misc::Nullable($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::IntType')]
 	static public function
 	TypeInt(mixed $Item):
@@ -40,6 +46,9 @@ class Datafilters {
 		return Filters\Numbers::IntType($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::IntNullable')]
 	static public function
 	TypeIntNullable(mixed $Item):
@@ -48,6 +57,9 @@ class Datafilters {
 		return Filters\Numbers::IntNullable($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::IntRange')]
 	static public function
 	TypeIntRange(mixed $Input, int $Min=PHP_INT_MIN, int $Max=PHP_INT_MAX, ?int $Or=NULL):
@@ -56,6 +68,9 @@ class Datafilters {
 		return Filters\Numbers::IntRange($Input, $Min, $Max, $Or);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::FloatType')]
 	static public function
 	TypeFloat(mixed $Item):
@@ -64,6 +79,9 @@ class Datafilters {
 		return Filters\Numbers::FloatType($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::FloatNullable')]
 	static public function
 	TypeFloatNullable(mixed $Item):
@@ -72,6 +90,9 @@ class Datafilters {
 		return Filters\Numbers::FloatNullable($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::BoolType')]
 	static public function
 	TypeBool(mixed $Item):
@@ -80,6 +101,9 @@ class Datafilters {
 		return Filters\Numbers::BoolType($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::BoolNullable')]
 	static public function
 	TypeBoolNullable(mixed $Item):
@@ -88,6 +112,9 @@ class Datafilters {
 		return Filters\Numbers::BoolNullable($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Numbers::Page')]
 	static public function
 	PageNumber(mixed $Item):
@@ -96,6 +123,9 @@ class Datafilters {
 		return Filters\Numbers::Page($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::WebsiteURL')]
 	static public function
 	WebsiteURL($Val):
@@ -104,6 +134,9 @@ class Datafilters {
 		return Filters\Links::WebsiteURL($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::FacebookURL')]
 	static public function
 	FacebookURL($Val):
@@ -112,6 +145,9 @@ class Datafilters {
 		return Filters\Links::FacebookURL($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::TwitterURL')]
 	static public function
 	TwitterURL($Val):
@@ -120,6 +156,9 @@ class Datafilters {
 		return Filters\Links::TwitterURL($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::InstagramURL')]
 	static public function
 	InstagramURL($Val):
@@ -128,6 +167,9 @@ class Datafilters {
 		return Filters\Links::InstagramURL($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::TikTokURL')]
 	static public function
 	TikTokURL($Val):
@@ -136,6 +178,9 @@ class Datafilters {
 		return Filters\Links::TikTokURL($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::YouTubeURL')]
 	static public function
 	YouTubeURL($Val):
@@ -144,6 +189,9 @@ class Datafilters {
 		return Filters\Links::YouTubeURL($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::YouTubeURL')]
 	static public function
 	ArrayOf(mixed $Input, callable|iterable $Filter=NULL):
@@ -152,6 +200,9 @@ class Datafilters {
 		return Filters\Lists::ArrayOf($Input, $Filter);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Links::YouTubeURL')]
 	static public function
 	ArrayOfNullable(mixed $Input, callable|iterable $Filter=NULL):
@@ -160,6 +211,9 @@ class Datafilters {
 		return Filters\Lists::ArrayOfNullable($Input, $Filter);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::StringType')]
 	static public function
 	TypeString(mixed $Item):
@@ -168,6 +222,9 @@ class Datafilters {
 		return Filters\Text::StringType($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::StringNullable')]
 	static public function
 	TypeStringNullable(mixed $Item):
@@ -176,6 +233,9 @@ class Datafilters {
 		return Filters\Text::StringNullable($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::Base64Encode')]
 	static public function
 	Base64Encode(mixed $Val):
@@ -184,6 +244,9 @@ class Datafilters {
 		return Filters\Text::Base64Encode($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::Base64Decode')]
 	static public function
 	Base64Decode(mixed $Val):
@@ -192,6 +255,9 @@ class Datafilters {
 		return Filters\Text::Base64Decode($Val);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::Trimmed')]
 	static public function
 	TrimmedText(mixed $Item):
@@ -200,6 +266,9 @@ class Datafilters {
 		return Filters\Text::Trimmed($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::TrimmedNullable')]
 	static public function
 	TrimmedTextNullable(mixed $Item):
@@ -208,6 +277,9 @@ class Datafilters {
 		return Filters\Text::TrimmedNullable($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::Encoded')]
 	static public function
 	EncodedText(mixed $Item):
@@ -216,6 +288,9 @@ class Datafilters {
 		return Filters\Text::Encoded($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::Stripped')]
 	static public function
 	StrippedText(mixed $Item):
@@ -224,6 +299,9 @@ class Datafilters {
 		return Filters\Text::Stripped($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::Email')]
 	static public function
 	Email(mixed $Item):
@@ -232,6 +310,9 @@ class Datafilters {
 		return Filters\Text::Email($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::UUID')]
 	static public function
 	UUID(mixed $Item):
@@ -240,6 +321,9 @@ class Datafilters {
 		return Filters\Text::UUID($Item);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::PathableKey')]
 	static public function
 	PathableKey(mixed $Input):
@@ -248,6 +332,9 @@ class Datafilters {
 		return Filters\Text::PathableKey($Input);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::SlottableKey')]
 	static public function
 	SlottableKey(mixed $Input):
@@ -256,6 +343,9 @@ class Datafilters {
 		return Filters\Text::SlottableKey($Input);
 	}
 
+	/**
+	* @codeCoverageIgnore
+	*/
 	#[Meta\Deprecated('2023-07-11', 'use Filters\Text::PascalFromKey')]
 	static public function
 	PascalFromKey(mixed $Input):

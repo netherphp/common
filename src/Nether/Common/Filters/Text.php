@@ -5,8 +5,21 @@ namespace Nether\Common\Filters;
 use Nether\Common;
 
 #[Common\Meta\DateAdded('2023-07-11')]
-class Text
-extends Common\Datafilters {
+class Text {
+
+	#[Common\Meta\DateAdded('2023-08-07')]
+	static public function
+	Prepare(mixed &$Item):
+	mixed {
+
+		// @todo 2023-08-07 rebase class off Datafilters after all the old
+		// methods are removed, then remove this method.
+
+		if($Item instanceof Common\Struct\DatafilterItem)
+		$Item = $Item->Value;
+
+		return $Item;
+	}
 
 	////////////////////////////////////////////////////////////////
 	// CONVERT TO STRING ///////////////////////////////////////////

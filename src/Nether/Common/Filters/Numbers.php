@@ -5,8 +5,21 @@ namespace Nether\Common\Filters;
 use Nether\Common;
 
 #[Common\Meta\DateAdded('2023-07-11')]
-class Numbers
-extends Common\Datafilters {
+class Numbers {
+
+	#[Common\Meta\DateAdded('2023-08-07')]
+	static public function
+	Prepare(mixed &$Item):
+	mixed {
+
+		// @todo 2023-08-07 rebase class off Datafilters after all the old
+		// methods are removed, then remove this method.
+
+		if($Item instanceof Common\Struct\DatafilterItem)
+		$Item = $Item->Value;
+
+		return $Item;
+	}
 
 	////////////////////////////////////////////////////////////////
 	// CONVERT TO INTEGER //////////////////////////////////////////
@@ -42,7 +55,7 @@ extends Common\Datafilters {
 	IntRange(mixed $Input, int $Min=PHP_INT_MIN, int $Max=PHP_INT_MAX, ?int $Or=NULL):
 	int {
 
-		$Input = static::TypeInt(static::Prepare($Input));
+		$Input = static::IntType(static::Prepare($Input));
 
 		if($Or !== NULL && $Input === $Or)
 		return $Input;
@@ -173,7 +186,7 @@ extends Common\Datafilters {
 	Page(mixed $Item):
 	int {
 
-		$Item = static::TypeInt(static::Prepare($Item));
+		$Item = static::IntType(static::Prepare($Item));
 
 		if($Item < 1)
 		return 1;
