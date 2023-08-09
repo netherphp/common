@@ -46,6 +46,13 @@ class Protostore {
 	}
 
 	public function
+	GetData():
+	Datastore {
+
+		return new Datastore($this->Data->GetData());
+	}
+
+	public function
 	HasKey(string $Key):
 	mixed {
 
