@@ -73,6 +73,15 @@ class Protostore {
 		return $this->Data->Keys();
 	}
 
+	public function
+	Set(string $Key, mixed $Val):
+	static {
+
+		$this->Data[$Key] = $Val;
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
