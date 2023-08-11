@@ -6,7 +6,9 @@ use Nether\Atlantis;
 use Nether\Common;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
+use DateTimeInterface;
 use Stringable;
 use JsonSerializable;
 
@@ -21,7 +23,12 @@ implements
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
-	protected DateTime
+	// we are not using the DateTimeInterface because it is missing the
+	// setTimezone method depite having get timezone method. i could just
+	// write it how i want but the editor claims its an error and im not
+	// going to have that.
+
+	protected DateTime|DateTimeImmutable
 	$DateTime;
 
 	protected string
@@ -34,17 +41,83 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(mixed $Input='now') {
+	__Construct(mixed $Input='now', bool $Immutable=FALSE) {
 
-		$this->DateTime = new DateTime($Input);
+		if($Input instanceof DateTimeInterface)
+		$this->ConstructFromDateTime($Input, $Immutable);
 
-		$this->DateTime->SetTimezone(new DateTimeZone(
-			Common\Library::Get(static::ConfDefaultTimezone)
-			?? 'UTC'
-		));
+		elseif($Input instanceof self)
+		$this->ConstructFromSelf($Input, $Immutable);
+
+		else
+		$this->ConstructDefault($Input, $Immutable);
 
 		return;
 	}
+
+	#[Common\Meta\Date('2023-08-11')]
+	protected function
+	ConstructFromSelf(self $Input, bool $Immutable):
+	void {
+
+		$DateTime = (
+			$Immutable
+			? new DateTimeImmutable($Input->Get(Common\Values::DateFormatYMDT12VO))
+			: new DateTime($Input->Get(Common\Values::DateFormatYMDT12VO))
+		);
+
+		$this->SetDateTime($DateTime);
+
+		return;
+	}
+
+	#[Common\Meta\Date('2023-08-11')]
+	protected function
+	ConstructFromDateTime(DateTimeInterface $Input, bool $Immutable):
+	void {
+
+		// current thought is if we instantiate using an object then we
+		// are going to be getting exact second and timezone info from
+		// that just because of how the built in class works.
+
+		// 1. don't convert immutable or not - chain as it was given.
+		// 2. don't set timezone - its already in here.
+
+		$this->SetDateTime($Input);
+
+		return;
+	}
+
+	#[Common\Meta\Date('2023-08-11')]
+	protected function
+	ConstructDefault(string $Input, bool $Immutable):
+	void {
+
+		// otherwise if we are instiantiating via fuzzy input then we will
+		// want to respect the immuable status to begin that chain.
+
+		$DateTime = (
+			$Immutable
+			? new DateTimeImmutable($Input)
+			: new DateTime($Input)
+		);
+
+		// additionally we want to change the timezone to the one we might
+		// be expecting after giving it fuzz input.
+
+		$TZ = (
+			Common\Library::Get(static::ConfDefaultTimezone)
+			?? 'UTC'
+		);
+
+		$this->SetDateTime($DateTime);
+		$this->SetTimezone($TZ);
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Stringable ///////////////////////////////////////
 
 	public function
 	__ToString():
@@ -52,6 +125,9 @@ implements
 
 		return $this->DateTime->Format($this->DateFormat);
 	}
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Invokeable ///////////////////////////////////////
 
 	public function
 	__Invoke(...$Argv):
@@ -62,6 +138,9 @@ implements
 
 		return $this->Get();
 	}
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS JsonSerializable /////////////////////////////////
 
 	public function
 	JsonSerialize():
@@ -75,6 +154,9 @@ implements
 		];
 	}
 
+	////////////////////////////////////////////////////////////////
+	// FEIGNS Nether\Atlantis\Prototype ////////////////////////////
+
 	public function
 	DescribeForPublicAPI():
 	string {
@@ -86,11 +168,33 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	public function
-	Modify(string $What):
+	GetDateTime():
+	DateTimeInterface {
+
+		return $this->DateTime;
+	}
+
+	public function
+	SetDateTime(DateTimeInterface $Input):
 	static {
 
-		$this->DateTime->Modify($What);
+		$this->DateTime = $Input;
+		return $this;
+	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	public function
+	Modify(string $How):
+	static {
+
+		if($this->DateTime instanceof DateTimeImmutable)
+		return new static($this->DateTime->Modify($How));
+
+		////////
+
+		$this->DateTime->Modify($How);
 		return $this;
 	}
 
@@ -103,10 +207,10 @@ implements
 
 		////////
 
-		$Then = $When->GetUnixtime();
 		$Now = $this->GetUnixtime();
+		$Then = $When->GetUnixtime();
 
-		if($Then < $Now)
+		if($Now > $Then)
 		return FALSE;
 
 		////////
@@ -123,15 +227,23 @@ implements
 
 		////////
 
-		$Then = $When->GetUnixtime();
 		$Now = $this->GetUnixtime();
+		$Then = $When->GetUnixtime();
 
-		if($Then > $Now)
+		if($Now < $Then)
 		return FALSE;
 
 		////////
 
 		return TRUE;
+	}
+
+	#[Common\Meta\Date('2023-08-11')]
+	public function
+	IsImmutable():
+	bool {
+
+		return ($this->DateTime instanceof DateTimeImmutable);
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -207,10 +319,17 @@ implements
 	SetTimezone(mixed $TZ):
 	static {
 
-		$this->DateTime->SetTimezone(
-			new DateTimeZone($TZ)
-		);
+		if(($TZ instanceof DateTimeZone) === FALSE)
+		$TZ = new DateTimeZone($TZ);
 
+		////////
+
+		//if($this->DateTime instanceof DateTimeImmutable)
+		//return new static($this->DateTime->SetTimezone($TZ));
+
+		////////
+
+		$this->DateTime = $this->DateTime->SetTimezone($TZ);
 		return $this;
 	}
 
@@ -218,7 +337,7 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	FromDateString(string $Date, ?string $Timezone=NULL):
+	FromDateString(string $Date, ?string $TZ=NULL, bool $Imm=FALSE):
 	static {
 	/*//
 	@date 2022-05-04
@@ -228,24 +347,37 @@ implements
 	day type deals when rehydrating this from the unix timestamp later.
 	//*/
 
-		if($Timezone === NULL)
-		$Timezone = (
+		if($TZ === NULL)
+		$TZ = (
 			Common\Library::Get('Nether.Common.Date.Timezone')
 			?? 'UTC'
 		);
 
-		return new static("{$Date} {$Timezone}");
+		return new static("{$Date} {$TZ}", $Imm);
 	}
 
 	static public function
-	FromTime(mixed $Time):
+	FromTime(mixed $Time, bool $Imm=FALSE):
 	static {
 	/*//
 	@date 2021-08-26
 	//*/
 
-		return new static("@{$Time} UTC");
+		return new static("@{$Time} UTC", $Imm);
 	}
+
+	#[Common\Meta\Date('2023-08-11')]
+	static public function
+	FromDateTime(DateTimeInterface $Input):
+	static {
+
+		$Output = new static($Input);
+
+		return $Output;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	static public function
 	FetchTimezoneFromSystem():
