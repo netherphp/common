@@ -228,4 +228,138 @@ extends TestCase {
 
 		return;
 	}
+
+	/** @test */
+	public function
+	TestImmutableModify():
+	void {
+
+		$Now = new Date('now', FALSE);
+		$Then = $Now->Modify('+1 hour');
+
+		$this->AssertTrue($Now === $Then);
+		$this->AssertTrue($Now->GetUnixtime() === $Then->GetUnixtime());
+
+		////////
+
+		$Now = new Date('now', TRUE);
+		$Then = $Now->Modify('+1 hour');
+
+		$this->AssertFalse($Now === $Then);
+		$this->AssertFalse($Now->GetUnixtime() === $Then->GetUnixtime());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestCarriedTimezones():
+	void {
+
+		$Control = new Date('2001-01-01 01:01am UTC');
+		$this->AssertEquals('UTC', $Control->GetTimezoneName());
+		$this->AssertEquals(0, $Control->GetTimezoneOffset());
+
+		// should be exactly the same.
+
+		$FromDateTime = new Date($Control->GetDateTime());
+		$this->AssertEquals('UTC', $Control->GetTimezoneName());
+		$this->AssertEquals(0, $Control->GetTimezoneOffset());
+
+		$FromDateTime = Date::FromDateTime($Control->GetDateTime());
+		$this->AssertEquals('UTC', $Control->GetTimezoneName());
+		$this->AssertEquals(0, $Control->GetTimezoneOffset());
+
+		// the same but it will lose the timezone name due to how we cloned.
+
+		$FromDate = new Date($Control);
+		$this->AssertEquals('+00:00', $FromDate->GetTimezoneName());
+		$this->AssertEquals(0, $FromDate->GetTimezoneOffset());
+
+		////////
+
+		$Control->SetTimezone('America/Chicago');
+		$this->AssertEquals('America/Chicago', $Control->GetTimezoneName());
+		$this->AssertEquals(-21600, $Control->GetTimezoneOffset());
+
+		// should be exactly the same.
+
+		$FromDateTime = new Date($Control->GetDateTime());
+		$this->AssertEquals('America/Chicago', $Control->GetTimezoneName());
+		$this->AssertEquals(-21600, $Control->GetTimezoneOffset());
+
+		// the same but it will lose the timezone name due to how we cloned.
+		$FromDate = new Date($Control);
+		$this->AssertEquals('-06:00', $FromDate->GetTimezoneName());
+		$this->AssertEquals(-21600, $FromDate->GetTimezoneOffset());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestBeforeAfter():
+	void {
+
+		$Then = new Date('-1 days');
+		$Now = new Date('+1 days');
+
+		////////
+
+		$this->AssertTrue($Then->IsAfter($Now));
+		$this->AssertTrue($Now->IsBefore($Then));
+
+		////////
+
+		$this->AssertTrue($Now->IsThisAfter($Then));
+		$this->AssertFalse($Now->IsThisBefore($Then));
+
+		$this->AssertFalse($Now->IsThatAfter($Then));
+		$this->AssertTrue($Now->IsThatBefore($Then));
+
+		$this->AssertTrue($Then->IsThisBefore($Now));
+		$this->AssertFalse($Then->IsThisAfter($Now));
+
+		$this->AssertFalse($Then->IsThatBefore($Now));
+		$this->AssertTrue($Then->IsThatAfter($Now));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFetchTimezoneFromSystem():
+	void {
+
+		$Magic = Date::FetchTimezoneFromSystem();
+		$Other = NULL;
+
+		////////
+
+		if(PHP_OS_FAMILY)
+		$Other = Date::FetchTimezoneFromWindows();
+		else
+		$Other = Date::FetchTimezoneFromUnix();
+
+		////////
+
+		$this->AssertEquals($Other, $Magic);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestUnixtime():
+	void {
+
+		$Then = Date::FromDateString('-1 day');
+		$Time = Date::Unixtime();
+
+		$this->AssertTrue(is_int($Time));
+		$this->AssertTrue($Time > $Then->GetUnixtime());
+
+		return;
+	}
+
 }

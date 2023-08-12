@@ -7,7 +7,11 @@ class Values {
 	const
 	SecPerMin = 60,
 	SecPerHr  = 3600,
-	SecPerDay = 86400;
+	SecPerDay = 86400,
+	MinPerHr  = 60,
+	MinPerDay = 1440,
+	HrPerDay  = 24,
+	DayPerWk  = 7;
 
 	const
 	DateFormatYMD              = 'Y-m-d',

@@ -199,7 +199,7 @@ implements
 	}
 
 	public function
-	IsAfter(self|int $When):
+	IsThisAfter(self|int $When):
 	bool {
 
 		if(is_int($When))
@@ -207,10 +207,10 @@ implements
 
 		////////
 
-		$Now = $this->GetUnixtime();
+		$Here = $this->GetUnixtime();
 		$Then = $When->GetUnixtime();
 
-		if($Now > $Then)
+		if($Here < $Then)
 		return FALSE;
 
 		////////
@@ -219,7 +219,7 @@ implements
 	}
 
 	public function
-	IsBefore(self|int $When):
+	IsThisBefore(self|int $When):
 	bool {
 
 		if(is_int($When))
@@ -227,15 +227,29 @@ implements
 
 		////////
 
-		$Now = $this->GetUnixtime();
+		$Here = $this->GetUnixtime();
 		$Then = $When->GetUnixtime();
 
-		if($Now < $Then)
+		if($Here > $Then)
 		return FALSE;
 
 		////////
 
 		return TRUE;
+	}
+
+	public function
+	IsThatAfter(self|int $When):
+	bool {
+
+		return !$this->IsThisAfter($When);
+	}
+
+	public function
+	IsThatBefore(self|int $When):
+	bool {
+
+		return !$this->IsThisBefore($When);
 	}
 
 	#[Common\Meta\Date('2023-08-11')]
@@ -316,6 +330,24 @@ implements
 	}
 
 	public function
+	GetTimezoneName():
+	string {
+
+		$TZ = $this->DateTime->GetTimezone();
+
+		return $TZ->GetName();
+	}
+
+	public function
+	GetTimezoneOffset():
+	int {
+
+		$TZ = $this->DateTime->GetTimezone();
+
+		return $TZ->GetOffset($this->DateTime);
+	}
+
+	public function
 	SetTimezone(mixed $TZ):
 	static {
 
@@ -379,16 +411,73 @@ implements
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Common\Meta\Date('2023-06-01')]
 	static public function
 	FetchTimezoneFromSystem():
 	string {
-	/*//
-	@date 2023-06-01
-	//*/
 
-		return trim(`date +"%z"`);
+		if(PHP_OS_FAMILY === 'Windows')
+		return static::FetchTimezoneFromWindows();
+
+		return static::FetchTimezoneFromUnix();
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
+	static public function
+	FetchTimezoneFromUnix():
+	string {
+
+		$Result = trim(`date +"%z"`);
+
+		return $Result;
+	}
+
+	#[Common\Meta\Date('2023-08-12')]
+	static public function
+	FetchTimezoneFromWindows():
+	string {
+
+		$Result = parse_ini_string(trim(
+			`wmic OS Get CurrentTimeZone /value`
+		));
+
+		////////
+
+		if(!$Result)
+		return 'UTC';
+
+		if(!isset($Result['CurrentTimeZone']))
+		return 'UTC';
+
+		////////
+
+		// windows returns this in minutes.
+
+		return sprintf('%d', (
+			(int)$Result['CurrentTimeZone'] / Values::MinPerHr
+		));
+	}
+
+	static public function
+	Unixtime(?string $Input=NULL):
+	int {
+
+		$Date = static::FromDateString(
+			$Input
+			?? 'now'
+		);
+
+		return $Date->GetUnixtime();
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+
+	#[Common\Meta\Deprecated('2023-08-12', 'Use Unixtime')]
 	static public function
 	CurrentUnixtime():
 	int {
@@ -401,13 +490,28 @@ implements
 		return $Now->GetUnixtime();
 	}
 
-	static public function
-	Unixtime(?string $Input=NULL):
-	int {
+	/**
+	 * @codeCoverageIgnore
+	 */
 
-		$Date = static::FromDateString($Input ?? 'now');
+	#[Common\Meta\Deprecated('2023-08-12', 'Use IsThatAfter')]
+	public function
+	IsAfter(self|int $When):
+	bool {
 
-		return $Date->GetUnixtime();
+		return $this->IsThatAfter($When);
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+
+	#[Common\Meta\Deprecated('2023-08-12', 'Use IsThatBefore')]
+	public function
+	IsBefore(self|int $When):
+	bool {
+
+		return $this->IsThatBefore($When);
 	}
 
 }
