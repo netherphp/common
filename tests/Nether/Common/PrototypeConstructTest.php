@@ -487,6 +487,22 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
+	TestFromArray():
+	void {
+
+		$Data = [ 'One'=> 1, 'Two'=> 2 ];
+		$Obj = Prototype::FromArray($Data);
+
+		$this->AssertTrue(property_exists($Obj, 'One'));
+		$this->AssertTrue(property_exists($Obj, 'Two'));
+		$this->AssertTrue($Obj->One === 1);
+		$this->AssertTrue($Obj->Two === 2);
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestThatAllowNullOnNullCallLogicFailWithUntypedProps() {
 
 		// tests a failure in my logic that went unnoticed for a while

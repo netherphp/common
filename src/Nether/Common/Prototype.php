@@ -181,22 +181,6 @@ impact i can find while packing in as many features as possible.
 		);
 	}
 
-	static public function
-	NewRelaxed():
-	static {
-	/*//
-	@date 2021-09-09
-	same as the New() method but without the strict input flag. any named
-	variables you provide will be created if they did not already exist.
-	//*/
-
-		return new static(
-			func_get_args(),
-			NULL,
-			0
-		);
-	}
-
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -206,7 +190,7 @@ impact i can find while packing in as many features as possible.
 	FromArray(iterable $Input):
 	static {
 
-		return new static($Input, NULL, Prototype\Flags::StrictInput);
+		return new static($Input, NULL, 0);
 	}
 
 }
