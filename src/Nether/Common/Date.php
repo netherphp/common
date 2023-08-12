@@ -429,6 +429,11 @@ implements
 	FetchTimezoneFromUnix():
 	string {
 
+		if(PHP_OS_FAMILY === 'Windows')
+		return 'UTC';
+
+		////////
+
 		$Result = trim(`date +"%z"`);
 
 		return $Result;
@@ -439,19 +444,17 @@ implements
 	FetchTimezoneFromWindows():
 	string {
 
+		if(PHP_OS_FAMILY !== 'Windows')
+		return 'UTC';
+
+		////////
+
 		$Result = parse_ini_string(trim(
 			`wmic OS Get CurrentTimeZone /value`
 		));
 
-		////////
-
-		if(!$Result)
-		return 'UTC';
-
-		if(!isset($Result['CurrentTimeZone']))
-		return 'UTC';
-
-		////////
+		//if(!$Result || !isset($Result['CurrentTimeZone']))
+		//return 'UTC';
 
 		// windows returns this in minutes.
 

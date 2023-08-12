@@ -353,13 +353,21 @@ extends TestCase {
 
 		$Magic = Date::FetchTimezoneFromSystem();
 		$Other = NULL;
+		$Laugh = NULL;
 
 		////////
 
-		if(PHP_OS_FAMILY === 'Windows')
-		$Other = Date::FetchTimezoneFromWindows();
-		else
-		$Other = Date::FetchTimezoneFromUnix();
+		if(PHP_OS_FAMILY === 'Windows') {
+			$Other = Date::FetchTimezoneFromWindows();
+			$Laugh = Date::FetchTimezoneFromUnix();
+			$this->AssertEquals('UTC', $Laugh);
+		}
+
+		else {
+			$Other = Date::FetchTimezoneFromUnix();
+			$Laugh = Date::FetchTimezoneFromWindows();
+			$this->AssertEquals('UTC', $Laugh);
+		}
 
 		////////
 
