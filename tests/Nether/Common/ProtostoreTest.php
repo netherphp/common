@@ -133,11 +133,23 @@ extends TestCase {
 	void {
 
 		$Store = Protostore::FromJSON('{ "One": 1, "Two": 2 }');
-
 		$this->AssertEquals(2, $Store->Count());
 		$this->AssertEquals(1, $Store->Get('One'));
 		$this->AssertEquals(2, $Store->Get('Two'));
 		$this->AssertNull($Store->Get('Three'));
+
+		$Store = Protostore::FromJSON(NULL);
+		$this->AssertEquals(0, $Store->Count());
+		$this->AssertNull($Store->Get('One'));
+		$this->AssertNull($Store->Get('Two'));
+		$this->AssertNull($Store->Get('Three'));
+
+		$Store = Protostore::FromJSON('oh snap');
+		$this->AssertEquals(0, $Store->Count());
+		$this->AssertNull($Store->Get('One'));
+		$this->AssertNull($Store->Get('Two'));
+		$this->AssertNull($Store->Get('Three'));
+
 
 		return;
 	}
