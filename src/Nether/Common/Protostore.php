@@ -2,6 +2,7 @@
 
 namespace Nether\Common;
 
+#[Meta\Date('2023-08-10')]
 class Protostore {
 
 	protected Datastore
@@ -24,13 +25,28 @@ class Protostore {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Meta\Date('2023-08-10')]
+	#[Meta\Info('Mimic the version on the Atlantis Prototype class to self-describe itself.')]
 	public function
 	DescribeForPublicAPI():
 	object {
 
+		// this is mainly to mimic the atlantis prototype version that
+		// the json apis use. this one specifically casts the array to
+		// an object to make my empty sets look consistent.
+
 		return (object)$this->Data->GetData();
 	}
 
+	#[Meta\Date('2023-08-12')]
+	public function
+	Count():
+	int {
+
+		return $this->Data->Count();
+	}
+
+	#[Meta\Date('2023-08-10')]
 	public function
 	Filter(callable $Func):
 	Datastore {
@@ -38,6 +54,7 @@ class Protostore {
 		return $this->Data->Distill($Func);
 	}
 
+	#[Meta\Date('2023-08-10')]
 	public function
 	Get(string $Key):
 	mixed {
@@ -45,13 +62,23 @@ class Protostore {
 		return $this->Data->Get($Key);
 	}
 
+	#[Meta\Date('2023-08-10')]
 	public function
 	GetData():
-	Datastore {
+	array {
 
-		return new Datastore($this->Data->GetData());
+		return $this->Data->GetData();
 	}
 
+	#[Meta\Date('2023-08-12')]
+	public function
+	GetDatastore():
+	Datastore {
+
+		return new Datastore($this->GetData());
+	}
+
+	#[Meta\Date('2023-08-10')]
 	public function
 	HasKey(string $Key):
 	mixed {
@@ -59,13 +86,15 @@ class Protostore {
 		return $this->Data->HasKey($Key);
 	}
 
+	#[Meta\Date('2023-08-10')]
 	public function
 	HasValue(string $Key):
 	mixed {
 
-		return $this->Data->HasKey($Key);
+		return $this->Data->HasValue($Key);
 	}
 
+	#[Meta\Date('2023-08-10')]
 	public function
 	Keys():
 	array {
@@ -73,6 +102,7 @@ class Protostore {
 		return $this->Data->Keys();
 	}
 
+	#[Meta\Date('2023-08-10')]
 	public function
 	Set(string $Key, mixed $Val):
 	static {
@@ -82,9 +112,20 @@ class Protostore {
 		return $this;
 	}
 
+	#[Meta\Date('2023-08-12')]
+	public function
+	Unset(string $Key):
+	static {
+
+		unset($this->Data[$Key]);
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Meta\Date('2023-08-10')]
 	static public function
 	FromArray(iterable $Input):
 	static {
@@ -95,6 +136,7 @@ class Protostore {
 		return $Output;
 	}
 
+	#[Meta\Date('2023-08-10')]
 	static public function
 	FromJSON(?string $JSON):
 	static {
