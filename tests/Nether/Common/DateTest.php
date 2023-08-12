@@ -336,7 +336,7 @@ extends TestCase {
 
 		////////
 
-		if(PHP_OS_FAMILY)
+		if(PHP_OS_FAMILY === 'Windows')
 		$Other = Date::FetchTimezoneFromWindows();
 		else
 		$Other = Date::FetchTimezoneFromUnix();
