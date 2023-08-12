@@ -329,6 +329,7 @@ implements
 		return $this->DateTime->Format(Common\Values::DateFormatUnix);
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	public function
 	GetTimezoneName():
 	string {
@@ -338,6 +339,7 @@ implements
 		return $TZ->GetName();
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	public function
 	GetTimezoneOffset():
 	int {
@@ -347,6 +349,7 @@ implements
 		return $TZ->GetOffset($this->DateTime);
 	}
 
+	#[Common\Meta\Date('2023-08-11')]
 	public function
 	SetTimezone(mixed $TZ):
 	static {
@@ -356,23 +359,24 @@ implements
 
 		////////
 
-		//if($this->DateTime instanceof DateTimeImmutable)
-		//return new static($this->DateTime->SetTimezone($TZ));
+		// this is an instance where im breaking the idea of mutable on
+		// purpose to be nice to use.
+
+		$this->DateTime = $this->DateTime->SetTimezone($TZ);
 
 		////////
 
-		$this->DateTime = $this->DateTime->SetTimezone($TZ);
 		return $this;
 	}
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Common\Meta\Date('2022-05-04')]
 	static public function
 	FromDateString(string $Date, ?string $TZ=NULL, bool $Imm=FALSE):
 	static {
 	/*//
-	@date 2022-05-04
 	consider the timezone when making an object from a date string. if a user
 	passes in 2010-01-01 they are likely expecting it to be in their (or the
 	site's default) timezone. without considering that might get off by one
@@ -388,12 +392,10 @@ implements
 		return new static("{$Date} {$TZ}", $Imm);
 	}
 
+	#[Common\Meta\Date('2021-08-26')]
 	static public function
 	FromTime(mixed $Time, bool $Imm=FALSE):
 	static {
-	/*//
-	@date 2021-08-26
-	//*/
 
 		return new static("@{$Time} UTC", $Imm);
 	}
@@ -458,13 +460,13 @@ implements
 		));
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	static public function
 	Unixtime(?string $Input=NULL):
 	int {
 
 		$Date = static::FromDateString(
-			$Input
-			?? 'now'
+			$Input ?? 'now'
 		);
 
 		return $Date->GetUnixtime();

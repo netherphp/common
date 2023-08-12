@@ -5,7 +5,9 @@ namespace Nether\Common;
 use PHPUnit\Framework\TestCase;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
+use DateTimeInterface;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -237,6 +239,7 @@ extends TestCase {
 		$Now = new Date('now', FALSE);
 		$Then = $Now->Modify('+1 hour');
 
+		$this->AssertFalse($Now->IsImmutable());
 		$this->AssertTrue($Now === $Then);
 		$this->AssertTrue($Now->GetUnixtime() === $Then->GetUnixtime());
 
@@ -245,6 +248,7 @@ extends TestCase {
 		$Now = new Date('now', TRUE);
 		$Then = $Now->Modify('+1 hour');
 
+		$this->AssertTrue($Now->IsImmutable());
 		$this->AssertFalse($Now === $Then);
 		$this->AssertFalse($Now->GetUnixtime() === $Then->GetUnixtime());
 
@@ -273,6 +277,12 @@ extends TestCase {
 		// the same but it will lose the timezone name due to how we cloned.
 
 		$FromDate = new Date($Control);
+		$this->AssertTrue($FromDate->GetDateTime() instanceof DateTime);
+		$this->AssertEquals('+00:00', $FromDate->GetTimezoneName());
+		$this->AssertEquals(0, $FromDate->GetTimezoneOffset());
+
+		$FromDate = new Date($Control, TRUE);
+		$this->AssertTrue($FromDate->GetDateTime() instanceof DateTimeImmutable);
 		$this->AssertEquals('+00:00', $FromDate->GetTimezoneName());
 		$this->AssertEquals(0, $FromDate->GetTimezoneOffset());
 
@@ -313,12 +323,22 @@ extends TestCase {
 
 		$this->AssertTrue($Now->IsThisAfter($Then));
 		$this->AssertFalse($Now->IsThisBefore($Then));
-
-		$this->AssertFalse($Now->IsThatAfter($Then));
-		$this->AssertTrue($Now->IsThatBefore($Then));
+		$this->AssertTrue($Now->IsThisAfter(0));
+		$this->AssertFalse($Now->IsThisBefore(0));
+		$this->AssertFalse($Now->IsThisAfter(PHP_INT_MAX));
+		$this->AssertTrue($Now->IsThisBefore(PHP_INT_MAX));
 
 		$this->AssertTrue($Then->IsThisBefore($Now));
 		$this->AssertFalse($Then->IsThisAfter($Now));
+		$this->AssertTrue($Then->IsThisAfter(0));
+		$this->AssertFalse($Then->IsThisBefore(0));
+		$this->AssertFalse($Then->IsThisAfter(PHP_INT_MAX));
+		$this->AssertTrue($Then->IsThisBefore(PHP_INT_MAX));
+
+		////////
+
+		$this->AssertFalse($Now->IsThatAfter($Then));
+		$this->AssertTrue($Now->IsThatBefore($Then));
 
 		$this->AssertFalse($Then->IsThatBefore($Now));
 		$this->AssertTrue($Then->IsThatAfter($Now));
@@ -358,6 +378,19 @@ extends TestCase {
 
 		$this->AssertTrue(is_int($Time));
 		$this->AssertTrue($Time > $Then->GetUnixtime());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestDescribeForPublicAPI():
+	void {
+
+		$Now = new Date;
+		$Item = $Now->DescribeForPublicAPI();
+
+		$this->AssertTrue(is_string($Item));
 
 		return;
 	}
