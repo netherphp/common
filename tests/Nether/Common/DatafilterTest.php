@@ -324,6 +324,42 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestFilterPrepare():
+	void {
+
+		$Filt = new Datafilter([]);
+		$Item = NULL;
+
+		// so first it'll be that object.
+
+		$Item = new DatafilterItem(1, 'One', $Filt);
+		$this->AssertInstanceOf(DatafilterItem::class, $Item);
+
+		// then i'll be an int.
+
+		Filters\Numbers::Prepare($Item);
+		$this->AssertTrue($Item === 1);
+
+		// it'll still be an int.
+
+		Filters\Numbers::Prepare($Item);
+		$this->AssertTrue($Item === 1);
+
+		// object again.
+
+		$Item = new DatafilterItem(1, 'One', $Filt);
+		$this->AssertInstanceOf(DatafilterItem::class, $Item);
+
+		// int again
+
+		$Item = Filters\Numbers::Prepare($Item);
+		$this->AssertTrue($Item === 1);
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestFiltersNumeric():
 	void {
 
@@ -998,6 +1034,48 @@ extends TestCase {
 
 		foreach($Dataset as $In => $Out)
 		$this->AssertEquals($Out, Filters\Links::YouTubeURL($In));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFilterLinkedInURL():
+	void {
+
+		$Dataset = [
+			'https://linkedin.com/linkedin' => 'https://linkedin.com/linkedin',
+			'linkedin'                      => 'https://linkedin.com/linkedin',
+			'@linkedin'                     => 'https://linkedin.com/linkedin',
+			'linkedin.com/linkedin'         => 'http://linkedin.com/linkedin'
+		];
+
+		$In = NULL;
+		$Out = NULL;
+
+		foreach($Dataset as $In => $Out)
+		$this->AssertEquals($Out, Filters\Links::LinkedInURL($In));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFilterThreadsURL():
+	void {
+
+		$Dataset = [
+			'https://threads.net/@threads' => 'https://threads.net/@threads',
+			'threads'                      => 'https://threads.net/@threads',
+			'@threads'                     => 'https://threads.net/@threads',
+			'threads.net/@threads'         => 'http://threads.net/@threads'
+		];
+
+		$In = NULL;
+		$Out = NULL;
+
+		foreach($Dataset as $In => $Out)
+		$this->AssertEquals($Out, Filters\Links::ThreadsURL($In));
 
 		return;
 	}

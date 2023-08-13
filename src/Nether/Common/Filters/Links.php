@@ -4,21 +4,11 @@ namespace Nether\Common\Filters;
 
 use Nether\Common;
 
+#[Common\Meta\DateAdded('2023-07-07')]
 class Links {
 
-	#[Common\Meta\DateAdded('2023-08-07')]
-	static public function
-	Prepare(mixed &$Item):
-	mixed {
-
-		// @todo 2023-08-07 rebase class off Datafilters after all the old
-		// methods are removed, then remove this method.
-
-		if($Item instanceof Common\Struct\DatafilterItem)
-		$Item = $Item->Value;
-
-		return $Item;
-	}
+	use
+	Common\Package\DatafilterPackage;
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
@@ -73,6 +63,28 @@ class Links {
 			'https://linkedin.com/%s',
 			ltrim($Val, '@')
 		);
+
+		return static::WebsiteURL($Val);
+	}
+
+	static public function
+	ThreadsURL($Val):
+	string {
+
+		static::Prepare($Val);
+
+		$Val = trim(strip_tags($Val));
+		if(!$Val) return '';
+
+		if(strpos($Val, '/') === FALSE) {
+			if(!str_starts_with($Val, '@'))
+			$Val = "@{$Val}";
+
+			return sprintf(
+				'https://threads.net/%s',
+				$Val
+			);
+		}
 
 		return static::WebsiteURL($Val);
 	}
