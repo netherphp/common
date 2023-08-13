@@ -18,6 +18,26 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestDirectoryClass():
+	void {
+
+		$Link = new Common\Filesystem\Directory([
+			'Path'   => '/path',
+			'Mode'   => 0o755
+		]);
+
+		$this->AssertEquals('/path', $Link->Path);
+		$this->AssertEquals(0o755, $Link->Mode);
+
+		$Array = json_decode(json_encode($Link), TRUE);
+		$this->AssertTrue(isset($Array['Path']));
+		$this->AssertTrue(isset($Array['Mode']));
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestSymlinkClass():
 	void {
 
