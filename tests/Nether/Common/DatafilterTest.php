@@ -644,6 +644,10 @@ extends TestCase {
 			$this->AssertNotNull($Val);
 		}
 
+		$this->AssertTrue(
+			Filters\Text::Trimmed(69) === '69'
+		);
+
 		return;
 	}
 
@@ -660,6 +664,14 @@ extends TestCase {
 			Filters\Text::Encoded($StringOG)
 		);
 
+		$this->AssertEquals(
+			$StringEnc,
+			Filters\Text::EncodedNullable($StringOG)
+		);
+
+		$this->AssertNull(Filters\Text::EncodedNullable(''));
+		$this->AssertNull(Filters\Text::EncodedNullable(NULL));
+
 		return;
 	}
 
@@ -675,6 +687,14 @@ extends TestCase {
 			$StringEnc,
 			Filters\Text::Stripped($StringOG)
 		);
+
+		$this->AssertEquals(
+			$StringEnc,
+			Filters\Text::StrippedNullable($StringOG)
+		);
+
+		$this->AssertNull(Filters\Text::StrippedNullable(''));
+		$this->AssertNull(Filters\Text::StrippedNullable(NULL));
 
 		return;
 	}
@@ -708,6 +728,37 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestFiltersTabbify():
+	void {
+
+		$S = "    ";
+		$T = "\t";
+		$L = PHP_EOL;
+
+		$Data = [
+			"{$S}Accessiblity Problems{$L}"
+			=> "{$T}Accessiblity Problems{$L}",
+
+			"{$S}{$S}Accessiblity Problems{$L}"
+			=> "{$T}{$T}Accessiblity Problems{$L}"
+		];
+
+		$Old = NULL;
+		$New = NULL;
+
+		foreach($Data as $Old => $New) {
+			$this->AssertEquals(
+				$New,
+				Filters\Text::Tabbify($Old)
+			);
+		}
+
+		return;
+	}
+
+
+	/** @test */
+	public function
 	TestFiltersPathableKey():
 	void {
 
@@ -720,7 +771,8 @@ extends TestCase {
 			'this-is-an-test..jpg'  => 'this-is-an-test.jpg',
 			'this/../../is-an-test' => 'this/is-an-test',
 			'this/../is-an-test'    => 'this/is-an-test',
-			'this/is//an///test.ok' => 'this/is/an/test.ok'
+			'this/is//an///test.ok' => 'this/is/an/test.ok',
+			69                      => '69'
 		];
 
 		$Old = NULL;
