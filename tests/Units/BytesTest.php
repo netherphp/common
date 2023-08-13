@@ -86,6 +86,7 @@ extends TestCase {
 	void {
 
 		$Bytes = new Bytes(1024);
+		$Bro = new Bytes(1024);
 		$Big = new Bytes(2048);
 		$Lil = new Bytes(512);
 
@@ -98,6 +99,11 @@ extends TestCase {
 		$this->AssertFalse($Bytes->IsHeavierThan($Big->GetBytes()));
 		$this->AssertTrue($Bytes->IsLighterThan($Big));
 		$this->AssertTrue($Bytes->IsLighterThan($Big->GetBytes()));
+
+		$this->AssertFalse($Bytes->IsLighterThan($Bro));
+		$this->AssertFalse($Bytes->IsHeavierThan($Bro));
+		$this->AssertTrue($Bytes->IsTheSameAs($Bro));
+		$this->AssertTrue($Bytes->IsTheSameAs($Bro->GetBytes()));
 
 		return;
 	}
