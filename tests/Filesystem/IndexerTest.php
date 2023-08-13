@@ -1,11 +1,13 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common;
+
+use Nether\Common;
 
 use PHPUnit\Framework\TestCase;
 use Exception;
 
-class FilesystemIndexerTest
+class IndexerTest
 extends TestCase {
 
 	/** @test */
@@ -13,13 +15,13 @@ extends TestCase {
 	TestBasic():
 	void {
 
-		$Path = Filesystem\Util::Pathify(dirname(__FILE__, 4), 'src');
+		$Path = Common\Filesystem\Util::Pathify(dirname(__FILE__, 3), 'src');
 		$File = NULL;
 
 		////////
 
-		$Indexer = new Filesystem\Indexer($Path);
-		$Files = new Datastore;
+		$Indexer = new Common\Filesystem\Indexer($Path);
+		$Files = new Common\Datastore;
 
 		foreach($Indexer as $File)
 		$Files->Push($File->GetPathname());
@@ -29,8 +31,8 @@ extends TestCase {
 
 		////////
 
-		$Indexer = new Filesystem\Indexer($Path, TRUE);
-		$Files = new Datastore;
+		$Indexer = new Common\Filesystem\Indexer($Path, TRUE);
+		$Files = new Common\Datastore;
 
 		foreach($Indexer as $File)
 		$Files->Push($File->GetPathname());

@@ -1,12 +1,14 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common;
+
+use Nether\Common;
 
 use PHPUnit\Framework\TestCase;
 use Exception;
 use Throwable;
 
-class FilesystemUtilTest
+class UtilTest
 extends TestCase {
 
 	/** @test */
@@ -33,13 +35,13 @@ extends TestCase {
 			if(str_starts_with($Goal, '/'))
 			$this->AssertEquals(
 				$Goal,
-				Filesystem\Util::PathifyWith('/', ...$Bits)
+				Common\Filesystem\Util::PathifyWith('/', ...$Bits)
 			);
 
 			else
 			$this->AssertEquals(
 				$Goal,
-				Filesystem\Util::PathifyWith('\\', ...$Bits)
+				Common\Filesystem\Util::PathifyWith('\\', ...$Bits)
 			);
 		}
 
@@ -51,7 +53,7 @@ extends TestCase {
 			if(PHP_OS_FAMILY !== 'Windows') {
 				$this->AssertEquals(
 					$Goal,
-					Filesystem\Util::Pathify(...$Bits)
+					Common\Filesystem\Util::Pathify(...$Bits)
 				);
 
 				continue;
@@ -61,7 +63,7 @@ extends TestCase {
 			if(PHP_OS_FAMILY === 'Windows') {
 				$this->AssertEquals(
 					$Goal,
-					Filesystem\Util::Pathify(...$Bits)
+					Common\Filesystem\Util::Pathify(...$Bits)
 				);
 
 				continue;
@@ -103,20 +105,20 @@ extends TestCase {
 		$Expect = NULL;
 
 		foreach($Linux as $Input => $Expect)
-		$this->AssertEquals($Expect, Filesystem\Util::RepathFor('Linux', $Input));
+		$this->AssertEquals($Expect, Common\Filesystem\Util::RepathFor('Linux', $Input));
 
 		foreach($Windows as $Input => $Expect)
-		$this->AssertEquals($Expect, Filesystem\Util::RepathFor('Windows', $Input));
+		$this->AssertEquals($Expect, Common\Filesystem\Util::RepathFor('Windows', $Input));
 
 		switch(PHP_OS_FAMILY) {
 			case 'Windows':
 				foreach($Windows as $Input => $Expect)
-				$this->AssertEquals($Expect, Filesystem\Util::Repath($Input));
+				$this->AssertEquals($Expect, Common\Filesystem\Util::Repath($Input));
 			break;
 
 			default:
 				foreach($Linux as $Input => $Expect)
-				$this->AssertEquals($Expect, Filesystem\Util::Repath($Input));
+				$this->AssertEquals($Expect, Common\Filesystem\Util::Repath($Input));
 			break;
 		}
 
@@ -131,22 +133,28 @@ extends TestCase {
 		$Dir = './here';
 		$Exceptional = FALSE;
 
-		Filesystem\Util::MkDir($Dir);
+		// test making a dir that didnt exist.
+
+		Common\Filesystem\Util::MkDir($Dir);
 		$this->AssertTrue(is_dir($Dir));
 
-		Filesystem\Util::MkDir($Dir);
+		// test making a dir that did exist aka chmod again.
+
+		Common\Filesystem\Util::MkDir($Dir);
 		$this->AssertTrue(is_dir($Dir));
 
-		Filesystem\Util::RmDir($Dir);
+		// get rid of it now.
+
+		Common\Filesystem\Util::RmDir($Dir);
 		$this->AssertFalse(is_dir($Dir));
 
 		try {
-			Filesystem\Util::RmDir('lkadjflkjaldfafdfa');
+			Common\Filesystem\Util::RmDir('lkadjflkjaldfafdfa');
 		}
 
 		catch(Exception $Err) {
 			$Exceptional = TRUE;
-			$this->AssertInstanceOf(Error\DirNotFound::class, $Err);
+			$this->AssertInstanceOf(Common\Error\DirNotFound::class, $Err);
 		}
 
 		$this->AssertTrue($Exceptional);
@@ -168,13 +176,13 @@ extends TestCase {
 		$Dir = NULL;
 
 		foreach($Dirs as $Dir)
-		Filesystem\Util::MkDir($Dir);
+		Common\Filesystem\Util::MkDir($Dir);
 		$this->AssertTrue(is_dir($Dir));
 
 		file_put_contents('./here/there/lol.txt', 'lol');
 		file_put_contents('./here/thurr/lulz.txt', 'lulz');
 
-		Filesystem\Util::RmDir($Dirs[0]);
+		Common\Filesystem\Util::RmDir($Dirs[0]);
 		$this->AssertFalse(is_dir($Dirs[0]));
 
 		return;
@@ -188,7 +196,7 @@ extends TestCase {
 		// discovery note:
 		// on windows, the prefix is truncated to max of 3 char.
 
-		$Filename = Filesystem\Util::MkTempFile();
+		$Filename = Common\Filesystem\Util::MkTempFile();
 		$this->AssertTrue(file_exists($Filename));
 		$this->AssertTrue(str_contains($Filename, 'nt-'));
 
@@ -198,7 +206,7 @@ extends TestCase {
 
 		////////
 
-		$Filename = Filesystem\Util::MkTempFile('gd');
+		$Filename = Common\Filesystem\Util::MkTempFile('gd');
 		$this->AssertTrue(file_exists($Filename));
 		$this->AssertTrue(str_contains($Filename, 'gd-'));
 
@@ -220,14 +228,14 @@ extends TestCase {
 		////////
 
 		try {
-			$Filename = Filesystem\Util::MkTempFile(Path: '/zomgwtfbbq');
+			$Filename = Common\Filesystem\Util::MkTempFile(Path: '/zomgwtfbbq');
 		}
 
 		catch(Throwable $Error) {
 			$Exceptional = TRUE;
 
 			$this->AssertInstanceOf(
-				Error\DirUnwritable::class,
+				Common\Error\DirUnwritable::class,
 				$Error
 			);
 		}
@@ -246,23 +254,23 @@ extends TestCase {
 	void {
 
 		if(PHP_OS_FAMILY !== 'Windows') {
-			$Filename = Filesystem\Util::MkTempFile();
+			$Filename = Common\Filesystem\Util::MkTempFile();
 			$this->AssertTrue(is_readable($Filename));
 			$this->AssertTrue(is_writable($Filename));
 
-			Filesystem\Util::Chmod($Filename, 0o000);
+			Common\Filesystem\Util::Chmod($Filename, 0o000);
 			$this->AssertFalse(is_readable($Filename));
 			$this->AssertFalse(is_writable($Filename));
 
-			Filesystem\Util::Chmod($Filename, 0o222);
+			Common\Filesystem\Util::Chmod($Filename, 0o222);
 			$this->AssertFalse(is_readable($Filename));
 			$this->AssertTrue(is_writable($Filename));
 
-			Filesystem\Util::Chmod($Filename, 0o444);
+			Common\Filesystem\Util::Chmod($Filename, 0o444);
 			$this->AssertTrue(is_readable($Filename));
 			$this->AssertFalse(is_writable($Filename));
 
-			Filesystem\Util::Chmod($Filename, 0o666);
+			Common\Filesystem\Util::Chmod($Filename, 0o666);
 			$this->AssertTrue(is_readable($Filename));
 			$this->AssertTrue(is_writable($Filename));
 
@@ -274,6 +282,73 @@ extends TestCase {
 			// this type of permission stuff on windows.
 			$this->AssertFalse(FALSE);
 		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestLinkStuff():
+	void {
+
+		$File = Common\Filesystem\Util::MkTempFile();
+		$Link = Common\Filesystem\Util::MkTempFile();
+
+		unlink($Link);
+		symlink($File, $Link);
+
+		$WasLinkTo = Common\Filesystem\Util::IsLinkTo($Link, $File);
+		unlink($Link);
+
+		$this->AssertTrue($WasLinkTo);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestIsAbsolutePath():
+	void {
+
+		$this->AssertTrue(Common\Filesystem\Util::IsAbsolutePathFor('Linux', '/home'));
+		$this->AssertFalse(Common\Filesystem\Util::IsAbsolutePathFor('Linux', 'banana'));
+
+		$this->AssertTrue(Common\Filesystem\Util::IsAbsolutePathFor('Windows', 'C:\\Users'));
+		$this->AssertTrue(Common\Filesystem\Util::IsAbsolutePathFor('Windows', '\\Users'));
+		$this->AssertFalse(Common\Filesystem\Util::IsAbsolutePathFor('Windows', 'banana'));
+
+		if(PHP_OS_FAMILY === 'Windows') {
+			$this->AssertTrue(Common\Filesystem\Util::IsAbsolutePath('C:\\Users'));
+			$this->AssertTrue(Common\Filesystem\Util::IsAbsolutePath('\\Users'));
+			$this->AssertFalse(Common\Filesystem\Util::IsAbsolutePath('banana'));
+		}
+
+		else {
+			$this->AssertTrue(Common\Filesystem\Util::IsAbsolutePath('/home'));
+			$this->AssertFalse(Common\Filesystem\Util::IsAbsolutePath('banana'));
+		}
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestReplaceFileExtension():
+	void {
+
+		$Data = [
+			'file'     => 'file.png',
+			'file.jpg' => 'file.png'
+		];
+
+		$Old = NULL;
+		$New = NULL;
+
+		foreach($Data as $Old => $New)
+		$this->AssertEquals(
+			$New,
+			Common\Filesystem\Util::ReplaceFileExtension($Old, 'png')
+		);
 
 		return;
 	}

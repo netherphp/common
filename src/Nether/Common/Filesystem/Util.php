@@ -116,9 +116,9 @@ class Util {
 	bool {
 
 		if($OS === 'Windows')
-		return preg_match('#^([A-Za-z]:){0,1}\\\\#', $Path);
+		return (bool)preg_match('#^([A-Za-z]:){0,1}\\\\#', $Path);
 
-		return str_starts_with($Path, DIRECTORY_SEPARATOR);
+		return str_starts_with($Path, static::RepathFor($OS, '/'));
 	}
 
 	////////////////////////////////////////////////////////////////
