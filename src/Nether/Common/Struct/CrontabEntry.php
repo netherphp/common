@@ -142,8 +142,8 @@ implements Stringable {
 		if($this->Month === NULL) {
 			$Output->Modify('+1 month');
 
-			if($Now->IsThatAfter($Output))
-			return $Output;
+			//if($Now->IsThatAfter($Output))
+			//return $Output;
 		}
 
 		return $Output;

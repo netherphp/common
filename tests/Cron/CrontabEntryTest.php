@@ -27,6 +27,19 @@ extends TestCase {
 		$this->AssertFalse($Line->IsHourly());
 		$this->AssertFalse($Line->IsDaily());
 
+		$this->AssertEquals('minutely', $Line->Command);
+
+		$Line->SetCommand('zomg');
+		$this->AssertEquals('zomg', $Line->Command);
+
+		$Line->Reset();
+		$this->AssertNull($Line->Minute);
+		$this->AssertNull($Line->Hour);
+		$this->AssertNull($Line->Day);
+		$this->AssertNull($Line->Month);
+		$this->AssertNull($Line->Weekday);
+		$this->AssertNull($Line->Command);
+
 		return;
 	}
 
@@ -148,6 +161,21 @@ extends TestCase {
 		$this->AssertTrue(strlen($Frame->Get()) > 0);
 
 		Common\Library::Set(Common\Date::ConfDefaultTimezone, NULL);
+		return;
+	}
+
+	/** @test */
+	public function
+	TestCrontabValue():
+	void {
+
+		$this->AssertEquals('*', Common\Struct\CrontabEntry::CrontabValue(NULL));
+		$this->AssertEquals('*', Common\Struct\CrontabEntry::CrontabValue('*'));
+		$this->AssertEquals('1', Common\Struct\CrontabEntry::CrontabValue(1));
+		$this->AssertEquals('1', Common\Struct\CrontabEntry::CrontabValue('1'));
+
+		$this->AssertEquals('daily', Common\Struct\CrontabEntry::CrontabValue('daily'));
+
 		return;
 	}
 
