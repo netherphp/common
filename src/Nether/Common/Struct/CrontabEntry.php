@@ -184,7 +184,7 @@ implements Stringable {
 		if($this->Day !== NULL || $this->Month !== NULL || $this->Weekday !== NULL)
 		return FALSE;
 
-		if($this->Hour === NULL || $this->Minute === NULL)
+		if(!is_numeric($this->Hour))
 		return FALSE;
 
 		////////
