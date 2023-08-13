@@ -69,10 +69,7 @@ extends TestCase {
 
 		$Future = new Common\Date('+1 hour');
 
-		////////
-
-		// this should test the path where the time is in the future and
-		// it bails early.
+		// test the path where the time is in the future and bails early.
 
 		$Line = Common\Struct\CrontabEntry::FromCrontab(sprintf(
 			'* %d * * * minutely', $Future->Get('H')
@@ -85,9 +82,7 @@ extends TestCase {
 			$Line->GetTimerAsWords()
 		);
 
-		////////
-
-		// this should test the path where it bumps to the next minute.
+		// test the path where it bumps to the next minute.
 
 		$Line = Common\Struct\CrontabEntry::FromCrontab('* * * * * minutely');
 		$Date = $Line->GetTimerAsObject();
@@ -97,9 +92,7 @@ extends TestCase {
 			$Line->GetTimerAsWords()
 		);
 
-		////////
-
-		// this should test the path where it bumps to the next hour.
+		// test the path where it bumps to the next hour.
 
 		$Line = Common\Struct\CrontabEntry::FromCrontab('0 * * * * hourly');
 		$Date = $Line->GetTimerAsObject();
@@ -109,6 +102,35 @@ extends TestCase {
 			$Line->GetTimerAsWords()
 		);
 
+		// test the path where it bumps to the next hour.
+
+		$Line = Common\Struct\CrontabEntry::FromCrontab('0 * * * * hourly');
+		$Date = $Line->GetTimerAsObject();
+
+		$this->AssertEquals(
+			$Date->Get(Common\Values::DateFormatYMDT24VZ),
+			$Line->GetTimerAsWords()
+		);
+
+		// test the path where it bumps to the next day.
+
+		$Line = Common\Struct\CrontabEntry::FromCrontab('* * * * 0 daily');
+		$Date = $Line->GetTimerAsObject();
+
+		$this->AssertEquals(
+			$Date->Get(Common\Values::DateFormatYMDT24VZ),
+			$Line->GetTimerAsWords()
+		);
+
+		// test the path where it bumps to the next month.
+
+		$Line = Common\Struct\CrontabEntry::FromCrontab('* * * 0 * monthly');
+		$Date = $Line->GetTimerAsObject();
+
+		$this->AssertEquals(
+			$Date->Get(Common\Values::DateFormatYMDT24VZ),
+			$Line->GetTimerAsWords()
+		);
 
 		return;
 	}
