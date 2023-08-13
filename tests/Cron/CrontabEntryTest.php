@@ -67,8 +67,10 @@ extends TestCase {
 	TestTimerMethods():
 	void {
 
-		$Line = Common\Struct\CrontabEntry::FromCrontab('* * * * * minutely');
+		$Line = Common\Struct\CrontabEntry::FromCrontab('0 0 * * * minutely');
 		$Date = $Line->GetTimerAsObject();
+
+		// should test the future branch.
 
 		$this->AssertEquals(
 			$Date->Get(Common\Values::DateFormatYMDT24VZ),

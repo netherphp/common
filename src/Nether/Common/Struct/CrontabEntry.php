@@ -110,7 +110,7 @@ implements Stringable {
 		// if the job has not happened yet then we are done, this is the
 		// time we want to report.
 
-		if($Now->IsAfter($Output))
+		if($Now->IsThatAfter($Output))
 		return $Output;
 
 		// time units which are wildcarded will be bumped until a launch
