@@ -135,6 +135,12 @@ extends TestCase {
 			$Line->GetTimerAsWords()
 		);
 
+		// test the int method.
+
+		$Time = $Line->GetTimerAsInt();
+
+		$this->AssertEquals($Date->GetUnixtime(), $Time);
+
 		return;
 	}
 
