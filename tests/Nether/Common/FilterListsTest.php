@@ -73,6 +73,9 @@ extends TestCase {
 		$Array = Lists::ArrayOfNullable(0);
 		$this->AssertNull($Array);
 
+		$Array = Lists::ArrayOfNullable([]);
+		$this->AssertNull($Array);
+
 		////////
 
 		$Array = Lists::ArrayOfNullable('42');
