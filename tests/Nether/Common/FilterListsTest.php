@@ -76,6 +76,9 @@ extends TestCase {
 		$Array = Lists::ArrayOfNullable([]);
 		$this->AssertNull($Array);
 
+		$Array = Lists::ArrayOfNullable(Datastore::FromArray([]));
+		$this->AssertNull($Array);
+
 		////////
 
 		$Array = Lists::ArrayOfNullable('42');
