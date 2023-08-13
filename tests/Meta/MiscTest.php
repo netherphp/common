@@ -19,6 +19,10 @@ extends Common\Prototype {
 	public string
 	$Dep;
 
+	#[Common\Meta\PropertyListable]
+	public int
+	$FourtyTwo = 42;
+
 };
 
 class MiscTest
@@ -26,7 +30,29 @@ extends TestCase {
 
 	/** @test */
 	public function
-	TestBasic():
+	TestListable():
+	void {
+
+		$Listable = TestMiscMetaAttr::GetPropertiesWithAttribute(
+			Common\Meta\PropertyListable::class
+		);
+
+		$this->AssertEquals(1, count($Listable));
+
+		///////
+
+		$Listable = Common\Meta\PropertyListable::FromClass(
+			TestMiscMetaAttr::class
+		);
+
+		$this->AssertEquals(1, count($Listable));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestDeprecated():
 	void {
 
 		$Deps = TestMiscMetaAttr::GetPropertiesWithAttribute(
