@@ -5,6 +5,8 @@ namespace Nether\Common\Units;
 use Nether\Common;
 use OzdemirBurak\Iris;
 
+use ArgumentCountError;
+
 class Colour {
 
 	protected Iris\Color\Rgba
@@ -59,13 +61,23 @@ class Colour {
 	}
 
 	public function
+	A():
+	float {
+
+		$Output = (float)$this->API->Alpha();
+
+		return $Output;
+	}
+
+	public function
 	GetRGB():
 	array {
 
 		return [
 			'R' => $this->R(),
 			'G' => $this->G(),
-			'B' => $this->B()
+			'B' => $this->B(),
+			'A' => $this->A()
 		];
 	}
 
@@ -121,6 +133,30 @@ class Colour {
 		$this->API = $this->API->Spin($Deg);
 
 		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Common\Meta\Date('2023-08-13')]
+	static public function
+	FromArray(array $RGBa):
+	static {
+
+		$Len = count($RGBa);
+
+		if($Len !== 3 && $Len !== 4)
+		throw new ArgumentCountError('RGBa must be an array of 3 or 4');
+
+		return new static($RGBa);
+	}
+
+	#[Common\Meta\Date('2023-08-13')]
+	static public function
+	FromString(string $RGBa):
+	static {
+
+		return new static($RGBa);
 	}
 
 }

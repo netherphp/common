@@ -20,9 +20,9 @@ extends TestCase {
 	void {
 
 		$Data = [
-			'red'  => [ 255, 0, 0 ],
-			'lime' => [ 0, 255, 0 ],
-			'blue' => [ 0, 0, 255 ]
+			'red'  => [ 255, 0, 0, 1.0 ],
+			'lime' => [ 0, 255, 0, 1.0 ],
+			'blue' => [ 0, 0, 255, 1.0 ]
 		];
 
 		$Name = NULL;
@@ -52,11 +52,114 @@ extends TestCase {
 			$this->AssertEquals($Expect[2], $Colour->B());
 			$this->AssertEquals($Expect[2], $RGB['B']);
 
+			$this->AssertEquals($Expect[3], $Colour->A());
+			$this->AssertEquals($Expect[3], $RGB['A']);
+
 			$this->AssertEquals($Exhext, $Colour->GetHexRGB());
 		}
 
 		return;
 	}
 
+	/** @test */
+	public function
+	TestLightenDarkenDesat():
+	void {
+
+		$Red = new Colour('red');
+		$this->AssertEquals(255, $Red->R());
+
+		// i am not entirely certain about the lighten and darken math
+		// but right now 25% lowers the red by half.
+
+		$Red->Darken(25.0);
+		$this->AssertEquals(128, $Red->R());
+
+		$Red->Lighten(25.0);
+		$this->AssertEquals(255, $Red->R());
+
+		// the desaturate value almost makes sense, as of right now a
+		// value of 100% lowers the red by half.
+
+		$Red->Desaturate(100.0);
+		$this->AssertEquals(128, $Red->R());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestRotate():
+	void {
+
+		$Red = new Colour('red');
+		$this->AssertEquals(255, $Red->R());
+		$this->AssertEquals(0, $Red->G());
+		$this->AssertEquals(0, $Red->B());
+
+		$Red->Rotate(120.0);
+		$this->AssertEquals(0, $Red->R());
+		$this->AssertEquals(255, $Red->G());
+		$this->AssertEquals(0, $Red->B());
+
+		$Red->Rotate(120.0);
+		$this->AssertEquals(0, $Red->R());
+		$this->AssertEquals(0, $Red->G());
+		$this->AssertEquals(255, $Red->B());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFromArray():
+	void {
+
+		$Red = Colour::FromArray([ 255, 0, 0 ]);
+		$this->AssertEquals(255, $Red->R());
+		$this->AssertEquals(0, $Red->G());
+		$this->AssertEquals(0, $Red->B());
+		$this->AssertEquals(1.0, $Red->A());
+
+		$Ghost = Colour::FromArray([ 128, 128, 128, 0.1 ]);
+		$this->AssertEquals(128, $Ghost->R());
+		$this->AssertEquals(128, $Ghost->G());
+		$this->AssertEquals(128, $Ghost->B());
+		$this->AssertEquals(0.1, $Ghost->A());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFromString():
+	void {
+
+		$Red = Colour::FromString('red');
+		$this->AssertEquals(255, $Red->R());
+		$this->AssertEquals(0, $Red->G());
+		$this->AssertEquals(0, $Red->B());
+		$this->AssertEquals(1.0, $Red->A());
+
+		$Grn = Colour::FromString('#00ff00');
+		$this->AssertEquals(0, $Grn->R());
+		$this->AssertEquals(255, $Grn->G());
+		$this->AssertEquals(0, $Grn->B());
+		$this->AssertEquals(1.0, $Grn->A());
+
+		$Blu = Colour::FromString('rgb(0,0,255)');
+		$this->AssertEquals(0, $Blu->R());
+		$this->AssertEquals(0, $Blu->G());
+		$this->AssertEquals(255, $Blu->B());
+		$this->AssertEquals(1.0, $Blu->A());
+
+		$Ghost = Colour::FromString('rgba(128, 128, 128, 0.5)');
+		$this->AssertEquals(128, $Ghost->R());
+		$this->AssertEquals(128, $Ghost->G());
+		$this->AssertEquals(128, $Ghost->B());
+		$this->AssertEquals(0.5, $Ghost->A());
+
+		return;
+	}
 
 }
