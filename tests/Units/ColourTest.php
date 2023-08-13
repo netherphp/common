@@ -7,6 +7,7 @@ namespace NetherTestSuite\Common;
 
 use Nether\Common\Units\Colour;
 use PHPUnit\Framework\TestCase;
+use ArgumentCountError;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +127,18 @@ extends TestCase {
 		$this->AssertEquals(128, $Ghost->G());
 		$this->AssertEquals(128, $Ghost->B());
 		$this->AssertEquals(0.1, $Ghost->A());
+
+		////////
+
+		$Exceptional = FALSE;
+
+		try { Colour::FromArray([ 1 ]); }
+		catch(ArgumentCountError $Err) {
+			$this->AssertInstanceOf(ArgumentCountError::class, $Err);
+			$Exceptional = TRUE;
+		}
+
+		$this->AssertTrue($Exceptional);
 
 		return;
 	}
