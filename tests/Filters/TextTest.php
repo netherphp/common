@@ -10,6 +10,9 @@ use PHPUnit\Framework\TestCase;
 class TextTest
 extends TestCase {
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	/** @test */
 	public function
 	TestTextPlain():
@@ -209,7 +212,6 @@ extends TestCase {
 		return;
 	}
 
-
 	/** @test */
 	public function
 	TestTextSpanHTML():
@@ -272,6 +274,50 @@ extends TestCase {
 
 			$this->AssertEquals($Expect, $Text->Get());
 		}
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	/** @test */
+	public function
+	TestDumpVar():
+	void {
+
+		$Data = [ 'One'=> 1, 'Two'=> 2 ];
+
+		$Crap = "";
+		$Crap .= 'array(2) {'.chr(10);
+		$Crap .= '  ["One"]=>'.chr(10);
+		$Crap .= '  int(1)'.chr(10);
+		$Crap .= '  ["Two"]=>'.chr(10);
+		$Crap .= '  int(2)'.chr(10);
+		$Crap .= '}'.chr(10);
+
+		$Expect = "";
+		$Expect .= 'array(2) {'.chr(10);
+		$Expect .= '	["One"] => int(1)'.chr(10);
+		$Expect .= '	["Two"] => int(2)'.chr(10);
+		$Expect .= '}'.chr(10);
+
+		// php's crap format.
+
+		//ob_start();
+		//var_dump($Data);
+		//$Dump = ob_get_clean();
+		//$this->AssertEquals($Crap, $Dump);
+
+		// more readable format.
+
+		ob_start();
+		Common\Dump::Var($Data);
+		$this->AssertEquals($Expect, ob_get_clean());
+
+		ob_start();
+		Common\Dump::Var($Data, TRUE);
+		$this->AssertEquals("<pre>{$Expect}</pre>", ob_get_clean());
 
 		return;
 	}
