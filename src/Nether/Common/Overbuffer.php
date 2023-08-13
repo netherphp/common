@@ -33,8 +33,9 @@ class Overbuffer {
 		return $this;
 	}
 
+	#[Meta\Date('2023-08-12')]
 	public function
-	Exec(callable $Fn):
+	Execute(callable $Fn):
 	mixed {
 
 		$Out = NULL;
@@ -93,6 +94,39 @@ class Overbuffer {
 	int {
 
 		return strlen($this->Buffer);
+	}
+
+	#[Meta\Date('2023-08-13')]
+	public function
+	SetKeep(bool $Should):
+	static {
+
+		$this->Keep = $Should;
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-08-13')]
+	public function
+	GetKeep():
+	bool {
+
+		return $this->Keep;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+
+	#[Meta\Deprecated('2023-08-12', 'Use Execute')]
+	public function
+	Exec(callable $Fn):
+	mixed {
+
+		return $this->Execute($Fn);
 	}
 
 }

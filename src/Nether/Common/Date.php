@@ -142,6 +142,7 @@ implements
 	////////////////////////////////////////////////////////////////
 	// IMPLEMENTS JsonSerializable /////////////////////////////////
 
+	#[Common\Meta\Date('2023-08-11')]
 	public function
 	JsonSerialize():
 	array {
@@ -157,6 +158,7 @@ implements
 	////////////////////////////////////////////////////////////////
 	// FEIGNS Nether\Atlantis\Prototype ////////////////////////////
 
+	#[Common\Meta\Date('2023-08-11')]
 	public function
 	DescribeForPublicAPI():
 	string {
@@ -167,6 +169,7 @@ implements
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Common\Meta\Date('2023-08-11')]
 	public function
 	GetDateTime():
 	DateTimeInterface {
@@ -174,6 +177,7 @@ implements
 		return $this->DateTime;
 	}
 
+	#[Common\Meta\Date('2023-08-11')]
 	public function
 	SetDateTime(DateTimeInterface $Input):
 	static {
@@ -185,6 +189,7 @@ implements
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Common\Meta\Date('2022-05-04')]
 	public function
 	Modify(string $How):
 	static {
@@ -198,6 +203,7 @@ implements
 		return $this;
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	public function
 	IsThisAfter(self|int $When):
 	bool {
@@ -218,6 +224,7 @@ implements
 		return TRUE;
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	public function
 	IsThisBefore(self|int $When):
 	bool {
@@ -238,6 +245,7 @@ implements
 		return TRUE;
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	public function
 	IsThatAfter(self|int $When):
 	bool {
@@ -245,6 +253,7 @@ implements
 		return !$this->IsThisAfter($When);
 	}
 
+	#[Common\Meta\Date('2023-08-12')]
 	public function
 	IsThatBefore(self|int $When):
 	bool {
