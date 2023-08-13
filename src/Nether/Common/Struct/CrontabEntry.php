@@ -119,28 +119,28 @@ implements Stringable {
 		if($this->Minute === NULL) {
 			$Output->Modify('+1 minute');
 
-			if($Now->IsAfter($Output))
+			if($Now->IsThatAfter($Output))
 			return $Output;
 		}
 
 		if($this->Hour === NULL) {
 			$Output->Modify('+1 hour');
 
-			if($Now->IsAfter($Output))
+			if($Now->IsThatAfter($Output))
 			return $Output;
 		}
 
 		if($this->Day === NULL) {
 			$Output->Modify('+1 day');
 
-			if($Now->IsAfter($Output))
+			if($Now->IsThatAfter($Output))
 			return $Output;
 		}
 
 		if($this->Month === NULL) {
 			$Output->Modify('+1 month');
 
-			if($Now->IsAfter($Output))
+			if($Now->IsThatAfter($Output))
 			return $Output;
 		}
 

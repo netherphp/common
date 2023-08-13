@@ -114,7 +114,7 @@ extends TestCase {
 
 		// test the path where it bumps to the next day.
 
-		$Line = Common\Struct\CrontabEntry::FromCrontab('* * 0 * * daily');
+		$Line = Common\Struct\CrontabEntry::FromCrontab('0 0 * * * daily');
 		$Date = $Line->GetTimerAsObject();
 
 		$this->AssertEquals(
