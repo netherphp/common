@@ -378,25 +378,6 @@ implements
 		return $this;
 	}
 
-	#[Common\Meta\Date('2023-08-13')]
-	#[Common\Meta\Info('Changes the timezone without changing the time.')]
-	public function
-	ReplaceTimezone(mixed $TZ):
-	static {
-
-		// more specifically... it actually just puts it back after.
-
-		$Old = new Common\Date($this, TRUE);
-		$this->SetTimezone($TZ);
-
-		$Diff = new Common\Units\Timeframe($Old->GetUnixtime(), $New->GetUnixtime());
-
-		var_dump((string)$Diff);
-
-
-		return $this;
-	}
-
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

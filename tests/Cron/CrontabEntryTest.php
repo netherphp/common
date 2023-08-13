@@ -75,9 +75,11 @@ extends TestCase {
 		// test the path where the time is in the future and bails early.
 
 		$Line = Common\Struct\CrontabEntry::FromCrontab(sprintf(
-			'%1$d %2$d * * * minutely',
+			'%1$d %2$d %3$d %4$d * minutely',
 			$Future->Get('i'),
-			$Future->Get('H')
+			$Future->Get('H'),
+			$Future->Get('d'),
+			$Future->Get('m')
 		));
 
 		$Date = $Line->GetTimerAsObject();

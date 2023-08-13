@@ -91,8 +91,6 @@ implements Stringable {
 	Common\Date {
 
 		$Now = new Common\Date;
-		$Now->SetTimezone('UTC');
-
 		$Output = NULL;
 		$UseLocal = TRUE;
 
@@ -103,11 +101,13 @@ implements Stringable {
 		$Year = $Now->Get('Y');
 		$TZ = 'UTC';
 
-		$Output = new Common\Date(sprintf(
-			"%s-%s-%s %s:%s %s",
+		$DateLine = sprintf(
+			"%04s-%02s-%02s %02s:%02s %s",
 			$Year, $Month, $Day,
 			$Hour, $Min, $TZ
-		));
+		);
+
+		$Output = new Common\Date($DateLine);
 
 		// if the job has not happened yet then we are done, this is the
 		// time we want to report.
