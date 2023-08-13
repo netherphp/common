@@ -73,7 +73,8 @@ extends TestCase {
 
 		$Line = Common\Struct\CrontabEntry::FromCrontab(sprintf(
 			'%d %d * * * minutely',
-			($Future->Get('i')-1), ($Future->Get('H')-1)
+			$Future->Get('i'),
+			$Future->Get('H')
 		));
 
 		$Date = $Line->GetTimerAsObject();
