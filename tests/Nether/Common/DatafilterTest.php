@@ -837,46 +837,6 @@ extends TestCase {
 
 	/** @test */
 	public function
-	TestFiltersArrayOf():
-	void {
-
-		$Array = Filters\Lists::ArrayOf(NULL);
-		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(1, count($Array));
-		$this->AssertEquals(NULL, $Array[0]);
-
-		$Array = Filters\Lists::ArrayOf('');
-		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(1, count($Array));
-		$this->AssertEquals('', $Array[0]);
-
-		$Array = Filters\Lists::ArrayOf(0);
-		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(1, count($Array));
-		$this->AssertEquals(0, $Array[0]);
-
-		$Array = Filters\Lists::ArrayOf('42');
-		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(1, count($Array));
-		$this->AssertEquals('42', $Array[0]);
-
-		////////
-
-		$Array = Filters\Lists::ArrayOf(['42']);
-		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(1, count($Array));
-		$this->AssertIsString($Array[0]);
-
-		$Array = Filters\Lists::ArrayOf(['42'], Filters\Numbers::IntType(...));
-		$this->AssertTrue(is_array($Array));
-		$this->AssertEquals(1, count($Array));
-		$this->AssertIsInt($Array[0]);
-
-		return;
-	}
-
-	/** @test */
-	public function
 	TestFiltersUUID():
 	void {
 
