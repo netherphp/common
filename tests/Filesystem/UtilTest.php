@@ -293,14 +293,19 @@ extends TestCase {
 
 		$File = Common\Filesystem\Util::MkTempFile();
 		$Link = Common\Filesystem\Util::MkTempFile();
+		$Sure = Common\Filesystem\Util::MkTempFile();
 
 		unlink($Link);
 		symlink($File, $Link);
 
 		$WasLinkTo = Common\Filesystem\Util::IsLinkTo($Link, $File);
+		$WasntLinkTo = Common\Filesystem\Util::IsLinkTo($Link, $Sure);
 		unlink($Link);
+		unlink($File);
+		unlink($Sure);
 
 		$this->AssertTrue($WasLinkTo);
+		$this->AssertFalse($WasntLinkTo);
 
 		return;
 	}
@@ -337,8 +342,10 @@ extends TestCase {
 	void {
 
 		$Data = [
-			'file'     => 'file.png',
-			'file.jpg' => 'file.png'
+			'file'         => 'file.png',
+			'file.jpg'     => 'file.png',
+			'dir\file'     => 'dir\file.png',
+			'dir\file.jpg' => 'dir\file.png'
 		];
 
 		$Old = NULL;
