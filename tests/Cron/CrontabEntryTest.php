@@ -69,19 +69,46 @@ extends TestCase {
 
 		$Future = new Common\Date('+1 hour');
 
+		////////
+
+		// this should test the path where the time is in the future and
+		// it bails early.
+
 		$Line = Common\Struct\CrontabEntry::FromCrontab(sprintf(
-			'* %d * * * minutely',
-			$Future->Get('H')
+			'* %d * * * minutely', $Future->Get('H')
 		));
 
 		$Date = $Line->GetTimerAsObject();
-
-		// should test the future branch.
 
 		$this->AssertEquals(
 			$Date->Get(Common\Values::DateFormatYMDT24VZ),
 			$Line->GetTimerAsWords()
 		);
+
+		////////
+
+		// this should test the path where it bumps to the next minute.
+
+		$Line = Common\Struct\CrontabEntry::FromCrontab('* * * * * minutely');
+		$Date = $Line->GetTimerAsObject();
+
+		$this->AssertEquals(
+			$Date->Get(Common\Values::DateFormatYMDT24VZ),
+			$Line->GetTimerAsWords()
+		);
+
+		////////
+
+		// this should test the path where it bumps to the next hour.
+
+		$Line = Common\Struct\CrontabEntry::FromCrontab('0 * * * * hourly');
+		$Date = $Line->GetTimerAsObject();
+
+		$this->AssertEquals(
+			$Date->Get(Common\Values::DateFormatYMDT24VZ),
+			$Line->GetTimerAsWords()
+		);
+
 
 		return;
 	}
