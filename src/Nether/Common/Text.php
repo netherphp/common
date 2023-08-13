@@ -9,6 +9,7 @@ extends Prototype
 implements Stringable {
 
 	const
+	ModePlain    = 0,
 	ModeTerminal = 1,
 	ModeTagSpan  = 2,
 	ModeTagDiv   = 3;
@@ -49,6 +50,21 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Get(?int $Mode=NULL):
+	string {
+
+		return $this->Render($Mode);
+	}
+
+	public function
+	Print(?int $Mode=NULL):
+	static {
+
+		echo $this->Render($Mode);
+		return $this;
+	}
+
+	public function
 	Render(?int $Mode=NULL):
 	string {
 
@@ -80,6 +96,9 @@ implements Stringable {
 		if($this->Bold)
 		$Codes[] = 1;
 
+		if($this->Italic)
+		$Codes[] = 3;
+
 		if($this->Underline)
 		$Codes[] = 4;
 
@@ -93,11 +112,14 @@ implements Stringable {
 
 		////////
 
+		if(count($Codes))
 		return sprintf(
 			"\e[%sm%s\e[0m",
 			join(';', $Codes),
 			$this->Text
 		);
+
+		return $this->Text;
 	}
 
 	public function
@@ -109,10 +131,10 @@ implements Stringable {
 		////////
 
 		if($this->Bold)
-		$Styles[] = 'font-weight: bold;';
+		$Styles[] = 'font-weight: bold';
 
 		if($this->Italic)
-		$Styles[] = 'font-style: italic;';
+		$Styles[] = 'font-style: italic';
 
 		if($this->Underline)
 		$Styles[] = 'text-decoration: underline';
@@ -120,12 +142,17 @@ implements Stringable {
 		if(isset($this->Colour))
 		$Styles[] = "color: {$this->Colour->GetHexRGB()}";
 
+		if(count($Styles))
+		$Styles = sprintf(' style="%s;"', join('; ', $Styles));
+		else
+		$Styles = '';
+
 		////////
 
 		return sprintf(
-			'<%1$s style="%2$s">%3$s</%1$s>',
+			'<%1$s%2$s>%3$s</%1$s>',
 			$Tag,
-			join('; ', $Styles),
+			$Styles,
 			$this->Text
 		);
 	}
@@ -141,7 +168,7 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	New(string $Text=NULL, int $Mode=self::ModeTerminal, Units\Colour $Colour=NULL, bool $Bold=FALSE, bool $Italic=FALSE, bool $Underline=FALSE):
+	New(string $Text=NULL, int $Mode=self::ModePlain, Units\Colour $Colour=NULL, bool $Bold=FALSE, bool $Italic=FALSE, bool $Underline=FALSE):
 	static {
 
 		return new static([
