@@ -256,7 +256,7 @@ class Text {
 		static::Prepare($Val);
 
 		if(!is_string($Val))
-		$Val = '';
+		$Val = (string)$Val;
 
 		$Val = preg_replace_callback(
 			'#^ {1,}#ms',

@@ -740,7 +740,10 @@ extends TestCase {
 			=> "{$T}Accessiblity Problems{$L}",
 
 			"{$S}{$S}Accessiblity Problems{$L}"
-			=> "{$T}{$T}Accessiblity Problems{$L}"
+			=> "{$T}{$T}Accessiblity Problems{$L}",
+
+			69
+			=> '69'
 		];
 
 		$Old = NULL;
