@@ -99,7 +99,8 @@ implements Stringable {
 		$Day = $this->Day ?? $Now->Get('d');
 		$Month = $this->Month ?? $Now->Get('m');
 		$Year = $Now->Get('Y');
-		$TZ = Common\Date::FetchTimezoneFromSystem();
+		//$TZ = Common\Date::FetchTimezoneFromSystem();
+		$TZ = 'UTC';
 
 		$Output = new Common\Date(sprintf(
 			"%s-%s-%s %s:%s %s",
