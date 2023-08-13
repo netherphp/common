@@ -1,0 +1,41 @@
+<?php
+
+namespace NetherTestSuite\Common;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+use Nether\Common;
+
+use PHPUnit\Framework\TestCase;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+class TestMiscMetaAttr
+extends Common\Prototype {
+
+	#[Common\Meta\Deprecated('2023-08-13')]
+	public string
+	$Dep;
+
+};
+
+class MiscTest
+extends TestCase {
+
+	/** @test */
+	public function
+	TestBasic():
+	void {
+
+		$Deps = TestMiscMetaAttr::GetPropertiesWithAttribute(
+			Common\Meta\Deprecated::class
+		);
+
+		$this->AssertEquals(1, count($Deps));
+
+		return;
+	}
+
+}
