@@ -134,6 +134,9 @@ extends TestCase {
 		Filesystem\Util::MkDir($Dir);
 		$this->AssertTrue(is_dir($Dir));
 
+		Filesystem\Util::MkDir($Dir);
+		$this->AssertTrue(is_dir($Dir));
+
 		Filesystem\Util::RmDir($Dir);
 		$this->AssertFalse(is_dir($Dir));
 
