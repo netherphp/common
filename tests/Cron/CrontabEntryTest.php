@@ -67,8 +67,8 @@ extends TestCase {
 	TestTimerMethods():
 	void {
 
-		$Future = new Common\Date('+1 hour');
-		$Future->SetTimezone('UTC');
+		$Now = new Common\Date('now', TRUE);
+		$Future = $Now->Modify('+1 hour');
 
 		// test the path where the time is in the future and bails early.
 
