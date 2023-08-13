@@ -287,27 +287,30 @@ extends TestCase {
 	void {
 
 		$Data = [ 'One'=> 1, 'Two'=> 2 ];
+		$Crap = [];
+		$Expect = [];
 
-		$Crap = "";
-		$Crap .= 'array(2) {'.chr(10);
-		$Crap .= '  ["One"]=>'.chr(10);
-		$Crap .= '  int(1)'.chr(10);
-		$Crap .= '  ["Two"]=>'.chr(10);
-		$Crap .= '  int(2)'.chr(10);
-		$Crap .= '}'.chr(10);
+		$Crap[] = 'array(2) {';
+		$Crap[] = '  ["One"]=>';
+		$Crap[] = '  int(1)';
+		$Crap[] = '  ["Two"]=>';
+		$Crap[] = '  int(2)';
+		$Crap[] = '}';
+		$Crap = sprintf('%s%s', join(chr(10), $Crap), chr(10));
 
-		$Expect = "";
-		$Expect .= 'array(2) {'.chr(10);
-		$Expect .= '	["One"] => int(1)'.chr(10);
-		$Expect .= '	["Two"] => int(2)'.chr(10);
-		$Expect .= '}'.chr(10);
+		$Expect[] = 'array(2) {';
+		$Expect[] = '	["One"] => int(1)';
+		$Expect[] = '	["Two"] => int(2)';
+		$Expect[] = '}';
+		$Expect = sprintf('%s%s', join(chr(10), $Expect), chr(10));
 
 		// php's crap format.
 
-		//ob_start();
-		//var_dump($Data);
-		//$Dump = ob_get_clean();
-		//$this->AssertEquals($Crap, $Dump);
+		ob_start();
+		var_dump($Data);
+		$Dump = ob_get_clean();
+		$this->AssertTrue(strlen($Dump) > 0);
+		$this->AssertEquals($Crap, $Dump, 'PHP (probably Xdebug) altered var_dump?');
 
 		// more readable format.
 
