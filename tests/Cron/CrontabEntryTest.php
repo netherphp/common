@@ -67,7 +67,13 @@ extends TestCase {
 	TestTimerMethods():
 	void {
 
-		$Line = Common\Struct\CrontabEntry::FromCrontab('0 0 * * * minutely');
+		$Future = new Common\Date('+1 hour');
+
+		$Line = Common\Struct\CrontabEntry::FromCrontab(sprintf(
+			'* %d * * * minutely',
+			$Future->Get('H')
+		));
+
 		$Date = $Line->GetTimerAsObject();
 
 		// should test the future branch.
