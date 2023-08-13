@@ -232,8 +232,10 @@ extends TestCase {
 		]);
 
 		$Exp = 'one=1&two=2&three=Three';
+		$Ovr = 'one=1&two=2&three=3';
 
 		$this->AssertEquals($Exp, $Data->GetQueryString());
+		$this->AssertEquals($Ovr, $Data->GetQueryString([ 'three'=> 3 ]));
 
 		return;
 	}
