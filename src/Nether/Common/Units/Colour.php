@@ -2,6 +2,7 @@
 
 namespace Nether\Common\Units;
 
+use Nether\Common;
 use OzdemirBurak\Iris;
 
 class Colour {
@@ -62,22 +63,22 @@ class Colour {
 	array {
 
 		return [
-			'R' => $this->API->Red(),
-			'G' => $this->API->Green(),
-			'B' => $this->API->Blue()
+			'R' => $this->R(),
+			'G' => $this->G(),
+			'B' => $this->B()
 		];
 	}
 
+	#[Common\Meta\Date('2023-08-13')]
 	public function
 	GetHexRGB():
 	string {
 
-		return sprintf(
-			'#%s%s%s',
-			dechex($this->API->Red()),
-			dechex($this->API->Green()),
-			dechex($this->API->Blue())
-		);
+		return sprintf('#%06s', dechex(0
+			| ($this->R() << 16)
+			| ($this->G() << 8)
+			| ($this->B() << 0)
+		));
 	}
 
 	////////////////////////////////////////////////////////////////

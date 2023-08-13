@@ -1,10 +1,12 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common;
 
+use Nether\Common\Values;
+use Nether\Common\Units\Timeframe;
 use PHPUnit\Framework\TestCase;
 
-class UnitsTimeframeTest
+class TimeframeTest
 extends TestCase {
 
 	/** @test */
@@ -33,7 +35,7 @@ extends TestCase {
 			]
 		];
 
-		$Time = new Units\Timeframe;
+		$Time = new Timeframe;
 		$this->RunFormattedTests($Time, $FormatSets);
 
 		return;
@@ -91,7 +93,7 @@ extends TestCase {
 			]
 		];
 
-		$Time = new Units\Timeframe;
+		$Time = new Timeframe;
 		$Time->SetSkipZero(FALSE);
 		$this->RunFormattedTests($Time, $FormatSets);
 
@@ -103,7 +105,7 @@ extends TestCase {
 	TestInvokeStyle():
 	void {
 
-		$Time = new Units\Timeframe;
+		$Time = new Timeframe;
 
 		$this->AssertEquals('5sec', $Time(5, 10));
 		$this->AssertEquals('1min 1sec', $Time(0, 61));
@@ -116,7 +118,7 @@ extends TestCase {
 	TestJoin():
 	void {
 
-		$Time = new Units\Timeframe(0, 61);
+		$Time = new Timeframe(0, 61);
 
 		$this->AssertEquals('1min 1sec', $Time->SetJoin(' ')->Get());
 		$this->AssertEquals('1min, 1sec', $Time->SetJoin(', ')->Get());
@@ -134,7 +136,7 @@ extends TestCase {
 	TestFormat():
 	void {
 
-		$Time = new Units\Timeframe(0, 61);
+		$Time = new Timeframe(0, 61);
 
 		$this->AssertEquals('1m 1s', $Time->SetFormat($Time::FormatShort)->Get());
 		$this->AssertEquals('1 minute 1 second', $Time->SetFormat($Time::FormatLong)->Get());
@@ -147,7 +149,7 @@ extends TestCase {
 	TestStringable():
 	void {
 
-		$Time = new Units\Timeframe(0, 61);
+		$Time = new Timeframe(0, 61);
 
 		$this->AssertEquals('1min 1sec', (string)$Time);
 		$this->AssertEquals('1hr', "{$Time->Span(0, 3600)}");
@@ -160,7 +162,7 @@ extends TestCase {
 	TestCurrentOffsets():
 	void {
 
-		$Time = new Units\Timeframe;
+		$Time = new Timeframe;
 
 		$this->AssertEquals('', $Time());
 		$this->AssertEquals('- 5d', $Time(Start: '+5 days'));
@@ -174,7 +176,7 @@ extends TestCase {
 	TestPrecision():
 	void {
 
-		$Time = new Units\Timeframe(Stop: '+1 year 1 month 1 day 1 hour 1 min 1 sec');
+		$Time = new Timeframe(Stop: '+1 year 1 month 1 day 1 hour 1 min 1 sec');
 
 		$this->AssertEquals('1yr 1mo 1d 1hr 1min 1sec', $Time->Get());
 		$this->AssertEquals('1yr 1mo', $Time->SetPrecision(2)->Get());
@@ -189,7 +191,7 @@ extends TestCase {
 	TestEmptyString():
 	void {
 
-		$Time = new Units\Timeframe(Start: 0, Stop: 0);
+		$Time = new Timeframe(Start: 0, Stop: 0);
 
 		$this->AssertEquals('', $Time->Get());
 		$this->AssertEquals('OK', $Time->Get(EmptyString: 'OK'));
@@ -200,7 +202,7 @@ extends TestCase {
 
 		////////
 
-		$Time = new Units\Timeframe(Start: 0, Stop: 0, EmptyString: 'KO');
+		$Time = new Timeframe(Start: 0, Stop: 0, EmptyString: 'KO');
 		$this->AssertEquals('KO', $Time->Get());
 		$this->AssertEquals('BO', $Time->Get(EmptyString: 'BO'));
 
@@ -221,7 +223,7 @@ extends TestCase {
 	TestTimeDiff():
 	void {
 
-		$Time = new Units\Timeframe(1, 10);
+		$Time = new Timeframe(1, 10);
 
 		$this->AssertEquals(9, $Time->GetTimeDiff());
 
@@ -232,7 +234,7 @@ extends TestCase {
 	////////////////////////////////////////////////////////////////
 
 	protected function
-	RunFormattedTests(Units\Timeframe $Time, array $FormatSets):
+	RunFormattedTests(Timeframe $Time, array $FormatSets):
 	void {
 
 		$Format = NULL;
@@ -248,7 +250,7 @@ extends TestCase {
 				$Expected,
 				$Time->Get(constant(sprintf(
 					'%s::%s',
-					Units\Timeframe::class,
+					Timeframe::class,
 					$Format
 				))),
 				json_encode($Set)
