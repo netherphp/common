@@ -6,6 +6,9 @@ use Nether\Common;
 
 use JsonSerializable;
 
+// this is meant as like a super high level description of what a symlink must
+// consist of. this will likely only be used in config files.
+
 class Symlink
 extends Common\Prototype
 implements JsonSerializable {
@@ -16,7 +19,7 @@ implements JsonSerializable {
 	public string
 	$Source;
 
-	public int|string
+	public string|int
 	$Mode = 0o777;
 
 	////////////////////////////////////////////////////////////////
