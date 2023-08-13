@@ -1826,4 +1826,36 @@ extends PHPUnit\Framework\TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestFromArray():
+	void {
+
+		$Store = Datastore::FromArray([ 'One'=> 1, 'Two'=> 2 ]);
+
+		$this->AssertTrue($Store->HasKey('One'));
+		$this->AssertTrue($Store->HasKey('Two'));
+		$this->AssertFalse($Store->HasKey('Three'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFromJSON():
+	void {
+
+		$Store = Datastore::FromJSON('{ "One": 1, "Two": 2 }');
+		$this->AssertTrue($Store->HasKey('One'));
+		$this->AssertTrue($Store->HasKey('Two'));
+		$this->AssertFalse($Store->HasKey('Three'));
+
+		$Store = Datastore::FromJSON('oh snap');
+		$this->AssertFalse($Store->HasKey('One'));
+		$this->AssertFalse($Store->HasKey('Two'));
+		$this->AssertFalse($Store->HasKey('Three'));
+
+		return;
+	}
+
 }

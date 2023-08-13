@@ -1508,12 +1508,22 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		$JSON ??= '[]';
 		$Data = json_decode($JSON, TRUE);
-		$Output = new static;
 
-		if(is_array($Data))
-		$Output->SetData($Data);
+		if(!is_array($Data))
+		$Data = [];
 
-		return $Output;
+		return static::FromArray($Data);
+	}
+
+	#[Meta\Date('2023-07-26')]
+	#[Meta\Info('Load a datastore from an array.')]
+	static public function
+	FromArray(iterable $Input):
+	static {
+
+		$Store = new static($Input);
+
+		return $Store;
 	}
 
 	#[Meta\DateAdded('2023-07-10')]
@@ -1548,21 +1558,14 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return $Store;
 	}
 
-	#[Meta\Date('2023-07-26')]
-	#[Meta\Info('Load a datastore from an array.')]
-	static public function
-	FromArray(iterable $Input):
-	static {
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
-		$Store = new static($Input);
-
-		return $Store;
-	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
+	/**
+	 * @codeCoverageIgnore
+	 */
 
 	#[Meta\Deprecated('2023-07-10', 'use FromStackBlended instead')]
 	static public function
@@ -1572,6 +1575,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return static::FromStackBlended($OG, ...$Adds);
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
+
 	#[Meta\Deprecated('2023-07-10', 'use FromStackMerged instead')]
 	static public function
 	NewMerged(iterable $OG, ...$Updates):
@@ -1579,6 +1586,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		return static::FromStackMerged($OG, ...$Updates);
 	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
 
 	#[Meta\DateAdded('2022-08-15')]
 	#[Meta\Deprecated('2023-07-10', 'use FromFile instead')]
@@ -1589,6 +1600,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return static::FromFile($Filename);
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
+
 	#[Meta\DateAdded('2022-08-15')]
 	#[Meta\Deprecated('2023-07-10', 'use FromJSON instead')]
 	static public function
@@ -1597,10 +1612,5 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		return static::FromJSON($JSON);
 	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
 
 }
