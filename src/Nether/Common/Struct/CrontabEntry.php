@@ -91,6 +91,8 @@ implements Stringable {
 	Common\Date {
 
 		$Now = new Common\Date;
+		$Now->SetTimezone('UTC');
+
 		$Output = NULL;
 		$UseLocal = TRUE;
 
@@ -99,7 +101,6 @@ implements Stringable {
 		$Day = $this->Day ?? $Now->Get('d');
 		$Month = $this->Month ?? $Now->Get('m');
 		$Year = $Now->Get('Y');
-		//$TZ = Common\Date::FetchTimezoneFromSystem();
 		$TZ = 'UTC';
 
 		$Output = new Common\Date(sprintf(

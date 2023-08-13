@@ -62,8 +62,8 @@ implements
 
 		$DateTime = (
 			$Immutable
-			? new DateTimeImmutable($Input->Get(Common\Values::DateFormatYMDT12VO))
-			: new DateTime($Input->Get(Common\Values::DateFormatYMDT12VO))
+			? new DateTimeImmutable($Input->Get(Common\Values::DateFormatYMDT24VO))
+			: new DateTime($Input->Get(Common\Values::DateFormatYMDT24VO))
 		);
 
 		$this->SetDateTime($DateTime);
@@ -76,14 +76,13 @@ implements
 	ConstructFromDateTime(DateTimeInterface $Input, bool $Immutable):
 	void {
 
-		// current thought is if we instantiate using an object then we
-		// are going to be getting exact second and timezone info from
-		// that just because of how the built in class works.
+		$DateTime = (
+			$Immutable
+			? new DateTimeImmutable($Input->Format(Common\Values::DateFormatYMDT24VO))
+			: new DateTime($Input->Format(Common\Values::DateFormatYMDT24VO))
+		);
 
-		// 1. don't convert immutable or not - chain as it was given.
-		// 2. don't set timezone - its already in here.
-
-		$this->SetDateTime($Input);
+		$this->SetDateTime($DateTime);
 
 		return;
 	}
@@ -183,6 +182,7 @@ implements
 	static {
 
 		$this->DateTime = $Input;
+
 		return $this;
 	}
 
@@ -374,6 +374,25 @@ implements
 		$this->DateTime = $this->DateTime->SetTimezone($TZ);
 
 		////////
+
+		return $this;
+	}
+
+	#[Common\Meta\Date('2023-08-13')]
+	#[Common\Meta\Info('Changes the timezone without changing the time.')]
+	public function
+	ReplaceTimezone(mixed $TZ):
+	static {
+
+		// more specifically... it actually just puts it back after.
+
+		$Old = new Common\Date($this, TRUE);
+		$this->SetTimezone($TZ);
+
+		$Diff = new Common\Units\Timeframe($Old->GetUnixtime(), $New->GetUnixtime());
+
+		var_dump((string)$Diff);
+
 
 		return $this;
 	}
