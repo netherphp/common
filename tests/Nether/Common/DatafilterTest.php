@@ -759,7 +759,6 @@ extends TestCase {
 		return;
 	}
 
-
 	/** @test */
 	public function
 	TestFiltersPathableKey():

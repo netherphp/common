@@ -75,7 +75,7 @@ class Numbers {
 			=> bindec($Val),
 
 			default
-			=> (int)$Val
+			=> static::IntType($Val)
 		};
 
 		return (int)$Val;
