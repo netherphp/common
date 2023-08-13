@@ -142,8 +142,10 @@ extends TestCase {
 		// test the int method.
 
 		$Time = $Line->GetTimerAsInt();
+		$Frame = $Line->GetTimerAsTimeframe();
 
 		$this->AssertEquals($Date->GetUnixtime(), $Time);
+		$this->AssertTrue(strlen($Frame->Get()) > 0);
 
 		Common\Library::Set(Common\Date::ConfDefaultTimezone, NULL);
 		return;

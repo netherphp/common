@@ -173,13 +173,6 @@ implements Stringable {
 	}
 
 	public function
-	GetWordsForHours():
-	string {
-
-		return sprintf('%02s:%02s', $this->Hour, $this->Minute);
-	}
-
-	public function
 	IsDaily():
 	bool {
 
