@@ -67,6 +67,8 @@ extends TestCase {
 	TestTimerMethods():
 	void {
 
+		Common\Library::Set(Common\Date::ConfDefaultTimezone, 'UTC');
+
 		$Now = new Common\Date('now', TRUE);
 		$Future = $Now->Modify('+1 hour');
 
@@ -141,6 +143,7 @@ extends TestCase {
 
 		$this->AssertEquals($Date->GetUnixtime(), $Time);
 
+		Common\Library::Set(Common\Date::ConfDefaultTimezone, NULL);
 		return;
 	}
 
