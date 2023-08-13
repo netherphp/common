@@ -13,6 +13,7 @@ use Nether\Common\Prototype\PropertyInfo;
 use Nether\Common\Prototype\PropertyInfoCache;
 use Nether\Common\Prototype\PropertyInfoInterface;
 use Nether\Common\Package\PropertyInfoPackage;
+use Nether\Common\Datastore;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -98,11 +99,31 @@ extends Prototype {
 
 }
 
+class TestClassPropPromotion
+extends Prototype {
+
+	public array|Datastore
+	$Data;
+
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 class PropertyInfoPackageTest
 extends PHPUnit\Framework\TestCase {
+
+	/** @test */
+	public function
+	TestUnionTypePropPromotion():
+	void {
+
+		$Info = TestClassPropPromotion::GetPropertyInfo('Data');
+
+		$this->AssertEquals(Datastore::class, $Info->Type);
+
+		return;
+	}
 
 	/** @test */
 	public function
