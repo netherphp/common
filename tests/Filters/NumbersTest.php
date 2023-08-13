@@ -1,6 +1,6 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,7 @@ extends TestCase {
 		$Num = NULL;
 
 		foreach($Data as $Num)
-		$this->AssertEquals(42, Filters\Numbers::IntFromNumeric($Num));
+		$this->AssertEquals(42, Numbers::IntFromNumeric($Num));
 
 		return;
 	}

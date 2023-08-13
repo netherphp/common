@@ -1,6 +1,6 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common;
 
 use Exception;
 use PHPUnit\Framework\TestCase;

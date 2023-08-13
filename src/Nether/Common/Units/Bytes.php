@@ -131,7 +131,7 @@ format. it can be used both one off or as like a printing/filter provider.
 		if($What instanceof self)
 		$What = $What->GetBytes();
 
-		return ($this->Bytes > $What);
+		return ($this->Bytes < $What);
 	}
 
 	#[Common\Meta\Date('2023-07-26')]
