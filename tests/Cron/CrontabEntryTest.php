@@ -124,7 +124,7 @@ extends TestCase {
 
 		// test the path where it bumps to the next month.
 
-		$Line = Common\Struct\CrontabEntry::FromCrontab('* * * 0 * monthly');
+		$Line = Common\Struct\CrontabEntry::FromCrontab('0 0 0 * * monthly');
 		$Date = $Line->GetTimerAsObject();
 
 		$this->AssertEquals(
