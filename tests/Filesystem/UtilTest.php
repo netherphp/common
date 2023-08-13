@@ -342,10 +342,17 @@ extends TestCase {
 	void {
 
 		$Data = [
-			'file'         => 'file.png',
-			'file.jpg'     => 'file.png',
-			'dir\file'     => 'dir\file.png',
-			'dir\file.jpg' => 'dir\file.png'
+			Common\Filesystem\Util::Pathify('file')
+			=> Common\Filesystem\Util::Pathify('file.png'),
+
+			Common\Filesystem\Util::Pathify('file.jpg')
+			=> Common\Filesystem\Util::Pathify('file.png'),
+
+			Common\Filesystem\Util::Pathify('dir', 'file')
+			=> Common\Filesystem\Util::Pathify('dir', 'file.png'),
+
+			Common\Filesystem\Util::Pathify('dir', 'file.jpg')
+			=> Common\Filesystem\Util::Pathify('dir', 'file.png')
 		];
 
 		$Old = NULL;
