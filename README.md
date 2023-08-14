@@ -61,3 +61,22 @@ the methods within the class.
 
 Bolt onto a class to provide access for reading the attributes assigned to the
 properties within the class.
+
+
+
+
+# ***DEVELOPER NOTES***
+
+* **PHP Constant:** UNIT_TEST_GO_BRRRT=TRUE
+* `if(defined('UNIT_TEST_GO_BRRRT'))`
+
+This constant is defined by the `phpunit.xml` file and some code uses it to
+alter its behaviour while the test suite is running. Primarily, code which is
+designed to `exit()` seems to make PHPUnit explode.
+
+* **ENV Variable:** UNIT_TEST_HITS_HARD=1
+* `if(isset($_ENV['UNIT_TEST_HITS_HARD']))`
+
+This variable is defined by the Github Actions `phpunit.yaml` file. When
+defined will allow some unit tests to try harder to achieve full coverage,
+which will include performing system altering tasks to make sure they work.
