@@ -63,7 +63,6 @@ extends TestCase {
 		$this->AssertEquals($Expect, file_get_contents($Temp));
 
 		$File->Apply();
-
 		unlink($Temp);
 
 		return;
