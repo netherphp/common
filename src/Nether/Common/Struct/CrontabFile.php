@@ -35,7 +35,6 @@ extends Common\Datastore {
 		return $this;
 
 		system(sprintf('crontab - < %s', $this->Filename));
-		unlink($this->Filename);
 
 		return $this;
 	}
