@@ -27,21 +27,7 @@ class RangeInt {
 	In(int $Val):
 	bool {
 
-		return (TRUE
-			&& $Val >= $this->Min
-			&& $Val <= $this->Max
-		);
-	}
-
-	public function
-	Diffcent(float $Val):
-	float {
-
-		$Out = 0.0;
-
-
-
-		return $Out;
+		return ($Val >= $this->Min) && ($Val <= $this->Max);
 	}
 
 };

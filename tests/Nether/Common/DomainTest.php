@@ -25,6 +25,10 @@ extends TestCase {
 		$this->AssertEquals('pegasusgate.net', $Domain->Get());
 		$this->AssertEquals('pegasusgate.net', (string)$Domain);
 
+		$Domain->Set('opsat.net');
+		$this->AssertEquals('opsat.net', $Domain->Get());
+		$this->AssertEquals('opsat.net', (string)$Domain);
+
 		return;
 	}
 
