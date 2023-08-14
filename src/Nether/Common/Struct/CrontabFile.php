@@ -36,8 +36,7 @@ extends Common\Datastore {
 
 		////////
 
-		$Commit = (
-			FALSE
+		$Commit = (FALSE
 			|| defined('UNIT_TEST_GO_BRRRT') === FALSE
 			|| isset($_ENV['UNIT_TEST_HITS_HARD']) === TRUE
 		);
