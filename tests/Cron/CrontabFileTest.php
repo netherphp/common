@@ -21,6 +21,46 @@ extends TestCase {
 	TestBasic():
 	void {
 
+		$Data = [
+			'',
+			' ',
+			'#comment',
+			'# comment',
+			'* * * * * six'
+		];
+
+		////////
+
+		$File = Common\Struct\CrontabFile::FromArray($Data);
+		$this->AssertEquals(5, $File->Count());
+
+		$File->Clean();
+		$this->AssertEquals(1, $File->Count());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestWrite():
+	void {
+
+		$Data = [ '* * * * * cmd' ];
+
+		////////
+
+		$File = Common\Struct\CrontabFile::FromArray($Data);
+
+		$this->AssertTrue(TRUE);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestViaSystemUser():
+	void {
+
 		$File = Common\Struct\CrontabFile::FetchViaSystemUser();
 
 		$this->AssertTrue($File instanceof Common\Struct\CrontabFile);

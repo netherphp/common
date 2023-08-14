@@ -11,21 +11,30 @@ extends Common\Datastore {
 	Write(?string $Filename = NULL):
 	static {
 
-		if($Filename !== NULL)
-		return parent::Write($Filename);
+		$this->Filename = (
+			$Filename
+			?: $this->Filename
+			?: Common\Filesystem\Util::MkTempFile()
+		);
 
 		////////
 
 		$Data = $this->Join(PHP_EOL);
-		$TmpFile = Common\Filesystem\Util::MkTempFile();
 
 		file_put_contents(
-			$TmpFile,
+			$this->Filename,
 			sprintf('%s%s', trim($Data), PHP_EOL)
 		);
 
-		system(sprintf('crontab - < %s', $TmpFile));
-		unlink($TmpFile);
+		return $this;
+	}
+
+	public function
+	Apply():
+	static {
+
+		system(sprintf('crontab - < %s', $this->Filename));
+		unlink($this->Filename);
 
 		return $this;
 	}
@@ -34,7 +43,7 @@ extends Common\Datastore {
 	Clean():
 	static {
 
-		$this->Filter($this::FilterCrontabLine(...));
+		$this->Filter(static::FilterCrontabLine(...));
 
 		return $this;
 	}
@@ -46,7 +55,7 @@ extends Common\Datastore {
 	FilterCrontabLine(mixed $Line):
 	bool {
 
-		$Line = trim(Common\Filters\Text::Prepare($Line));
+		$Line = Common\Filters\Text::Trimmed($Line);
 
 		if(!$Line)
 		return FALSE;
