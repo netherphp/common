@@ -34,6 +34,13 @@ extends Common\Datastore {
 		if(PHP_OS_FAMILY === 'Windows')
 		return $this;
 
+		$Commit = (
+			FALSE
+			|| defined('UNIT_TEST_GO_BRRRT') === FALSE
+			|| isset($_ENV['UNIT_TEST_HITS_HARD']) === TRUE
+		);
+
+		if($Commit)
 		system(sprintf('crontab - < %s', $this->Filename));
 
 		return $this;

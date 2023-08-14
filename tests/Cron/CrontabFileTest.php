@@ -61,6 +61,9 @@ extends TestCase {
 		$File->Write($Temp);
 		$this->AssertTrue($File->GetFilename() === $Temp);
 		$this->AssertEquals($Expect, file_get_contents($Temp));
+
+		$File->Apply();
+
 		unlink($Temp);
 
 		return;
