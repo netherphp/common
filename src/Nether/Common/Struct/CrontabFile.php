@@ -19,11 +19,9 @@ extends Common\Datastore {
 
 		////////
 
-		$Data = $this->Join(PHP_EOL);
-
 		file_put_contents(
 			$this->Filename,
-			sprintf('%s%s', trim($Data), PHP_EOL)
+			sprintf('%s%s', trim($this->Join(PHP_EOL)), PHP_EOL)
 		);
 
 		return $this;
