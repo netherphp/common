@@ -46,12 +46,21 @@ extends TestCase {
 	void {
 
 		$Data = [ '* * * * * cmd' ];
+		$Expect = sprintf('%s%s', trim(join(PHP_EOL, $Data)), PHP_EOL);
 
 		////////
 
 		$File = Common\Struct\CrontabFile::FromArray($Data);
+		$Temp = Common\Filesystem\Util::MkTempFile();
 
-		$this->AssertTrue(TRUE);
+		$File->Write();
+		$this->AssertTrue($File->GetFilename() !== NULL);
+		$this->AssertEquals($Expect, file_get_contents($File->GetFilename()));
+		unlink($File->GetFilename());
+
+		$File->Write($Temp);
+		$this->AssertTrue($File->GetFilename() === $Temp);
+		unlink($Temp);
 
 		return;
 	}

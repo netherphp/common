@@ -31,6 +31,9 @@ extends Common\Datastore {
 	Apply():
 	static {
 
+		if(PHP_OS_FAMILY === 'Windows')
+		return $this;
+
 		system(sprintf('crontab - < %s', $this->Filename));
 		unlink($this->Filename);
 
