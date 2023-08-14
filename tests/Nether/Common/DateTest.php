@@ -295,6 +295,12 @@ extends TestCase {
 		// should be exactly the same.
 
 		$FromDateTime = new Date($Control->GetDateTime());
+		$this->AssertTrue($FromDateTime->GetDateTime() instanceof DateTime);
+		$this->AssertEquals('America/Chicago', $Control->GetTimezoneName());
+		$this->AssertEquals(-21600, $Control->GetTimezoneOffset());
+
+		$FromDateTime = new Date($Control->GetDateTime(), TRUE);
+		$this->AssertTrue($FromDateTime->GetDateTime() instanceof DateTimeImmutable);
 		$this->AssertEquals('America/Chicago', $Control->GetTimezoneName());
 		$this->AssertEquals(-21600, $Control->GetTimezoneOffset());
 
