@@ -34,7 +34,7 @@ extends Common\Datastore {
 	Clean():
 	static {
 
-		$this->Filter($this::CleanCrontabLine(...));
+		$this->Filter($this::FilterCrontabLine(...));
 
 		return $this;
 	}
@@ -43,7 +43,7 @@ extends Common\Datastore {
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	CleanCrontabLine(mixed $Line):
+	FilterCrontabLine(mixed $Line):
 	bool {
 
 		$Line = trim(Common\Filters\Text::Prepare($Line));
@@ -60,6 +60,9 @@ extends Common\Datastore {
 	static public function
 	FetchViaSystemUser():
 	static {
+
+		if(PHP_OS_FAMILY === 'Windows')
+		return new static;
 
 		$Output = new static(
 			(new Common\Datastore(explode("\n", `crontab -l`)))
