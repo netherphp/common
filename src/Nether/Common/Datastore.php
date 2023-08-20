@@ -2,23 +2,36 @@
 
 namespace Nether\Common;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
 use Exception;
 use Iterator;
-use ArrayAccess;
-use Countable;
 use JsonSerializable;
 use ReturnTypeWillChange;
+use Serializable;
 use SplFileInfo;
 
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+#[Meta\Date('2015-12-02')]
 class Datastore
-implements Iterator, ArrayAccess, Countable, JsonSerializable {
-/*//
-@date 2015-12-02
-//*/
+implements
+	ArrayAccess,
+	Countable,
+	Iterator,
+	JsonSerializable {
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	const
 	FormatPHP  = 1,
 	FormatJSON = 2;
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	protected ?string
 	$Title = NULL;
@@ -53,26 +66,17 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	__Construct(?iterable $Input=NULL) {
-	/*//
-	@date 2015-12-02
-	//*/
-
-		// fun fact:
-		// in 8.2.0 iterator_to_array can handle arrays without needing
-		// to check for ourselves.
 
 		if($Input !== NULL)
-		$this->SetData(
-			is_array($Input)
-			? $Input
-			: iterator_to_array($Input, TRUE)
-		);
+		$this->SetData($Input);
 
 		return;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	__DebugInfo():
 	array {
@@ -117,6 +121,7 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return $Output;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	__Invoke():
 	array {
@@ -124,6 +129,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return $this->Data;
 	}
 
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Serializable /////////////////////////////////////
+
+	#[Meta\Date('2023-08-19')]
 	public function
 	__Serialize():
 	array {
@@ -133,9 +142,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 
 		// bubble down the serialize setting to any substores.
 
-		foreach($this->Data as $Value)
-		if($Value instanceof self)
-		$Value->SetFullSerialize($this->FullSerialize);
+		foreach($this->Data as $Value) {
+			if($Value instanceof self)
+			$Value->SetFullSerialize($this->FullSerialize);
+		}
 
 		// handle if we want a small serialize.
 
@@ -158,6 +168,7 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return (array)$this;
 	}
 
+	#[Meta\Date('2023-08-19')]
 	public function
 	__Unserialize(array $Input):
 	void {
@@ -172,7 +183,153 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	}
 
 	////////////////////////////////////////////////////////////////
-	// protected key api ///////////////////////////////////////////
+	// IMPLEMENTS JsonSerializable /////////////////////////////////
+
+	#[Meta\Date('2021-08-18')]
+	public function
+	JsonSerialize():
+	mixed {
+
+		if(!$this->FullJSON)
+		return $this->Data;
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Countable ////////////////////////////////////////
+
+	public function
+	Count():
+	int {
+	/*//
+	@date 2015-12-02
+	count how many items are in this datastore.
+	//*/
+
+		return count($this->Data);
+	}
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS ArrayAccess //////////////////////////////////////
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	OffsetExists(mixed $Key):
+	bool {
+
+		return array_key_exists($Key, $this->Data);
+	}
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	OffsetGet(mixed $Key):
+	mixed {
+
+		if(array_key_exists($Key, $this->Data))
+		return $this->Data[$Key];
+
+		return NULL;
+	}
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	OffsetSet(mixed $Key, mixed $Value):
+	void {
+
+		// enables $Dataset[] = 'val';
+
+		if($Key === NULL)
+		$this->Data[] = $Value;
+
+		// enables $Dataset['key'] = 'val';
+
+		else
+		$this->Data[$Key] = $Value;
+
+		return;
+	}
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	OffsetUnset($Key):
+	void {
+
+		unset($this->Data[$Key]);
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Iterator /////////////////////////////////////////
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	Current():
+	mixed {
+
+		return current($this->Data);
+	}
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	Key():
+	int|string {
+
+		return key($this->Data);
+	}
+
+	#[Meta\Date('2015-12-02')]
+	#[ReturnTypeWillChange]
+	public function
+	Next():
+	void {
+
+		next($this->Data);
+
+		return;
+	}
+
+	#[Meta\Date('2015-12-02')]
+	#[ReturnTypeWillChange]
+	public function
+	Rewind():
+	void {
+
+		reset($this->Data);
+
+		return;
+	}
+
+	#[Meta\Date('2015-12-02')]
+	public function
+	Valid():
+	bool {
+
+		return (key($this->Data) !== NULL);
+	}
+
+	////////////////////////////////////////////////////////////////
+	// implements IteratorAggregate ////////////////////////////////
+
+	public function
+	GetIterator():
+	ArrayIterator {
+
+		// return an iterator that will only process the data if it
+		// actually gets ran over.
+
+		return new ArrayIterator(array_map(
+			(fn(mixed $Key)=> $this->Get($Key)),
+			array_combine(
+				array_keys($this->Data),
+				array_keys($this->Data)
+			)
+		));
+	}
+
+	////////////////////////////////////////////////////////////////
+	// Protected Key API ///////////////////////////////////////////
 
 	// just a way to provide for not accidentally var_dumping all your
 	// database secrets or whatever. it only really has effect for the
@@ -204,9 +361,10 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		if(is_array($Key)) {
 			$K = NULL;
 
-			foreach($Key as $K)
-			if(array_key_exists($K, $this->ProtectedKeys))
-			unset($this->ProtectedKeys[$K]);
+			foreach($Key as $K) {
+				if(array_key_exists($K, $this->ProtectedKeys))
+				unset($this->ProtectedKeys[$K]);
+			}
 		}
 
 		elseif(is_string($Key)) {
@@ -225,68 +383,62 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	GetData():
 	array {
-	/*//
-	@date 2015-12-02
-	//*/
 
 		return $this->Data;
 	}
 
+	#[Meta\Date('2022-11-23')]
 	public function
 	&GetDataRef():
 	array {
-	/*//
-	@date 2022-11-23
-	return the dataset by reference. keep in mind that you need to do the
-	ampersand on the reciever end too, and that it only really works if
-	assigned to a variable first. dropping this on an array function for
-	example wont work.
-	//*/
+
+		// return the dataset by reference. keep in mind that you need to
+		// do the ampersand on the reciever end too, and that it only
+		// really works if assigned to a variable first. dropping this on
+		// an array function for example wont work.
 
 		return $this->Data;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	SetData(?iterable $Input):
 	static {
-	/*//
-	@date 2015-12-02
-	//*/
 
-		if($Input)
-		$this->Data = (
-			is_array($Input)
-			? $Input
-			: iterator_to_array($Input, TRUE)
-		);
+		// fun fact:
+		// in 8.2.0 iterator_to_array can handle arrays without needing
+		// to check for ourselves.
 
-		else
-		$this->Data = [];
+		$this->Data = match(TRUE) {
+			(is_array($Input) === FALSE)
+			=> iterator_to_array($Input),
 
-		////////
+			(is_array($Input) === TRUE)
+			=> $Input,
+
+			default
+			=> [ ]
+		};
 
 		return $this;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	GetFilename():
 	?string {
-	/*//
-	@date 2015-12-02
-	//*/
 
 		return $this->Filename;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	SetFilename(string $Filename):
 	static {
-	/*//
-	@date 2015-12-02
-	//*/
 
 		$this->Filename = $Filename;
 		$this->Format = $this->DetermineFormatByFilename($Filename);
@@ -294,154 +446,133 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		return $this;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	GetFormat():
 	int {
-	/*//
-	@date 2015-12-02
-	//*/
 
 		return $this->Format;
 	}
 
+	#[Meta\Date('2015-12-02')]
 	public function
 	SetFormat(int $Format):
 	static {
-	/*//
-	@date 2015-12-02
-	//*/
 
-		switch($Format) {
-			case static::FormatPHP:
-			case static::FormatJSON: {
-				$this->Format = $Format;
-				break;
-			}
-			default: {
-				$this->Format = static::FormatPHP;
-				break;
-			}
-		}
+		$this->Format = match($Format) {
+			static::FormatJSON,
+			static::FormatPHP
+			=> $Format,
+
+			default
+			=> static::FormatPHP
+		};
 
 		return $this;
 	}
 
+	#[Meta\Date('2021-08-18')]
 	public function
 	GetFullDebug():
 	bool {
-	/*//
-	@date 2021-08-18
-	//*/
 
 		return $this->FullDebug;
 	}
 
+	#[Meta\Date('2021-08-18')]
 	public function
-	SetFullDebug(bool $Val):
+	SetFullDebug(bool $Enable):
 	static {
-	/*//
-	@date 2021-08-18
-	//*/
 
-		$this->FullDebug = $Val;
+		$this->FullDebug = $Enable;
+
 		return $this;
 	}
 
+	#[Meta\Date('2021-08-18')]
 	public function
 	GetFullJSON():
 	bool {
-	/*//
-	@date 2021-08-18
-	//*/
 
 		return $this->FullJSON;
 	}
 
+	#[Meta\Date('2021-08-18')]
 	public function
-	SetFullJSON(bool $Val):
+	SetFullJSON(bool $Enable):
 	static {
-	/*//
-	@date 2021-08-18
-	//*/
 
-		$this->FullJSON = $Val;
+		$this->FullJSON = $Enable;
+
 		return $this;
 	}
 
+	#[Meta\Date('2021-08-18')]
 	public function
 	GetFullSerialize():
 	bool {
-	/*//
-	@date 2021-08-18
-	//*/
 
 		return $this->FullSerialize;
 	}
 
+	#[Meta\Date('2021-08-18')]
 	public function
-	SetFullSerialize(bool $Val):
+	SetFullSerialize(bool $Enable):
 	static {
-	/*//
-	@date 2021-08-18
-	//*/
 
-		$this->FullSerialize = $Val;
+		$this->FullSerialize = $Enable;
+
 		return $this;
 	}
 
+	#[Meta\Date('2016-02-25')]
 	public function
 	GetSorter():
 	mixed {
-	/*//
-	@date 2016-02-25
-	//*/
 
 		return $this->Sorter;
 	}
 
+	#[Meta\Date('2016-02-25')]
 	public function
-	SetSorter(?callable $Function):
+	SetSorter(?callable $Fn):
 	static {
-	/*//
-	@date 2016-02-25
-	//*/
 
-		$this->Sorter = $Function;
+		$this->Sorter = $Fn;
+
 		return $this;
 	}
 
+	#[Meta\Date('2016-03-25')]
 	public function
 	GetTitle():
 	?string {
-	/*//
-	@date 2016-03-25
-	//*/
 
 		return $this->Title;
 	}
 
+	#[Meta\Date('2016-03-25')]
 	public function
 	SetTitle(?string $Title=''):
 	static {
-	/*//
-	@date 2016-03-25
-	//*/
 
 		$this->Title = $Title;
+
 		return $this;
 	}
 
+	#[Meta\Date('2022-08-15')]
 	public function
 	DetermineFormatByFilename(string $Filename):
 	int {
-	/*//
-	@date 2022-08-15
-	if the filename matches these specific types it will return what we
-	think it should be. else it will return what it already is in the event
-	you just doing whatever you want.
-	//*/
+
+		// if the filename matches these specific types it will return
+		// what we think it should be. else it will return what it already
+		// is in the event you just doing whatever you want.
 
 		$File = strtolower($Filename);
+
+		////////
 
 		if(str_ends_with($File, '.json'))
 		return static::FormatJSON;
@@ -449,156 +580,13 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		if(str_ends_with($File, '.phson'))
 		return static::FormatPHP;
 
+		////////
+
 		return $this->Format;
 	}
 
 	////////////////////////////////////////////////////////////////
-	// implements ArrayAccess //////////////////////////////////////
-
-	public function
-	OffsetExists(mixed $Key):
-	bool {
-	/*//
-	@date 2015-12-02
-	@implements ArrayAccess
-	//*/
-
-		return array_key_exists($Key, $this->Data);
-	}
-
-	public function
-	OffsetGet(mixed $Key):
-	mixed {
-	/*//
-	@date 2015-12-02
-	@implements ArrayAccess
-	//*/
-
-		if(array_key_exists($Key, $this->Data))
-		return $this->Data[$Key];
-
-		return NULL;
-	}
-
-	public function
-	OffsetSet(mixed $Key, mixed $Value):
-	void {
-	/*//
-	@date 2015-12-02
-	@implements ArrayAccess
-	//*/
-
-		// enables $Dataset[] = 'val';
-
-		if($Key === NULL)
-		$this->Data[] = $Value;
-
-		// enables $Dataset['key'] = 'val';
-
-		else
-		$this->Data[$Key] = $Value;
-
-		return;
-	}
-
-	public function
-	OffsetUnset($Key):
-	void {
-	/*//
-	@date 2015-12-02
-	@implements ArrayAccess
-	//*/
-
-		unset($this->Data[$Key]);
-		return;
-	}
-
-	////////////////////////////////////////////////////////////////
-	// implements Iterator /////////////////////////////////////////
-
-	public function
-	Current():
-	mixed {
-	/*//
-	@date 2015-12-02
-	//*/
-
-		return current($this->Data);
-	}
-
-	public function
-	Key():
-	int|string {
-	/*//
-	@date 2015-12-02
-	//*/
-
-		return key($this->Data);
-	}
-
-	#[ReturnTypeWillChange]
-	public function
-	Next():
-	void {
-	/*//
-	@date 2015-12-02
-	//*/
-
-		next($this->Data);
-		return;
-	}
-
-	#[ReturnTypeWillChange]
-	public function
-	Rewind():
-	void {
-	/*//
-	@date 2015-12-02
-	//*/
-
-		reset($this->Data);
-		return;
-	}
-
-	public function
-	Valid():
-	bool {
-	/*//
-	@date 2015-12-02
-	//*/
-
-		return (key($this->Data) !== NULL);
-	}
-
-	////////////////////////////////////////////////////////////////
-	// implements JsonSerializable /////////////////////////////////
-
-	public function
-	JsonSerialize():
-	mixed {
-	/*//
-	@date 2021-08-18
-	//*/
-
-		if(!$this->FullJSON)
-		return $this->Data;
-
-		return $this;
-	}
-
-	////////////////////////////////////////////////////////////////
 	// General API /////////////////////////////////////////////////
-
-	public function
-	Count():
-	int {
-	/*//
-	@date 2015-12-02
-	count how many items are in this datastore.
-	//*/
-
-		return count($this->Data);
-	}
 
 	public function
 	Each(callable $Function, ?array $Argv=NULL):
@@ -858,6 +846,35 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 	}
 
 	public function
+	Bump(string $Key, int|float $Inc=1):
+	static {
+
+		$this->Inc($Key, $Inc);
+
+		return $this;
+	}
+
+	public function
+	Inc(string $Key, int|float $Inc=1):
+	int|float {
+
+		$Val = match(TRUE) {
+			is_int($this->Data[$Key]),
+			is_float($this->Data[$Key])
+			=> $this->Data[$Key],
+
+			default
+			=> 0
+		};
+
+		$Val += $Inc;
+
+		$this->Data[$Key] = $Val;
+
+		return $Val;
+	}
+
+	public function
 	Clear():
 	static {
 	/*//
@@ -1046,7 +1063,7 @@ implements Iterator, ArrayAccess, Countable, JsonSerializable {
 		$Val = NULL;
 
 		foreach($this->Data as $Key => $Val) {
-			$Result = $Func($Key,$Val,$this);
+			$Result = $Func($Key, $Val, $this);
 
 			if(is_array($Result))
 			$Output[key($Result)] = current($Result);
