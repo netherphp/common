@@ -83,4 +83,11 @@ class Timer {
 		return $this;
 	}
 
+	public function
+	Get():
+	float {
+
+		return $this->Time;
+	}
+
 }
