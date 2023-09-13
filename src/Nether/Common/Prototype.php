@@ -112,13 +112,40 @@ impact i can find while packing in as many features as possible.
 		foreach($Properties as $Src => $Val) {
 			if($Val->Objectify instanceof Meta\PropertyObjectify) {
 				if($Val->Objectify instanceof Meta\PropertyFactory) {
-					if(class_exists($Properties[$Src]->Type))
-					if(is_callable("{$Properties[$Src]->Type}::{$Val->Objectify->Callable}"))
-					if(property_exists($this, $Val->Objectify->Source))
-					$this->{$Val->Name} = (
-						("{$Properties[$Src]->Type}::{$Val->Objectify->Callable}")
-						($this->{$Val->Objectify->Source}, ...$Val->Objectify->Args)
-					);
+
+					$Callable = $Val->Objectify->Callable;
+
+					// if what you gave me was not callable check if
+					// there was a method on the remote type.
+
+					if(!is_callable($Callable))
+					$Callable = "{$Properties[$Src]->Type}::{$Val->Objectify->Callable}";
+
+					// if i still cannot call anything then there
+					// is nothing to do.
+
+					if(!is_callable($Callable))
+					throw new Error\MissingCallableFunc;
+
+					// run the callable with or without the supplied
+					// source if defined and able.
+
+					if($Val->Objectify->Source) {
+						if(!property_exists($this, $Val->Objectify->Source))
+						throw new Error\RequiredDataMissing($Val->Objectify->Source, 'Object Property');
+
+						$this->{$Val->Name} = ($Callable)(
+							$this->{$Val->Objectify->Source},
+							...$Val->Objectify->Args
+						);
+					}
+
+					else {
+						$this->{$Val->Name} = ($Callable)(
+							...$Val->Objectify->Args
+						);
+					}
+
 				}
 
 				else

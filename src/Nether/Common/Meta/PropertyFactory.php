@@ -13,14 +13,14 @@ use ReflectionAttribute;
 class PropertyFactory
 extends PropertyObjectify {
 
-	public string
+	public mixed
 	$Callable;
 
-	public string
-	$Source;
+	public ?string
+	$Source = NULL;
 
 	public function
-	__Construct(string $Callable, string $Source, ...$Args) {
+	__Construct(mixed $Callable, ?string $Source=NULL, ...$Args) {
 
 		$this->Callable = $Callable;
 		$this->Source = $Source;

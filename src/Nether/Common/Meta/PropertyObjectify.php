@@ -28,6 +28,7 @@ to the object being constructed for that property.
 	__Construct(...$Args) {
 
 		$this->Args = $Args;
+
 		return;
 	}
 
@@ -36,6 +37,7 @@ to the object being constructed for that property.
 	static {
 
 		$Attrib->Objectify = $this;
+
 		return $this;
 	}
 
