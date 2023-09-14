@@ -42,4 +42,18 @@ implements JsonSerializable {
 		];
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	public function
+	Exists():
+	bool {
+
+		return (
+			TRUE
+			&& file_exists($this->Path)
+			&& is_dir($this->Path)
+		);
+	}
+
 }
