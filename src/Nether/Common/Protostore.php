@@ -2,8 +2,15 @@
 
 namespace Nether\Common;
 
+use ArrayAccess;
+use Iterator;
+use ReturnTypeWillChange;
+
 #[Meta\Date('2023-08-10')]
-class Protostore {
+class Protostore
+implements
+	ArrayAccess,
+	Iterator {
 
 	protected Datastore
 	$Data;
@@ -23,10 +30,97 @@ class Protostore {
 	}
 
 	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS ArrayAccess //////////////////////////////////////
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	OffsetExists(mixed $Key):
+	bool {
+
+		return $this->Data->OffsetExists($Key);
+	}
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	OffsetGet(mixed $Key):
+	mixed {
+
+		return $this->Data->OffsetGet($Key);
+	}
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	OffsetSet(mixed $Key, mixed $Value):
+	void {
+
+		$this->Data->OffsetSet($Key, $Value);
+
+		return;
+	}
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	OffsetUnset($Key):
+	void {
+
+		$this->Data->OffsetUnset($Key);
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Iterator /////////////////////////////////////////
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	Current():
+	mixed {
+
+		return $this->Data->Current();
+	}
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	Key():
+	int|string {
+
+		return $this->Data->Key();
+	}
+
+	#[Meta\Date('2023-09-14')]
+	#[ReturnTypeWillChange]
+	public function
+	Next():
+	void {
+
+		$this->Data->Next();
+
+		return;
+	}
+
+	#[Meta\Date('2023-09-14')]
+	#[ReturnTypeWillChange]
+	public function
+	Rewind():
+	void {
+
+		$this->Data->Next();
+
+		return;
+	}
+
+	#[Meta\Date('2023-09-14')]
+	public function
+	Valid():
+	bool {
+
+		return $this->Data->Valid();
+	}
+
+	////////////////////////////////////////////////////////////////
+	// EMULATE: Atlantis\Prototype /////////////////////////////////
 
 	#[Meta\Date('2023-08-10')]
-	#[Meta\Info('Mimic the version on the Atlantis Prototype class to self-describe itself.')]
 	public function
 	DescribeForPublicAPI():
 	object {
@@ -37,6 +131,9 @@ class Protostore {
 
 		return (object)$this->Data->GetData();
 	}
+
+	////////////////////////////////////////////////////////////////
+	// Local Dataset API ///////////////////////////////////////////
 
 	#[Meta\Date('2023-08-12')]
 	public function

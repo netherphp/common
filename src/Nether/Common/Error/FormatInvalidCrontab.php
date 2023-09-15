@@ -4,7 +4,7 @@ namespace Nether\Common\Error;
 
 use Exception;
 
-class CrontabFormatInvalid
+class FormatInvalidCrontab
 extends Exception {
 
 	public function

@@ -187,7 +187,7 @@ extends PHPUnit\Framework\TestCase {
 
 			else {
 				$this->AssertTrue($Exceptional);
-				$this->AssertInstanceOf(Common\Error\CrontabFormatInvalid::class, $Err);
+				$this->AssertInstanceOf(Common\Error\FormatInvalidCrontab::class, $Err);
 			}
 		}
 

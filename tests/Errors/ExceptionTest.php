@@ -27,7 +27,7 @@ extends TestCase {
 	void {
 
 		$Data = [
-			Common\Error\CrontabFormatInvalid::class
+			Common\Error\FormatInvalidCrontab::class
 			=> [ 'omg' ],
 
 			Common\Error\RequiredDataMissing::class
