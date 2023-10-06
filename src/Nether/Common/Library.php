@@ -107,4 +107,16 @@ class Library {
 		return TRUE;
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	Reset(iterable $Input=[]):
+	static {
+
+		$Output = new static(Datastore::FromArray($Input));
+
+		return $Output;
+	}
+
 }
