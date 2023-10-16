@@ -188,7 +188,6 @@ implements Stringable {
 	TemplateFindTokens(?string $Input):
 	Datastore {
 
-		$Output = new Datastore;
 		$Match = NULL;
 
 		preg_match_all(
