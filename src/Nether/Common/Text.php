@@ -181,4 +181,29 @@ implements Stringable {
 		]);
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	TemplateFindTokens(?string $Input):
+	Datastore {
+
+		$Output = new Datastore;
+		$Match = NULL;
+
+		preg_match_all(
+			'#\\{%([A-Za-z0-9_-]+)%\\}#',
+			$Input, $Match
+		);
+
+		return Datastore::FromArray($Match[1]);
+	}
+
+	static public function
+	TemplateMakeToken(string $Input):
+	string {
+
+		return "{%{$Input}%}";
+	}
+
 }
