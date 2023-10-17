@@ -16,9 +16,16 @@ class RangeInt {
 	public function
 	__Construct(int $Min, int $Max) {
 
+		if($Min > $Max) {
+			$Tmp = $Min;
+			$Min = $Max;
+			$Max = $Tmp;
+			unset($Tmp);
+		}
+
 		$this->Min = $Min;
 		$this->Max = $Max;
-		$this->Diff = $Max - $Min;
+		$this->Diff = (int)($Max - $Min);
 
 		return;
 	}
