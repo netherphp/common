@@ -268,4 +268,24 @@ class Text {
 		return $Val;
 	}
 
+	static public function
+	YamlEscapeSingleQuote(mixed $Input):
+	string {
+
+		static::Prepare($Input);
+
+		if(!is_string($Input))
+		$Input = (string)$Input;
+
+		////////
+
+		// YAML apparently escapes its single quotes by doubling them.
+
+		$Input = preg_replace("#'{1}#", "''", $Input);
+
+		////////
+
+		return $Input;
+	}
+
 }
