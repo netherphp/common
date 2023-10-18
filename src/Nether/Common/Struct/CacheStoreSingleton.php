@@ -13,7 +13,7 @@ abstract class CacheStoreSingleton {
 	// expected, where they each maintain their own datastores per class.
 	// else they all end up pointing to the parent copy.
 
-	// static private Common\Datastore
+	// static protected Common\Datastore
 	// $Data;
 
 	////////////////////////////////////////////////////////////////
