@@ -1,12 +1,12 @@
 <?php
 
-namespace NetherTestSuite\Common;
+namespace NetherTestSuite\Common\Filters;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Nether\Common\Filters\Misc;
 
-class FilterMiscTest
+class MiscTest
 extends TestCase {
 
 	/** @test */
