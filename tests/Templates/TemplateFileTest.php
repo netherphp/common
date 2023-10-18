@@ -86,6 +86,11 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertFalse($Exceptional);
 		$this->AssertNull($Err);
 
+		// test overwriting the data.
+
+		$Template->SetData(NULL);
+		$this->AssertNull($Template->GetData());
+
 		// testing no autoload
 
 		$Exceptional = FALSE;
