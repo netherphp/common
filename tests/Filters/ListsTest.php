@@ -8,7 +8,7 @@ use Nether\Common\Filters\Numbers;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
-class ListsTests
+class ListsTest
 extends TestCase {
 
 	/** @test */
