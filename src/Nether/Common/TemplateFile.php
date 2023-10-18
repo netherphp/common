@@ -47,13 +47,13 @@ class TemplateFile {
 
 		////////
 
-		$this->SetData(match(TRUE) {
+		$this->Data = match(TRUE) {
 			($this->Cache && TemplateCache::Has($Filename))
 			=> TemplateCache::Get($Filename),
 
 			default
 			=> file_get_contents($Filename)
-		});
+		};
 
 		if($this->Cache)
 		TemplateCache::Set($Filename, $this->Data);

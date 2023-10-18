@@ -91,6 +91,9 @@ extends PHPUnit\Framework\TestCase {
 		$Template->SetData(NULL);
 		$this->AssertNull($Template->GetData());
 
+		$Template->SetData('ZOMG');
+		$this->AssertEquals('ZOMG', $Template->GetData());
+
 		// testing no autoload
 
 		$Exceptional = FALSE;
