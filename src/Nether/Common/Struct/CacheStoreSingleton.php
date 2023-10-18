@@ -9,8 +9,12 @@ use Nether\Common;
 
 abstract class CacheStoreSingleton {
 
-	static protected Common\Datastore
-	$Data;
+	// this must be defined by the child class for the effect to work as
+	// expected, where they each maintain their own datastores per class.
+	// else they all end up pointing to the parent copy.
+
+	// static private Common\Datastore
+	// $Data;
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
@@ -18,6 +22,14 @@ abstract class CacheStoreSingleton {
 	static public function
 	Init():
 	void {
+
+		if(!property_exists(static::class, 'Data'))
+		throw new Common\Error\RequiredDataMissing(
+			'Data',
+			'Extensions of CacheStoreSingleton must define $Data property.'
+		);
+
+		////////
 
 		if(isset(static::$Data))
 		return;
@@ -34,8 +46,7 @@ abstract class CacheStoreSingleton {
 	Count():
 	int {
 
-		if(!isset(static::$Data))
-		return 0;
+		static::Init();
 
 		return static::$Data->Count();
 	}
@@ -55,9 +66,9 @@ abstract class CacheStoreSingleton {
 	Flush():
 	void {
 
-		if(isset(static::$Data))
-		static::$Data->Clear();
+		static::Init();
 
+		static::$Data->Clear();
 		return;
 	}
 
@@ -74,8 +85,7 @@ abstract class CacheStoreSingleton {
 	Has(string $Key):
 	bool {
 
-		if(!isset(static::$Data))
-		return FALSE;
+		static::Init();
 
 		return static::$Data->HasKey($Key);
 	}
