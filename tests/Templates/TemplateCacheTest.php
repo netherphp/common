@@ -34,6 +34,7 @@ extends PHPUnit\Framework\TestCase {
 		// load file hit cache and verify cache was primed.
 
 		$Template = new Common\TemplateFile($File, Cache: TRUE);
+		$this->AssertTrue($Template->GetUseCache());
 		$this->AssertEquals(1, Common\TemplateCache::Count());
 		$this->AssertTrue(Common\TemplateCache::Has($File));
 		$this->AssertEquals($Original, $Template->GetData());
