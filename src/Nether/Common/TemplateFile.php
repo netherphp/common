@@ -20,7 +20,7 @@ class TemplateFile {
 	__Construct(string $Filename, bool $Autoload=TRUE, bool $Cache=FALSE) {
 
 		$this->SetFilename($Filename);
-		$this->SetCache($Cache);
+		$this->SetUseCache($Cache);
 
 		if($Autoload)
 		$this->Load();
@@ -47,13 +47,13 @@ class TemplateFile {
 
 		////////
 
-		$this->Data = match(TRUE) {
+		$this->SetData(match(TRUE) {
 			($this->Cache && TemplateCache::Has($Filename))
 			=> TemplateCache::Get($Filename),
 
 			default
 			=> file_get_contents($Filename)
-		};
+		});
 
 		if($this->Cache)
 		TemplateCache::Set($Filename, $this->Data);
@@ -104,14 +104,14 @@ class TemplateFile {
 	////////////////////////////////////////////////////////////////
 
 	public function
-	GetCache():
+	GetUseCache():
 	bool {
 
 		return $this->Cache;
 	}
 
 	public function
-	SetCache(bool $Use):
+	SetUseCache(bool $Use):
 	static {
 
 		$this->Cache = $Use;

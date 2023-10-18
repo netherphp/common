@@ -18,9 +18,10 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
-	TestLoading():
+	TestLoadingNotFound():
 	void {
 
+		$Template = NULL;
 		$File = 'qwertyuiopasdfghjklzxcvbnm';
 		$Exceptional = FALSE;
 		$Err = NULL;
@@ -28,10 +29,51 @@ extends PHPUnit\Framework\TestCase {
 		try { $Template = Common\TemplateFile::FromFile($File); }
 		catch(Exception $Err) { $Exceptional = TRUE; }
 
+		$this->AssertNull($Template);
 		$this->AssertTrue($Exceptional);
-		$this->AssertTrue($Err instanceof Common\Error\FileNotFound);
+		$this->AssertInstanceOf(Common\Error\FileNotFound::class, $Err);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestLoadingUnreadable():
+	void {
+
+		if(PHP_OS_FAMILY === 'Windows') {
+			$this->MarkTestSkipped('Fileperms on Windows is meh.');
+			return;
+		}
 
 		////////
+
+		$File = Common\Filesystem\Util::Pathify(dirname(__FILE__), 'TemplateFileTest1.txt');
+		$Template = NULL;
+		$Exceptional = FALSE;
+		$Err = NULL;
+
+		try {
+			chmod($File, 0o000);
+			$Template = Common\TemplateFile::FromFile($File);
+		}
+
+		catch(Exception $Err) { $Exceptional = TRUE; }
+
+		chmod($File, 0o666);
+		$this->AssertNull($Template);
+		$this->AssertTrue($Exceptional);
+		$this->AssertInstanceOf(Common\Error\FileUnreadable::class, $Err);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestLoadingNormal():
+	void {
+
+		// testing file normal.
 
 		$File = Common\Filesystem\Util::Pathify(dirname(__FILE__), 'TemplateFileTest1.txt');
 		$Exceptional = FALSE;
@@ -40,8 +82,21 @@ extends PHPUnit\Framework\TestCase {
 		try { $Template = Common\TemplateFile::FromFile($File); }
 		catch(Exception $Err) { $Exceptional = TRUE; }
 
+		$this->AssertEquals($File, $Template->GetFilename());
+		$this->AssertFalse($Exceptional);
+		$this->AssertNull($Err);
+
+		// testing no autoload
+
+		$Exceptional = FALSE;
+		$Err = NULL;
+
+		try { $Template = new Common\TemplateFile($File, FALSE); }
+		catch(Exception $Err) { $Exceptional = TRUE; }
+
 		$this->AssertFalse($Exceptional);
 		$this->AssertTrue($Err === NULL);
+		$this->AssertNull($Template->GetData());
 
 		return;
 	}
