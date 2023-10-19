@@ -288,4 +288,44 @@ class Text {
 		return $Input;
 	}
 
+	#[Common\Meta\DateAdded('2023-10-18')]
+	#[Common\Meta\Info('Expecting a dataset in JSON return an array, silently trashing it and returning an empty dataset if it was invalid.')]
+	static public function
+	DatasetFromJSON(mixed $Input):
+	array {
+
+		static::Prepare($Input);
+
+		////////
+
+		// we are expecting a json object or array.
+		// if it is not a string then prepare an empty data string.
+
+		if(!is_string($Input))
+		$Input = '{}';
+
+		// try to decode was was given. if it did not result in an array
+		// the prepare an empty data array.
+
+		$Output = json_decode($Input, TRUE);
+
+		if(!is_array($Output))
+		$Output = [];
+
+		////////
+
+		return $Output;
+	}
+
+	#[Common\Meta\DateAdded('2023-10-18')]
+	#[Common\Meta\Info('Same as DatasetFromJSON except returns a Datastore.')]
+	static public function
+	DatastoreFromJSON(mixed $Input):
+	Common\Datastore {
+
+		return Common\Datastore::FromArray(
+			static::DatasetFromJSON($Input)
+		);
+	}
+
 }
