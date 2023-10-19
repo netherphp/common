@@ -1,6 +1,6 @@
 <?php
 
-namespace NetherTestSuite\Common;
+namespace NetherTestSuite\Common\Filters;
 
 use Nether\Common\Datastore;
 use Nether\Common\Filters\Lists;
@@ -8,7 +8,7 @@ use Nether\Common\Filters\Numbers;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
-class FilterListsTest
+class ListsTest
 extends TestCase {
 
 	/** @test */

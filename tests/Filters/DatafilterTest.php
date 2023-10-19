@@ -1,6 +1,6 @@
 <?php
 
-namespace NetherTestSuite\Common;
+namespace NetherTestSuite\Common\Filters;
 
 use Nether\Common\Filters;
 use Nether\Common\Datafilter;
