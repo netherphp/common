@@ -2,13 +2,20 @@
 
 namespace Nether\Common\Filesystem;
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+use Nether\Common;
+
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
-
 use IteratorIterator;
 use FilesystemIterator;
-
 use FilterIterator;
+use SplFileInfo;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 class Indexer
 extends FilterIterator {
@@ -45,6 +52,52 @@ extends FilterIterator {
 	bool {
 
 		return TRUE;
+	}
+
+	public function
+	ToArray():
+	array {
+
+		$File = NULL;
+		$Output = [];
+
+		foreach($this as $File) {
+			/** @var SplFileInfo $File */
+			$Output[] = $File->GetRealPath();
+		}
+
+		return $Output;
+	}
+
+	public function
+	ToDatastore():
+	Common\Datastore {
+
+		return Common\Datastore::FromArray($this->ToArray());
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	FromPath(string $Dir, bool $Recur=FALSE):
+	static {
+
+		return new static($Dir, $Recur);
+	}
+
+	static public function
+	ArrayFromPath(string $Dir, bool $Recur=FALSE):
+	array {
+
+		return static::FromPath($Dir, $Recur)->ToArray();
+	}
+
+	static public function
+	DatastoreFromPath(string $Dir, bool $Recur=FALSE):
+	Common\Datastore {
+
+		return static::FromPath($Dir, $Recur)->ToDatastore();
 	}
 
 }
