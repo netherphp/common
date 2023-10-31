@@ -9,6 +9,60 @@ use SplFileInfo;
 
 class Util {
 
+	#[Common\Meta\Date('2023-10-31')]
+	#[Common\Meta\Info('Make the supplied file path vanish without having to care what it is.')]
+	static public function
+	Delete(string $Path):
+	void {
+
+		if(is_file($Path)) {
+			unlink($Path);
+			return;
+		}
+
+		if(is_dir($Path)) {
+			static::RmDir($Path);
+			return;
+		}
+
+		if(file_exists($Path))
+		throw new Exception("Failed to delete {$Path}");
+
+		return;
+	}
+
+	static public function
+	RmDir(string $Path):
+	void {
+
+		if(!is_dir($Path))
+		throw new Common\Error\DirNotFound($Path);
+
+		////////
+
+		$Scan = new Indexer($Path);
+		$Info = NULL;
+
+		foreach($Scan as $Info) {
+			/** @var SplFileInfo $Info */
+
+			if($Info->IsDir()) {
+				static::RmDir($Info->GetPathname());
+				continue;
+			}
+
+			unlink($Info->GetPathname());
+			continue;
+		}
+
+		rmdir($Path);
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	static public function
 	MkDir(string $Path, int $Mode=0777):
 	bool {
@@ -47,34 +101,6 @@ class Util {
 		$Filename = tempnam($Path, "{$Prefix}-");
 
 		return $Filename;
-	}
-
-	static public function
-	RmDir(string $Path):
-	void {
-
-		if(!is_dir($Path))
-		throw new Common\Error\DirNotFound($Path);
-
-		////////
-
-		$Scan = new Indexer($Path);
-		$Info = NULL;
-
-		foreach($Scan as $Info) {
-			/** @var SplFileInfo $Info */
-
-			if($Info->IsDir()) {
-				static::RmDir($Info->GetPathname());
-				continue;
-			}
-
-			unlink($Info->GetPathname());
-		}
-
-		rmdir($Path);
-
-		return;
 	}
 
 	static public function
@@ -198,6 +224,38 @@ class Util {
 		////////
 
 		return Common\Filesystem\Util::Pathify($Path, $Base);
+	}
+
+	static public function
+	Basename(string $Input, int $Len=1):
+	string {
+
+		$Bits = explode(DIRECTORY_SEPARATOR, $Input);
+
+		if(count($Bits) < $Len)
+		return join(DIRECTORY_SEPARATOR, $Bits);
+
+		return join(
+			DIRECTORY_SEPARATOR,
+			array_slice($Bits, (count($Bits) - $Len))
+		);
+	}
+
+	static public function
+	Prechomp(string $BaseDir, string $Path):
+	string {
+
+		return trim(
+			str_replace($BaseDir, '', $Path),
+			DIRECTORY_SEPARATOR
+		);
+	}
+
+	static public function
+	Prefix(string $BaseDir, string $Path):
+	string {
+
+		return static::Pathify($BaseDir, $Path);
 	}
 
 }
