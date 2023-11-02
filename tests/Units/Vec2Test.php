@@ -22,20 +22,23 @@ extends PHPUnit\Framework\TestCase {
 	TestBasic():
 	void {
 
-		$Vec = new Vec2(42, 69);
+		$X = 42;
+		$Y = 69;
+
+		$Vec = new Vec2($X, $Y);
 		$Exceptional = FALSE;
 		$Doh = NULL;
 		$Err = NULL;
 
 		// read the properties directly.
 
-		$this->AssertEquals(42, $Vec->X);
-		$this->AssertEquals(69, $Vec->Y);
+		$this->AssertEquals($X, $Vec->X);
+		$this->AssertEquals($Y, $Vec->Y);
 
 		// read context sugar properties that do the same thing.
 
-		$this->AssertEquals(42, $Vec->Min);
-		$this->AssertEquals(69, $Vec->Max);
+		$this->AssertEquals($X, $Vec->Min);
+		$this->AssertEquals($Y, $Vec->Max);
 
 		// read context sugar properties that don't exist.
 
@@ -45,6 +48,14 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertTrue($Exceptional);
 		$this->AssertInstanceOf(Exception::class, $Err);
 
+		// test direct assignment.
+
+		$Vec->X = ($X = 123.4);
+		$Vec->Y = ($Y = 321.0);
+
+		$this->AssertEquals($X, $Vec->X);
+		$this->AssertEquals($Y, $Vec->Y);
+
 		return;
 	}
 
@@ -53,36 +64,45 @@ extends PHPUnit\Framework\TestCase {
 	TestClamp():
 	void {
 
+		$X = 42;
+		$Y = 69;
+
+		$CX = 50;
+		$CY = 60;
+
 		// test doing things lame
 
-		$Vec = new Vec2(42, 69);
-		$Vec->ClampX(50, 60);
-		$Vec->ClampY(50, 60);
+		$Vec = new Vec2($X, $Y);
+		$Vec->ClampX($CX, $CY);
+		$Vec->ClampY($CX, $CY);
 
-		$this->AssertEquals(50, $Vec->X);
-		$this->AssertEquals(60, $Vec->Y);
+		$this->AssertEquals($CX, $Vec->X);
+		$this->AssertEquals($CY, $Vec->Y);
 
 		// test doing things epic
 
-		$Vec = Vec2::Coord(42, 69);
-		$Vec->Clamp(Vec2::Range(50, 60), Vec2::Range(50, 60));
+		$Vec = Vec2::Coord($X, $Y);
+		$Vec->Clamp(
+			Vec2::Range($CX, $CY),
+			Vec2::Range($CX, $CY)
+		);
 
-		$this->AssertEquals(50, $Vec->X);
-		$this->AssertEquals(60, $Vec->Y);
+		$this->AssertEquals($CX, $Vec->X);
+		$this->AssertEquals($CY, $Vec->Y);
 
 		// test doing things very iteratively.
 
-		$Vec = new Vec2(42, 69);
-		$Vec->Clamp(X: Vec2::Range(50, 60));
+		$Vec = new Vec2($X, $Y);
+		$Vec->Clamp(X: Vec2::Range($CX, $CY));
 
 		$this->AssertEquals(50, $Vec->X);
 		$this->AssertEquals(69, $Vec->Y);
 
-		$Vec->X = 55;
-		$Vec->Clamp(Y: Vec2::Range(50, 60));
+		$Vec->X = $CX + 5;
+		$Vec->Clamp(Y: Vec2::Range($CX, $CY));
 
-		$this->AssertEquals(55, $Vec->X);
-		$this->AssertEquals(60, $Vec->Y);
+		$this->AssertEquals(($CX + 5), $Vec->X);
+		$this->AssertEquals($CY, $Vec->Y);
 
 		return;
 	}
