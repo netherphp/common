@@ -4,23 +4,19 @@ namespace Nether\Common;
 
 use Nether\Common\Prototype\Flags;
 use Nether\Common\Prototype\ConstructArgs;
-use Nether\Common\Package\ClassInfoPackage;
-use Nether\Common\Package\PropertyInfoPackage;
-use Nether\Common\Package\MethodInfoPackage;
 
-class Prototype {
-/*//
-@date 2021-08-05
-provides a self-sealing stem object to build from where you can trust that the
-properties you need will exist, prefilled with a default value if needed. this
-class and its supports have been micro-optimized to have the most minimal
-impact i can find while packing in as many features as possible.
-//*/
+#[Meta\Date('2021-08-05')]
+#[Meta\Info('Provides a self-sealing stem object designed to take data dumps and consume their content into itself.')]
+class Prototype
+implements
+	Interfaces\ClassInfoPackage,
+	Interfaces\PropertyInfoPackage,
+	Interfaces\MethodInfoPackage {
 
 	use
-	ClassInfoPackage,
-	PropertyInfoPackage,
-	MethodInfoPackage;
+	Package\ClassInfoPackage,
+	Package\PropertyInfoPackage,
+	Package\MethodInfoPackage;
 
 	public function
 	__Construct(array|object|NULL $Raw=NULL, array|object|NULL $Defaults=NULL, ?int $Flags=NULL) {
