@@ -6,8 +6,11 @@ use Nether\Common;
 use OzdemirBurak\Iris;
 
 use ArgumentCountError;
+use Stringable;
 
-class Colour {
+class Colour
+implements
+	Stringable {
 
 	protected Iris\Color\Rgba
 	$API;
@@ -28,6 +31,13 @@ class Colour {
 		$this->API = $API->ToRGBA();
 
 		return;
+	}
+
+	public function
+	__ToString():
+	string {
+
+		return $this->GetHexRGB();
 	}
 
 	////////////////////////////////////////////////////////////////
