@@ -1411,7 +1411,7 @@ implements
 		$Data = NULL;
 
 		if($Ext === 'json' || $this->Format === static::FormatJSON)
-		$Data = json_decode(file_get_contents($Filename));
+		$Data = json_decode(file_get_contents($Filename), TRUE);
 		else
 		$Data = unserialize(file_get_contents($Filename));
 
