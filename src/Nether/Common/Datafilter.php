@@ -199,6 +199,13 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Raw(string $Key):
+	mixed {
+
+		return $this->__Data[$Key];
+	}
+
+	public function
 	Get(string $Key):
 	mixed {
 
