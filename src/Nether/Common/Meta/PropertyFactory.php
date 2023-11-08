@@ -35,6 +35,9 @@ extends PropertyObjectify {
 
 		$Attrib->Objectify = $this;
 
+		if($this->Source === NULL)
+		$this->Source = $Attrib->Name;
+
 		return $this;
 	}
 

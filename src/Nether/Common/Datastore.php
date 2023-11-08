@@ -73,6 +73,9 @@ implements
 		if($Input !== NULL)
 		$this->SetData($Input);
 
+		$this->OnPrepare();
+		$this->OnReady();
+
 		return;
 	}
 
@@ -127,6 +130,22 @@ implements
 	array {
 
 		return $this->Data;
+	}
+
+	#[Meta\Date('2023-11-08')]
+	protected function
+	OnPrepare():
+	void {
+
+		return;
+	}
+
+	#[Meta\Date('2023-11-08')]
+	protected function
+	OnReady():
+	void {
+
+		return;
 	}
 
 	////////////////////////////////////////////////////////////////
