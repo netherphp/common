@@ -130,7 +130,7 @@ implements
 						if(!property_exists($this, $Val->Objectify->Source))
 						throw new Error\RequiredDataMissing($Val->Objectify->Source, 'Object Property');
 
-						if(isset($this->{$Val->Objectify->Source}))
+						//if(isset($this->{$Val->Objectify->Source}))
 						$this->{$Val->Name} = ($Callable)(
 							$this->{$Val->Objectify->Source},
 							...$Val->Objectify->Args
