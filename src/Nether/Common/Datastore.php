@@ -740,12 +740,15 @@ implements
 	}
 
 	public function
-	Values():
-	array {
+	Values(bool $Array=FALSE):
+	array|static {
 	/*//
 	@date 2021-01-05
 	fetches a clean indexed copy of the data via array_values.
 	//*/
+
+		if(!$Array)
+		return new static(array_values($this->Data));
 
 		return array_values($this->Data);
 	}
@@ -842,6 +845,15 @@ implements
 		////////
 
 		return ($Val === NULL);
+	}
+
+	#[Meta\Date('2023-11-08')]
+	#[Meta\Info('Returns if the array numerically indexed.')]
+	public function
+	IsList():
+	bool {
+
+		return array_is_list($this->Data);
 	}
 
 	////////////////////////////////////////////////////////////////

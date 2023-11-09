@@ -1322,6 +1322,12 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertContains('One', $Keys);
 
 		$Values = $Store->Values();
+		$this->AssertInstanceOf($Store::class, $Values);
+		$this->AssertCount(4, $Values);
+		$this->AssertEquals(1, $Values[0]);
+		$this->AssertEquals('Won', $Values[3]);
+
+		$Values = $Store->Values(TRUE);
 		$this->AssertIsArray($Values);
 		$this->AssertCount(4, $Values);
 		$this->AssertEquals(1, $Values[0]);
