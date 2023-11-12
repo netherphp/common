@@ -1274,6 +1274,26 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2023-11-11')]
+	#[Meta\Info('Remove duplicates from this dataset.')]
+	public function
+	Flatten():
+	static {
+
+		$this->Data = array_unique($this->Data);
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-11')]
+	#[Meta\Info('Make a new dataset with just the unique items.')]
+	public function
+	Unique():
+	static {
+
+		return new static(array_unique($this->Data));
+	}
+
 	////////////////////////////////////////////////////////////////
 	// Merging API /////////////////////////////////////////////////
 

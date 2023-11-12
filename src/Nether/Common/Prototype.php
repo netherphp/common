@@ -128,8 +128,10 @@ implements
 					);
 
 					$this->{$Val->Name} = ($Callable)(
-						(isset($this->{$Key}) ? $this->{$Key} : NULL),
-						...$Val->Objectify->Args
+						...array_merge(
+							(isset($this->{$Key}) ? [ $this->{$Key} ] : []),
+							$Val->Objectify->Args
+						)
 					);
 				}
 
