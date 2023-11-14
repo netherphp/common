@@ -32,6 +32,9 @@ class Numbers {
 
 		static::Prepare($Item);
 
+		if($Item === 0 || $Item === '0')
+		return 0;
+
 		if(!$Item)
 		return NULL;
 
