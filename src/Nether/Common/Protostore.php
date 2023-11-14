@@ -235,7 +235,7 @@ implements
 
 	#[Meta\Date('2023-08-10')]
 	static public function
-	FromJSON(?string $JSON):
+	FromJSON(?string $JSON='{}'):
 	static {
 
 		if(!$JSON)
