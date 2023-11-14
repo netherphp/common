@@ -202,7 +202,10 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	Raw(string $Key):
 	mixed {
 
+		if(isset($this->__Data[$Key]))
 		return $this->__Data[$Key];
+
+		return NULL;
 	}
 
 	public function
