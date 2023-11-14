@@ -379,6 +379,7 @@ extends TestCase {
 		////////
 
 		$Data
+		->CacheClear()
 		->Zero(Filters\Numbers::IntType(...))
 		->One(Filters\Numbers::IntType(...))
 		->Two(Filters\Numbers::IntType(...))
@@ -390,7 +391,9 @@ extends TestCase {
 		$this->AssertIsInt($Data->Three);
 		$this->AssertEquals(0, $Data->Three);
 
+
 		$Data
+		->CacheClear()
 		->Zero(Filters\Numbers::IntNullable(...))
 		->One(Filters\Numbers::IntNullable(...))
 		->Two(Filters\Numbers::IntNullable(...))
@@ -400,6 +403,11 @@ extends TestCase {
 		$this->AssertIsInt($Data->One);
 		$this->AssertIsInt($Data->Two);
 		$this->AssertNull($Data->Three);
+
+		$Data->CacheClear();
+		$Data->ResetFilters('Zero');
+		$Data->Zero(Filters\Numbers::IntNullable(...), TRUE);
+		$this->AssertIsInt($Data->Zero);
 
 		////////
 

@@ -27,12 +27,12 @@ class Numbers {
 	#[Common\Meta\DateAdded('2022-02-17')]
 	#[Common\Meta\Info('Typecast to Integer, except falsey values turn into NULL.')]
 	static public function
-	IntNullable(mixed $Item):
+	IntNullable(mixed $Item, bool $ButMyZero=FALSE):
 	?int {
 
 		static::Prepare($Item);
 
-		if($Item === 0 || $Item === '0')
+		if($ButMyZero && ($Item === 0 || $Item === '0'))
 		return 0;
 
 		if(!$Item)
