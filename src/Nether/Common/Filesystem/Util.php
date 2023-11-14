@@ -118,11 +118,11 @@ class Util {
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	IsLinkTo(string $Dest, string $Source):
+	IsLinkTo(string $Link, string $Source):
 	bool {
 
-		if(is_link($Dest))
-		if(readlink($Dest) === $Source)
+		if(is_link($Link))
+		if(readlink($Link) === $Source)
 		return TRUE;
 
 		////////

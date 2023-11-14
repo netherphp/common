@@ -274,6 +274,9 @@ class Text {
 
 		static::Prepare($Input);
 
+		if($Input === NULL)
+		$Input = '';
+
 		if(!is_string($Input))
 		$Input = (string)$Input;
 

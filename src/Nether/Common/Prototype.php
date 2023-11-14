@@ -57,7 +57,7 @@ implements
 
 		if($Defaults !== NULL)
 		foreach($Defaults as $Src => $Val) {
-			if($StrictDefaults && !property_exists($this,$Src))
+			if($StrictDefaults && !property_exists($this, $Src))
 			continue;
 
 			$this->{$Src} = $Val;
@@ -105,44 +105,34 @@ implements
 
 		// apply any follow up attribute demands.
 
+		$Src = NULL;
+		$Val = NULL;
+		$Key = NULL;
+
 		foreach($Properties as $Src => $Val) {
 			if($Val->Objectify instanceof Meta\PropertyObjectify) {
 				if($Val->Objectify instanceof Meta\PropertyFactory) {
 
+					$Key = $Val->Objectify->Source ?? $Val->Name;
 					$Callable = $Val->Objectify->Callable;
-
-					// if what you gave me was not callable check if
-					// there was a method on the remote type.
 
 					if(!is_callable($Callable))
 					$Callable = "{$Properties[$Src]->Type}::{$Val->Objectify->Callable}";
 
-					// if i still cannot call anything then there
-					// is nothing to do.
-
 					if(!is_callable($Callable))
 					throw new Error\MissingCallableFunc;
 
-					// run the callable with or without the supplied
-					// source if defined and able.
+					if(!property_exists($this, $Key))
+					throw new Error\RequiredDataMissing(
+						$Key, 'Object Property'
+					);
 
-					if($Val->Objectify->Source) {
-						if(!property_exists($this, $Val->Objectify->Source))
-						throw new Error\RequiredDataMissing($Val->Objectify->Source, 'Object Property');
-
-						//if(isset($this->{$Val->Objectify->Source}))
-						$this->{$Val->Name} = ($Callable)(
-							$this->{$Val->Objectify->Source},
-							...$Val->Objectify->Args
-						);
-					}
-
-					else {
-						$this->{$Val->Name} = ($Callable)(
-							...$Val->Objectify->Args
-						);
-					}
-
+					$this->{$Val->Name} = ($Callable)(
+						...array_merge(
+							(isset($this->{$Key}) ? [ $this->{$Key} ] : []),
+							$Val->Objectify->Args
+						)
+					);
 				}
 
 				else

@@ -17,10 +17,10 @@ extends PropertyObjectify {
 	$Callable;
 
 	public ?string
-	$Source = NULL;
+	$Source;
 
 	public function
-	__Construct(mixed $Callable, ?string $Source=NULL, ...$Args) {
+	__Construct(mixed $Callable, string $Source=NULL, ...$Args) {
 
 		$this->Callable = $Callable;
 		$this->Source = $Source;
@@ -35,8 +35,8 @@ extends PropertyObjectify {
 
 		$Attrib->Objectify = $this;
 
-		//if($this->Source === NULL)
-		//$this->Source = $Attrib->Name;
+		if(!isset($this->Source))
+		$this->Source = $Attrib->Name;
 
 		return $this;
 	}
