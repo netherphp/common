@@ -607,21 +607,31 @@ implements
 	////////////////////////////////////////////////////////////////
 	// General API /////////////////////////////////////////////////
 
+	#[Meta\Date('2016-12-02')]
 	public function
 	Each(callable $Function, ?array $Argv=NULL):
 	static {
-	/*//
-	@date 2016-12-02
-	run the specified function against every single thing in the list. it is
-	is slower than running a direct foreach() on the property but it sure makes
-	for some nice looking shit sometimes.
-	//*/
 
 		$Key = NULL;
 		$Value = NULL;
 
 		foreach($this->Data as $Key => &$Value)
 		$Function($Value, $Key, $this, ...($Argv??[]));
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-15')]
+	#[Meta\Info('For when you dun wanna get fucked about on what the callback arg order is.')]
+	public function
+	EachKeyValue(callable $Function, ?iterable $Argv=NULL):
+	static {
+
+		$Key = NULL;
+		$Value = NULL;
+
+		foreach($this->Data as $Key => &$Value)
+		$Function($Key, $Value, $this, ...($Argv??[]));
 
 		return $this;
 	}
@@ -1292,6 +1302,44 @@ implements
 	static {
 
 		return new static(array_unique($this->Data));
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	MapKeyValue(callable $Fn, ...$Argv):
+	static {
+
+		// this is going to be absolutely mental on large datasets. but it
+		// nets me the api i want and all that stuff is just a handful of
+		// stuffs so get rekt.
+
+		$Sigh = function(mixed $Val, mixed $Key) use($Fn, $Argv) {
+			return $Fn($Key, $Val, ...$Argv);
+		};
+
+		return new static(array_combine(
+			array_keys($this->Data),
+			array_map($Sigh, $this->Data, array_keys($this->Data))
+		));
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	RemapKeyValue(callable $Fn, ...$Argv):
+	static {
+
+		// see MapKeyValue for the rant.
+
+		$Sigh = function(mixed $Val, mixed $Key) use($Fn, $Argv) {
+			return $Fn($Key, $Val, ...$Argv);
+		};
+
+		$this->Data = array_combine(
+			array_keys($this->Data),
+			array_map($Sigh, $this->Data, array_keys($this->Data))
+		);
+
+		return $this;
 	}
 
 	////////////////////////////////////////////////////////////////

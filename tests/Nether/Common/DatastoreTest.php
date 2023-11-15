@@ -898,7 +898,7 @@ extends PHPUnit\Framework\TestCase {
 		$New->Remap(function($Val){ return (String)$Val; });
 		$this->AssertEquals(3,$New->Count());
 
-		$New->Each(function($Val){
+		$New->EachKeyValue(function($Key, $Val){
 			$this->AssertTrue(is_string($Val));
 			return;
 		});
@@ -1860,6 +1860,35 @@ extends PHPUnit\Framework\TestCase {
 		$this->AssertFalse($Store->HasKey('One'));
 		$this->AssertFalse($Store->HasKey('Two'));
 		$this->AssertFalse($Store->HasKey('Three'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestMapKeyValue():
+	void {
+
+		$Store = Datastore::FromArray(array_flip([
+			'Zero', 'One', 'Two'
+		]));
+
+		// test the mapping returning new.
+
+		$New = $Store->MapKeyValue(fn($K, $V)=> strtolower($K));
+
+		$this->AssertTrue($Store['Zero'] === 0);
+		$this->AssertTrue($New['Zero'] === 'zero');
+
+		$this->AssertTrue($Store['Two'] === 2);
+		$this->AssertTrue($New['Two'] === 'two');
+
+		// test the mapping modding itself.
+
+		$Store->RemapKeyValue(fn($K, $V)=> strtolower($K));
+
+		$this->AssertTrue($Store['Zero'] === 'zero');
+		$this->AssertTrue($Store['Two'] === 'two');
 
 		return;
 	}
