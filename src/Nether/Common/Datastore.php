@@ -1342,6 +1342,67 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2023-11-15')]
+	public function
+	HeadCrop(int $Len=1):
+	static {
+
+		$this->Data = array_slice($this->Data, 0, $Len, TRUE);
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	HeadPush(mixed $Item):
+	static {
+
+		array_unshift($this->Data, $Item);
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	HeadPop():
+	mixed {
+
+		return array_shift($this->Data);
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	TailCrop(int $Len=1):
+	static {
+
+		$this->Data = array_slice(
+			$this->Data,
+			(count($this->Data) - $Len - 1),
+			$Len,
+			TRUE
+		);
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	TailPush(mixed $Item):
+	static {
+
+		array_push($this->Data, $Item);
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-15')]
+	public function
+	TailPop():
+	mixed {
+
+		return array_pop($this->Data);
+	}
+
 	////////////////////////////////////////////////////////////////
 	// Merging API /////////////////////////////////////////////////
 

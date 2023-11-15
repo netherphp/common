@@ -206,6 +206,24 @@ implements Stringable {
 	}
 
 	static public function
+	TemplateReplaceTokens(string $Input, iterable $Tokens):
+	string {
+
+		$Output = $Input;
+		$Token = NULL;
+		$Value = NULL;
+
+		foreach($Tokens as $Token => $Value)
+		$Output = str_replace(
+			static::TemplateMakeToken($Token),
+			$Value,
+			$Output
+		);
+
+		return $Output;
+	}
+
+	static public function
 	ReadableJSON(mixed $Input):
 	string {
 

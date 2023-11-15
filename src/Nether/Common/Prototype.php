@@ -2,11 +2,13 @@
 
 namespace Nether\Common;
 
+use AllowDynamicProperties;
 use Nether\Common\Prototype\Flags;
 use Nether\Common\Prototype\ConstructArgs;
 
 #[Meta\Date('2021-08-05')]
 #[Meta\Info('Provides a self-sealing stem object designed to take data dumps and consume their content into itself.')]
+#[AllowDynamicProperties]
 class Prototype
 implements
 	Interfaces\ClassInfoPackage,
@@ -33,6 +35,12 @@ implements
 		// there has also been a lot of micro-optimizations made in this
 		// entire flow in regards to the read and write speed of object
 		// properties and checking if a key exists.
+
+		// @todo 2023-11-15 the AllowDynamicProperites attribute was added
+		// to squelch php 8.2's notices. this code needs to be auditied to
+		// remove that dynamic property re-inforcement feature that the
+		// language itself is trying to stamp out. and thats fine because
+		// i haven't used that shit in forever.
 
 		if(is_object($Raw))
 		$Raw = (array)$Raw;
