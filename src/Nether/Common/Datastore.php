@@ -1347,7 +1347,11 @@ implements
 	HeadCrop(int $Len=1):
 	static {
 
-		$this->Data = array_slice($this->Data, 0, $Len, TRUE);
+		$this->Data = array_slice(
+			$this->Data,
+			0, $Len,
+			!array_is_list($this->Data)
+		);
 
 		return $this;
 	}
@@ -1375,11 +1379,12 @@ implements
 	TailCrop(int $Len=1):
 	static {
 
+		$Start = (count($this->Data) - $Len);
+
 		$this->Data = array_slice(
 			$this->Data,
-			(count($this->Data) - $Len - 1),
-			$Len,
-			TRUE
+			$Start, $Len,
+			!array_is_list($this->Data)
 		);
 
 		return $this;
