@@ -45,6 +45,29 @@ class Timer {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Start():
+	void {
+
+		$this->Start = microtime(TRUE);
+
+		return;
+	}
+
+	public function
+	Stop():
+	void {
+
+		$this->Stop = microtime(TRUE);
+
+		$this->Time += $this->Stop - $this->Start;
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	public function
 	Run(...$Argv):
 	static {
 
@@ -53,12 +76,11 @@ class Timer {
 
 		////////
 
-		$this->Start = microtime(TRUE);
+		$this->Start();
 
 		($this->Callable)(...$Argv);
 
-		$this->Stop = microtime(TRUE);
-		$this->Time += $this->Stop - $this->Start;
+		$this->Stop();
 
 		return $this;
 	}
