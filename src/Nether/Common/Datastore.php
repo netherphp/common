@@ -1408,6 +1408,36 @@ implements
 		return array_pop($this->Data);
 	}
 
+	#[Meta\Date('2023-11-17')]
+	public function
+	Copy():
+	static {
+
+		// this is a method to do a thing i do very often as i still
+		// am genuinely unsure how deep clone() even is anyway.
+
+		// but it can also be considered placeholder for what i am
+		// considering may become what need to be like the deepest of
+		// copies. maybe an arg deep=true.
+
+		// the main reason i am considering a deep copy is when i want
+		// a clear clean cut copy. copy on write works great and all that
+		// but there are times where i just want, both in my head and in
+		// my digital hand, something with zero magic strings attached.
+
+		return $this->Map(fn(mixed $D)=> $D);
+	}
+
+	#[Meta\Date('2023-11-17')]
+	public function
+	Flip():
+	static {
+
+		$this->Data = array_flip($this->Data);
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	// Merging API /////////////////////////////////////////////////
 

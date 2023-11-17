@@ -258,4 +258,17 @@ class Util {
 		return static::Pathify($BaseDir, $Path);
 	}
 
+	static public function
+	LineCount(string $Filename):
+	int {
+
+		$Count = 0;
+		$FP = fopen($Filename, 'r');
+
+		while(fgets($FP))
+		$Count++;
+
+		return $Count;
+	}
+
 }

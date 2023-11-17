@@ -55,7 +55,7 @@ extends FilterIterator {
 	}
 
 	public function
-	ToArray():
+	ToArray(bool $SplFileInfo=FALSE):
 	array {
 
 		$File = NULL;
@@ -63,17 +63,24 @@ extends FilterIterator {
 
 		foreach($this as $File) {
 			/** @var SplFileInfo $File */
-			$Output[] = $File->GetRealPath();
+
+			$Output[] = match(TRUE) {
+				$SplFileInfo
+				=> $File,
+
+				default
+				=> $File->GetRealPath()
+			};
 		}
 
 		return $Output;
 	}
 
 	public function
-	ToDatastore():
+	ToDatastore(bool $SplFileInfo=FALSE):
 	Common\Datastore {
 
-		return Common\Datastore::FromArray($this->ToArray());
+		return Common\Datastore::FromArray($this->ToArray($SplFileInfo));
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -86,18 +93,21 @@ extends FilterIterator {
 		return new static($Dir, $Recur);
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	static public function
-	ArrayFromPath(string $Dir, bool $Recur=FALSE):
+	ArrayFromPath(string $Dir, bool $Recur=FALSE, bool $SplFileInfo=FALSE):
 	array {
 
-		return static::FromPath($Dir, $Recur)->ToArray();
+		return static::FromPath($Dir, $Recur)->ToArray($SplFileInfo);
 	}
 
 	static public function
-	DatastoreFromPath(string $Dir, bool $Recur=FALSE):
+	DatastoreFromPath(string $Dir, bool $Recur=FALSE, bool $SplFileInfo=FALSE):
 	Common\Datastore {
 
-		return static::FromPath($Dir, $Recur)->ToDatastore();
+		return static::FromPath($Dir, $Recur)->ToDatastore($SplFileInfo);
 	}
 
 }
