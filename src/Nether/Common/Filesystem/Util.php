@@ -264,9 +264,19 @@ class Util {
 
 		$Count = 0;
 		$FP = fopen($Filename, 'r');
+		$Chunk = NULL;
 
-		while(fgets($FP))
-		$Count++;
+		if(!$FP)
+		throw new Common\Error\FileNotFound($Filename);
+
+		////////
+
+		while($Chunk = fread($FP, 2048))
+		$Count += substr_count($Chunk, "\n");
+
+		fclose($FP);
+
+		////////
 
 		return $Count;
 	}
