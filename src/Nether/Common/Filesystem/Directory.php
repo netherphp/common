@@ -46,6 +46,25 @@ implements JsonSerializable {
 	////////////////////////////////////////////////////////////////
 
 	public function
+	Is(string|self $Path):
+	bool {
+
+		if($Path instanceof static)
+		$Path = $Path->Path;
+
+		$Path = rtrim($Path, DIRECTORY_SEPARATOR);
+
+		return $this->Path === $Path;
+	}
+
+	public function
+	IsNot(string|self $Path):
+	bool {
+
+		return !$this->Is($Path);
+	}
+
+	public function
 	Exists():
 	bool {
 
@@ -54,6 +73,26 @@ implements JsonSerializable {
 			&& file_exists($this->Path)
 			&& is_dir($this->Path)
 		);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	FromPath(string $Path):
+	static {
+
+		return new static([ 'Path'=> $Path ]);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	ForSortingByPath(self $A, self $B):
+	int {
+
+		return $A->Path <=> $B->Path;
 	}
 
 }
