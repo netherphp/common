@@ -60,9 +60,9 @@ implements
 
 		////////
 
-		ob_start();
+		$this->Start();
 		$Out = $Fn();
-		$Buf = ob_get_clean();
+		$Buf = $this->Stop();
 
 		////////
 
@@ -74,6 +74,26 @@ implements
 		////////
 
 		return $Out;
+	}
+
+	#[Meta\Date('2023-11-23')]
+	public function
+	Start():
+	static {
+
+		ob_start();
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-11-23')]
+	public function
+	Stop():
+	string {
+
+		$Output = ob_get_clean();
+
+		return $Output;
 	}
 
 	public function

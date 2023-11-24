@@ -184,28 +184,6 @@ implements
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
-	static public function
-	New():
-	static {
-	/*//
-	@date 2021-09-09
-	provides the most extreme generic support for using named properties
-	instead of an array to build your objects. implies the strict input
-	flag as well so new properties are not created. if you would like your
-	code completion to be able to suggest the arguments you would need
-	to override this method with one of your own.
-	//*/
-
-		return new static(
-			func_get_args(),
-			NULL,
-			Prototype\Flags::StrictInput
-		);
-	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
 	#[Meta\Date('2023-07-26')]
 	#[Meta\Info('Factory for creating new instances using an array.')]
 	static public function
