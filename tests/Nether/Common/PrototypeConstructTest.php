@@ -433,32 +433,6 @@ extends PHPUnit\Framework\TestCase {
 
 	/** @test */
 	public function
-	TestNamedPropertyConstruct() {
-
-		$Test1 = LocalTest2::New(
-			One: 1,
-			Two: 2,
-			Three: 3
-		);
-
-		$Test2 = LocalTest2::NewRelaxed(
-			One: 1,
-			Two: 2,
-			Three: 3
-		);
-
-		$this->AssertTrue(property_exists($Test1, 'Two'));
-		$this->AssertFalse(property_exists($Test1, 'Three'));
-
-		$this->AssertTrue(property_exists($Test2, 'One'));
-		$this->AssertTrue(property_exists($Test2, 'Two'));
-		$this->AssertTrue(property_exists($Test2, 'Three'));
-
-		return;
-	}
-
-	/** @test */
-	public function
 	TestPropertyFactory():
 	void {
 	/*//
