@@ -717,6 +717,37 @@ implements
 		return array_search($Val, $this->Data, $Strict) !== FALSE;
 	}
 
+	#[Meta\Date('2023-12-05')]
+	public function
+	HasAnyKey(...$Keys):
+	bool {
+
+		$Key = NULL;
+
+		foreach($Keys as $Key) {
+			if(is_string($Key) || is_int($Key))
+			if($this->HasKey($Key))
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	#[Meta\Date('2023-12-05')]
+	public function
+	HasAnyValue(...$Vals):
+	bool {
+
+		$Val = NULL;
+
+		foreach($Vals as $Val) {
+			if($this->HasValue($Val))
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
 	public function
 	IsFirstKey(mixed $Key):
 	bool {
