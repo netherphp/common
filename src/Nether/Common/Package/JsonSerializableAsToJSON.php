@@ -2,7 +2,7 @@
 
 namespace Nether\Common\Package;
 
-trait JsonSerializableAsToJson {
+trait JsonSerializableAsToJSON {
 
 	public function
 	JsonSerialize():
