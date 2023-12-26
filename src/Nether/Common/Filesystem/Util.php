@@ -3,6 +3,7 @@
 namespace Nether\Common\Filesystem;
 
 use Nether\Common;
+use FileEye;
 
 use Exception;
 use SplFileInfo;

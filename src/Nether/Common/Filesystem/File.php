@@ -3,6 +3,7 @@
 namespace Nether\Common\Filesystem;
 
 use Nether\Common;
+use FileEye;
 
 use JsonSerializable;
 
@@ -122,6 +123,19 @@ implements
 	int {
 
 		return $A->Path <=> $B->Path;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	ExtensionForType(string $Type):
+	string {
+
+		$FileEye = new FileEye\MimeMap\Type($Type);
+		$Ext = $FileEye->GetDefaultExtension();
+
+		return $Ext;
 	}
 
 }
