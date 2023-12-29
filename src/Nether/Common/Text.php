@@ -246,4 +246,16 @@ implements Stringable {
 		return $Output;
 	}
 
+	static public function
+	MarkdownToHTML(string $Input):
+	string {
+
+		$Parse = new \Parsedown;
+		$Parse->SetSafeMode(TRUE);
+
+		$Output = $Parse->Text($Input);
+
+		return $Output;
+	}
+
 }
