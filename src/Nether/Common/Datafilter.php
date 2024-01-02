@@ -257,6 +257,8 @@ implements ArrayAccess, Countable, IteratorAggregate {
 		if($Overwrite !== NULL)
 		$Data->MergeRight($Overwrite);
 
+		$Data->Filter(fn($V)=> $V !== NULL);
+
 		$Data->Each(function($Val, $Key, $Self) {
 
 			$Self[$Key] = sprintf(
