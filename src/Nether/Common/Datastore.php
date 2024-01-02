@@ -917,6 +917,15 @@ implements
 		return array_reduce($this->Data,$Function,$Initial);
 	}
 
+	#[Meta\Date('2024-01-02')]
+	#[Meta\Info('Accumulate returning a Datastore compiled from the callback which should return a Datastore.')]
+	public function
+	Compile(callable $Func):
+	static {
+
+		return $this->Accumulate((new static), $Func);
+	}
+
 	public function
 	Bump(string $Key, int|float $Inc=1):
 	static {
