@@ -155,7 +155,7 @@ class Links {
 
 		if(strpos($Val, '/') === FALSE)
 		return sprintf(
-			'https://youtube.com/channel/%s',
+			'https://youtube.com/@%s',
 			ltrim($Val, '@')
 		);
 
