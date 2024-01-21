@@ -165,7 +165,7 @@ class Util {
 		$Arg = NULL;
 
 		foreach($Argv as &$Arg)
-		$Arg = rtrim($Arg, $DS);
+		$Arg = rtrim($Arg ?? '', $DS);
 
 		return join($DS, $Argv);
 	}
@@ -280,6 +280,15 @@ class Util {
 		////////
 
 		return $Count;
+	}
+
+	static public function
+	Filesize(string $Filename):
+	int {
+
+		clearstatcache($Filename);
+
+		return filesize($Filename);
 	}
 
 }
