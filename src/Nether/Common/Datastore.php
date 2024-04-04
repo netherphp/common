@@ -1478,6 +1478,34 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2024-04-03')]
+	public function
+	Slice(int $Offset, ?int $Length=NULL):
+	static {
+
+		return new static(array_slice(
+			$this->Data,
+			$Offset,
+			$Length,
+			FALSE
+		));
+	}
+
+	#[Meta\Date('2024-04-03')]
+	public function
+	Chop(int $Offset, ?int $Length=NULL):
+	static {
+
+		$this->Data = array_slice(
+			$this->Data,
+			$Offset,
+			$Length,
+			FALSE
+		);
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	// Merging API /////////////////////////////////////////////////
 
