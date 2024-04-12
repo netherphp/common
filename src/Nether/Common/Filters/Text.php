@@ -61,6 +61,8 @@ class Text {
 	TrimmedNullable(mixed $Item):
 	?string {
 
+		static::Prepare($Item);
+
 		if($Item === 'null')
 		return NULL;
 
