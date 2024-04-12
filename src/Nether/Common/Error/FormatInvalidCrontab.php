@@ -2,10 +2,8 @@
 
 namespace Nether\Common\Error;
 
-use Exception;
-
 class FormatInvalidCrontab
-extends Exception {
+extends FormatInvalid {
 
 	public function
 	__Construct(?string $Input=NULL) {
