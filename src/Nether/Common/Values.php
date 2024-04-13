@@ -62,4 +62,11 @@ class Values {
 		return $Out;
 	}
 
+	static public function
+	IfOneElse(int $Num, mixed $One, mixed $Other):
+	mixed {
+
+		return $Num === 1 ? $One : $Other;
+	}
+
 }

@@ -291,4 +291,46 @@ class Util {
 		return filesize($Filename);
 	}
 
+	static public function
+	TryToReadFile(string $Filename):
+	string {
+
+		if(!file_exists($Filename))
+		throw new Common\Error\FileNotFound($Filename);
+
+		if(!is_readable($Filename))
+		throw new Common\Error\FileUnreadable($Filename);
+
+		////////
+
+		$Data = file_get_contents($Filename);
+
+		if($Data === FALSE)
+		throw new Common\Error\FileReadError($Filename);
+
+		////////
+
+		return $Data;
+	}
+
+	static public function
+	TryToReadFileJSON(string $Filename):
+	mixed {
+
+		$JSON = static::TryToReadFile($Filename);
+		$Data = json_decode($JSON, TRUE);
+
+		////////
+
+		// @NOTE 2024-04-13
+		// ever stop in awe of how thread unsafe this is?
+
+		if(json_last_error() !== JSON_ERROR_NONE)
+		throw new Common\Error\FormatInvalidJSON;
+
+		////////
+
+		return $Data;
+	}
+
 }
