@@ -18,6 +18,7 @@ use SplFileInfo;
 #[Meta\Date('2015-12-02')]
 class Datastore
 implements
+	Interfaces\ToArray,
 	ArrayAccess,
 	Countable,
 	Iterator,
@@ -400,9 +401,55 @@ implements
 	}
 
 	////////////////////////////////////////////////////////////////
+	// Nether\Common Interfaces ////////////////////////////////////
+
+	#[Meta\Date('2024-04-22')]
+	public function
+	ToArray():
+	array {
+
+		return $this->Export();
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-04-22')]
+	public function
+	Import(iterable $Data):
+	static {
+
+		$this->SetData($Data);
+
+		return $this;
+	}
+
+	#[Meta\Date('2024-04-22')]
+	public function
+	Export():
+	array {
+
+		return $this->Data;
+	}
+
+	#[Meta\Date('2024-04-22')]
+	public function
+	&Reference():
+	array {
+
+		// return the dataset by reference. keep in mind that you need to
+		// do the ampersand on the reciever end too, and that it only
+		// really works if assigned to a variable first. dropping this on
+		// an array function for example wont work.
+
+		return $this->Data;
+	}
+
+	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
 	#[Meta\Date('2015-12-02')]
+	#[Meta\Deprecated('2024-04-22', 'use Export() instead.')]
 	public function
 	GetData():
 	array {
@@ -411,6 +458,7 @@ implements
 	}
 
 	#[Meta\Date('2022-11-23')]
+	#[Meta\Deprecated('2024-04-22', 'use Reference() instead.')]
 	public function
 	&GetDataRef():
 	array {
@@ -424,6 +472,7 @@ implements
 	}
 
 	#[Meta\Date('2015-12-02')]
+	#[Meta\Deprecated('2024-04-22', 'this method being public is deprecated.')]
 	public function
 	SetData(?iterable $Input):
 	static {
