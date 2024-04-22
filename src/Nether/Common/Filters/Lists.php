@@ -69,4 +69,32 @@ class Lists {
 		return static::ArrayOf($Output, $Filters);
 	}
 
+	#[Common\Meta\DateAdded('2023-07-07')]
+	#[Common\Meta\Info('Same as ArrayOf except Falsy values will return NULL.')]
+	static public function
+	CommaOfNullable(mixed $Items, callable|iterable $Filters=NULL):
+	?array {
+
+		$Output = static::Prepare($Items);
+
+		////////
+
+		// no list at all? nope.
+
+		if(!$Output)
+		return NULL;
+
+		if(is_string($Output))
+		$Output = explode(',', $Output);
+
+		// empty list? nope.
+
+		if(is_countable($Output) && count($Output) === 0)
+		return NULL;
+
+		////////
+
+		return static::ArrayOf($Output, $Filters);
+	}
+
 }

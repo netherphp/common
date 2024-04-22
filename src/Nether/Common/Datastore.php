@@ -946,6 +946,24 @@ implements
 		return array_is_list($this->Data);
 	}
 
+	public function
+	IsEmpty():
+	bool {
+
+		return $this->Count() === 0;
+	}
+
+	public function
+	IsNotEmpty():
+	bool {
+
+		// technically if the system had enough ram to add int max plus
+		// one things this is going to have an annurism over an array with
+		// negative 9 bazillion things.
+
+		return $this->Count() > 0;
+	}
+
 	////////////////////////////////////////////////////////////////
 	// Manipulation API ////////////////////////////////////////////
 
