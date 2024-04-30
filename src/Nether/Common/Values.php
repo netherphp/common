@@ -43,6 +43,9 @@ class Values {
 	DateFormatTO               = 'O',
 	DateFormatUnix             = 'U';
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	static public function
 	DebugProtectValue(mixed $Val):
 	string {
@@ -62,11 +65,59 @@ class Values {
 		return $Out;
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-04-15')]
+	#[Meta\Info('Returns $One if $Num is 1, otherwise returns $Other.')]
 	static public function
 	IfOneElse(int $Num, mixed $One, mixed $Other):
 	mixed {
 
 		return $Num === 1 ? $One : $Other;
+	}
+
+	#[Meta\Date('2024-04-15')]
+	#[Meta\Info('Returns $One if $Truth, otherwise returns $Other.')]
+	static public function
+	IfTrueElse(bool $Test, mixed $One, mixed $Other):
+	mixed {
+
+		return $Test ? $One : $Other;
+	}
+
+	#[Meta\Date('2024-04-29')]
+	#[Meta\Info('Check if a string is only made up of numbers (Base 10).')]
+	static public function
+	IsNumericDec(?string $Input):
+	bool {
+
+		// just do not trust is_numeric() and the stupid amount of things
+		// it checks when all we wanted was a series of decimal digits in
+		// a string.
+
+		$Input ??= '';
+		$Num = preg_match('/^[0-9]{1,}$/', $Input);
+
+		return (TRUE
+			&& $Num !== FALSE
+			&& $Num > 0
+		);
+	}
+
+	#[Meta\Date('2024-04-29')]
+	#[Meta\Info('Check if a string is only made up of numbers (Base 16).')]
+	static public function
+	IsNumericHex(?string $Input):
+	bool {
+
+		$Input ??= '';
+		$Num = preg_match('/^[0-9a-fA-F]{1,}$/', $Input);
+
+		return (TRUE
+			&& $Num !== FALSE
+			&& $Num > 0
+		);
 	}
 
 }
