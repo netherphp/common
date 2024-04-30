@@ -1031,7 +1031,9 @@ implements
 	use $Store->SetData([]);
 	//*/
 
-		unset($this->Data);
+		// this unset breaks external references fetched via Reference().
+		// unset($this->Data);
+
 		$this->Data = [];
 
 		return $this;

@@ -1893,4 +1893,120 @@ extends PHPUnit\Framework\TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestHasAnyKeyValue():
+	void {
+
+		$Data = new Datastore([
+			'one'   => 1,
+			'two'   => 2,
+			'three' => 3,
+			'four'  => 4
+		]);
+
+		$this->AssertTrue($Data->HasAnyKey('one', 'two', 'ten'));
+		$this->AssertFalse($Data->HasAnyKey('eight', 'nine', 'ten'));
+
+		$this->AssertTrue($Data->HasAnyValue(1, 2, 10));
+		$this->AssertFalse($Data->HasAnyValue(8, 9, 10));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestIsList():
+	void {
+
+		$List = new Datastore([
+			1, 2, 3, 4
+		]);
+
+		$Pile = new Datastore([
+			'one'   => 1,
+			'two'   => 2,
+			'three' => 3,
+			'four'  => 4
+		]);
+
+		$this->AssertTrue($List->IsList());
+		$this->AssertFalse($Pile->IsList());
+
+		$List->Remove(2);
+		$this->AssertFalse($List->IsList());
+
+		$List->Revalue();
+		$this->AssertTrue($List->IsList());
+
+		$Pile->Revalue();
+		$this->AssertTrue($Pile->IsList());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestImportExportToArray():
+	void {
+
+		$Array = [ 1, 2, 3 ];
+		$Data = new Datastore;
+
+		// the store should be empty.
+
+		$this->AssertTrue($Data->Count() === 0);
+
+		// the store should be filled.
+
+		$Data->Import($Array);
+		$this->AssertTrue($Data->Count() === 3);
+
+		// it should be spitting an array out.
+
+		$this->AssertIsArray($Data->Export());
+		$this->AssertIsArray($Data->ToArray());
+		$this->AssertTrue(count($Data->Export()) === 3);
+
+		// it should be spitting an empty array out but the original
+		// data that was sourced from should remain.
+
+		$Data->Clear();
+		$this->AssertTrue(count($Array) === 3);
+		$this->AssertTrue($Data->Count() === 0);
+		$this->AssertTrue(count($Data->Export()) === 0);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestMagicReference():
+	void {
+
+		$Data = new Datastore([ 1, 2, 3 ]);
+		$Magic = &$Data->Reference();
+
+		// check that the magic worked.
+
+		$this->AssertTrue(is_array($Magic));
+		$this->AssertTrue(count($Magic) === 3);
+
+		// check that they are changing the same pointer.
+
+		$Data->Remove(2);
+		$this->AssertTrue($Data->Count() === 2);
+		$this->AssertTrue(count($Magic) === 2);
+
+		$Magic[] = 'orange';
+		$this->AssertTrue(in_array('orange', $Magic));
+		$this->AssertTrue($Data->HasValue('orange'));
+
+		$Data->Clear();
+		$this->AssertTrue($Data->Count() === 0);
+		$this->AssertTrue(count($Magic) === 0);
+
+		return;
+	}
+
 }
