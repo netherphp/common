@@ -2,6 +2,7 @@ name: Unit Tests
 on: [push]
 env:
   UNIT_TEST_HITS_HARD: 1
+  CODECOV_TOKEN: 23dacfc9-b174-4de8-9a94-af80b20898f1
 jobs:
   run:
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
