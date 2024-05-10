@@ -333,4 +333,39 @@ class Util {
 		return $Data;
 	}
 
+	static public function
+	TryToWriteFile(string $Filename, mixed $Data):
+	int {
+
+		$Exists = file_exists($Filename);
+		$Dirname = dirname($Filename);
+
+		////////
+
+		if($Exists && !is_writable($Filename))
+		throw new Common\Error\FileUnwritable($Filename);
+
+		if(!$Exists) {
+			if(!is_dir($Dirname))
+			static::MkDir($Dirname);
+
+			if(!is_dir($Dirname))
+			throw new Common\Error\DirNotFound($Dirname);
+
+			if(!is_writable($Dirname))
+			throw new Common\Error\DirUnwritable($Dirname);
+		}
+
+		////////
+
+		$Bytes = file_put_contents($Filename, $Data);
+
+		if($Bytes === FALSE)
+		throw new Common\Error\FileWriteError($Filename);
+
+		////////
+
+		return $Bytes;
+	}
+
 }
