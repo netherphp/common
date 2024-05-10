@@ -994,7 +994,7 @@ implements
 	}
 
 	public function
-	Bump(string $Key, int|float $Inc=1):
+	Bump(string|int $Key, int|float $Inc=1):
 	static {
 
 		$this->Inc($Key, $Inc);
@@ -1003,7 +1003,7 @@ implements
 	}
 
 	public function
-	Inc(string $Key, int|float $Inc=1):
+	Inc(string|int $Key, int|float $Inc=1):
 	int|float {
 
 		$Val = match(TRUE) {
