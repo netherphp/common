@@ -449,53 +449,6 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	#[Meta\Date('2015-12-02')]
-	#[Meta\Deprecated('2024-04-22', 'use Export() instead.')]
-	public function
-	GetData():
-	array {
-
-		return $this->Data;
-	}
-
-	#[Meta\Date('2022-11-23')]
-	#[Meta\Deprecated('2024-04-22', 'use Reference() instead.')]
-	public function
-	&GetDataRef():
-	array {
-
-		// return the dataset by reference. keep in mind that you need to
-		// do the ampersand on the reciever end too, and that it only
-		// really works if assigned to a variable first. dropping this on
-		// an array function for example wont work.
-
-		return $this->Data;
-	}
-
-	#[Meta\Date('2015-12-02')]
-	#[Meta\Deprecated('2024-04-22', 'this method being public is deprecated.')]
-	public function
-	SetData(?iterable $Input):
-	static {
-
-		// fun fact:
-		// in 8.2.0 iterator_to_array can handle arrays without needing
-		// to check for ourselves.
-
-		$this->Data = match(TRUE) {
-			(is_array($Input) === FALSE)
-			=> iterator_to_array($Input),
-
-			(is_array($Input) === TRUE)
-			=> $Input,
-
-			default
-			=> [ ]
-		};
-
-		return $this;
-	}
-
-	#[Meta\Date('2015-12-02')]
 	public function
 	GetFilename():
 	?string {
@@ -1875,6 +1828,18 @@ implements
 		return $Store;
 	}
 
+	#[Meta\Date('2024-05-11')]
+	#[Meta\Info('Load up a datastore by blowing up a string.')]
+	static public function
+	FromString(?string $Input, string $Delimiter=''):
+	static {
+
+		return new static(explode(
+			$Delimiter,
+			($Input ?: '')
+		));
+	}
+
 	#[Meta\DateAdded('2023-07-10')]
 	#[Meta\Info('Perform a BlendRight upon all the arguments and return the final result.')]
 	static public function
@@ -1960,6 +1925,53 @@ implements
 	static {
 
 		return static::FromJSON($JSON);
+	}
+
+	#[Meta\Date('2015-12-02')]
+	#[Meta\Deprecated('2024-04-22', 'use Export() instead.')]
+	public function
+	GetData():
+	array {
+
+		return $this->Data;
+	}
+
+	#[Meta\Date('2022-11-23')]
+	#[Meta\Deprecated('2024-04-22', 'use Reference() instead.')]
+	public function
+	&GetDataRef():
+	array {
+
+		// return the dataset by reference. keep in mind that you need to
+		// do the ampersand on the reciever end too, and that it only
+		// really works if assigned to a variable first. dropping this on
+		// an array function for example wont work.
+
+		return $this->Data;
+	}
+
+	#[Meta\Date('2015-12-02')]
+	#[Meta\Deprecated('2024-04-22', 'this method being public is deprecated.')]
+	public function
+	SetData(?iterable $Input):
+	static {
+
+		// fun fact:
+		// in 8.2.0 iterator_to_array can handle arrays without needing
+		// to check for ourselves.
+
+		$this->Data = match(TRUE) {
+			(is_array($Input) === FALSE)
+			=> iterator_to_array($Input),
+
+			(is_array($Input) === TRUE)
+			=> $Input,
+
+			default
+			=> [ ]
+		};
+
+		return $this;
 	}
 
 }
