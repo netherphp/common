@@ -726,6 +726,17 @@ implements
 
 		$Key = NULL;
 
+		////////
+
+		// if there is only one item and that item is an array then
+		// what happened was i regret the original splatter api.
+
+		if(count($Keys) === 1)
+		if(is_array(current($Keys)))
+		$Keys = current($Keys);
+
+		////////
+
 		foreach($Keys as $Key) {
 			if(is_string($Key) || is_int($Key))
 			if($this->HasKey($Key))
