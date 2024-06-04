@@ -245,6 +245,11 @@ Printing via Stringable will print using all the current instance settings.
 	SetStart(mixed $When):
 	static {
 
+		if(is_float($When))
+		$When = (int)round($When, 0);
+
+		////////
+
 		$When = $this->HandleTimeInput($When);
 
 		$this->Start = new DateTime($When);
@@ -255,6 +260,11 @@ Printing via Stringable will print using all the current instance settings.
 	public function
 	SetStop(mixed $When):
 	static {
+
+		if(is_float($When))
+		$When = (int)round($When, 0);
+
+		////////
 
 		$When = $this->HandleTimeInput($When);
 
