@@ -274,6 +274,13 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	}
 
 	public function
+	Export():
+	?array {
+
+		return $this->__Data;
+	}
+
+	public function
 	Exists(mixed $Key):
 	bool {
 

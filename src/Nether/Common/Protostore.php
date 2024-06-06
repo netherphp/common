@@ -145,6 +145,14 @@ implements
 
 	#[Meta\Date('2023-08-10')]
 	public function
+	Export():
+	array {
+
+		return $this->Data->Export();
+	}
+
+	#[Meta\Date('2023-08-10')]
+	public function
 	Filter(callable $Func):
 	Datastore {
 
@@ -160,6 +168,7 @@ implements
 	}
 
 	#[Meta\Date('2023-08-10')]
+	#[Meta\Deprecated('2024-06-06', 'use Export() instead')]
 	public function
 	GetData():
 	array {
