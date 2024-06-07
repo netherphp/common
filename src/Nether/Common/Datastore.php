@@ -1216,6 +1216,16 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2024-06-07')]
+	public function
+	Reset():
+	static {
+
+		$this->Rewind();
+
+		return $this;
+	}
+
 	public function
 	Revalue():
 	static {
