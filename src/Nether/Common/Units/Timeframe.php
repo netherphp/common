@@ -2,6 +2,8 @@
 
 namespace Nether\Common\Units;
 
+use Nether\Common;
+
 use DateInterval;
 use DateTime;
 use Stringable;
@@ -349,6 +351,9 @@ Printing via Stringable will print using all the current instance settings.
 
 			($When === NULL)
 			=> sprintf('@%d', time()),
+
+			($When instanceof Common\Date)
+			=> $When->Get(Common\Values::DateFormatYMDT24VZ),
 
 			default
 			=> $When
