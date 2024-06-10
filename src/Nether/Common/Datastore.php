@@ -1239,6 +1239,17 @@ implements
 	}
 
 	public function
+	Mirror():
+	static {
+	/*//
+	@date 2023-04-20
+	quick flip of the ordering.
+	//*/
+
+		return new static(array_reverse($this->Data));
+	}
+
+	public function
 	Reverse():
 	static {
 	/*//
