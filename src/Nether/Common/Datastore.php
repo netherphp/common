@@ -416,10 +416,23 @@ implements
 
 	#[Meta\Date('2024-04-22')]
 	public function
-	Import(iterable $Data):
+	Import(iterable $Input):
 	static {
 
-		$this->SetData($Data);
+		// fun fact:
+		// in 8.2.0 iterator_to_array can handle arrays without needing
+		// to check for ourselves.
+
+		$this->Data = match(TRUE) {
+			(is_array($Input) === FALSE)
+			=> iterator_to_array($Input),
+
+			(is_array($Input) === TRUE)
+			=> $Input,
+
+			default
+			=> [ ]
+		};
 
 		return $this;
 	}
@@ -906,10 +919,6 @@ implements
 	public function
 	IsNotEmpty():
 	bool {
-
-		// technically if the system had enough ram to add int max plus
-		// one things this is going to have an annurism over an array with
-		// negative 9 bazillion things.
 
 		return $this->Count() > 0;
 	}
@@ -1462,34 +1471,6 @@ implements
 		return $this;
 	}
 
-	#[Meta\Date('2024-04-03')]
-	public function
-	Slice(int $Offset, ?int $Length=NULL):
-	static {
-
-		return new static(array_slice(
-			$this->Data,
-			$Offset,
-			$Length,
-			FALSE
-		));
-	}
-
-	#[Meta\Date('2024-04-03')]
-	public function
-	Chop(int $Offset, ?int $Length=NULL):
-	static {
-
-		$this->Data = array_slice(
-			$this->Data,
-			$Offset,
-			$Length,
-			FALSE
-		);
-
-		return $this;
-	}
-
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -1547,6 +1528,39 @@ implements
 		////////
 
 		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-04-03')]
+	#[Meta\Info('chop this dataset down to the specified slice.')]
+	public function
+	Chop(int $Offset, ?int $Length=NULL):
+	static {
+
+		$this->Data = array_slice(
+			$this->Data,
+			$Offset,
+			$Length,
+			FALSE
+		);
+
+		return $this;
+	}
+
+	#[Meta\Date('2024-04-03')]
+	#[Meta\Info('return new dataset of just the specified slice.')]
+	public function
+	Slice(int $Offset, ?int $Length=NULL):
+	static {
+
+		return new static(array_slice(
+			$this->Data,
+			$Offset,
+			$Length,
+			FALSE
+		));
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -1933,6 +1947,9 @@ implements
 	FromString(?string $Input, string $Delimiter=''):
 	static {
 
+		if($Delimiter === '')
+		return new static(mb_str_split($Input));
+
 		return new static(explode(
 			$Delimiter,
 			($Input ?: '')
@@ -2055,22 +2072,7 @@ implements
 	SetData(?iterable $Input):
 	static {
 
-		// fun fact:
-		// in 8.2.0 iterator_to_array can handle arrays without needing
-		// to check for ourselves.
-
-		$this->Data = match(TRUE) {
-			(is_array($Input) === FALSE)
-			=> iterator_to_array($Input),
-
-			(is_array($Input) === TRUE)
-			=> $Input,
-
-			default
-			=> [ ]
-		};
-
-		return $this;
+		return $this->Import($Input);
 	}
 
 }

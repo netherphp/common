@@ -311,4 +311,45 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestCompile():
+	void {
+
+		$Data = new Common\Datastore([1, 2, 3, 4]);
+
+		$More = $Data->Compile(
+			fn(Common\Datastore $C, int $V)=> $C->Push($V)
+		);
+
+		$this->AssertCount(4, $More);
+
+		$More->EachKeyValue(
+			fn(int $K, int $V)
+			=> $this->AssertEquals($More[$K], $Data[$K])
+		);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestReverseMirror():
+	void {
+
+		$Data = new Common\Datastore([ 1, 2, 3, 4 ]);
+		$Data->Reverse();
+
+		$this->AssertEquals(4, $Data[0]);
+		$this->AssertEquals(1, $Data[3]);
+
+		$Atad = $Data->Mirror();
+
+		$this->AssertTrue(spl_object_id($Data) !== spl_object_id($Atad));
+		$this->AssertEquals(1, $Atad[0]);
+		$this->AssertEquals(4, $Atad[3]);
+
+		return;
+	}
+
 };
