@@ -34,7 +34,7 @@ extends TestCase {
 		////////
 
 		$File = tempnam('/tmp', 'tmp');
-		file_put_contents($File, serialize( (object)[ 'k1'=> 1, 'k2'=> 2, 'k3'=> 3, 'k4'=> 4 ] ));
+		file_put_contents($File, serialize((object)[ 'k1'=> 1, 'k2'=> 2, 'k3'=> 3, 'k4'=> 4 ]));
 		rename($File, "{$File}.phson");
 
 		$Data = Common\Datastore::FromFile("{$File}.phson");
