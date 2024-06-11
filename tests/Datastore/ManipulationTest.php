@@ -197,7 +197,7 @@ extends TestCase {
 	void {
 
 		$Store = new Common\Datastore([ 1, 2, 2, 3, 3, 3 ]);
-		$Uniq = $Store->Unique();
+		$Uniq = $Store->Flatten();
 
 		// check we got a new list of unique items that is separate from
 		// the original datastore.
@@ -205,7 +205,7 @@ extends TestCase {
 		$this->AssertEquals(6, $Store->Count());
 		$this->AssertEquals(3, $Uniq->Count());
 
-		$Store->Flatten();
+		$Store->Unique();
 		$this->AssertEquals(3, $Store->Count());
 		$this->AssertEquals(3, $Uniq->Count());
 
@@ -253,6 +253,60 @@ extends TestCase {
 		$Store->Chop(1, 2);
 		$this->AssertEquals(2, $Store->Count());
 		$this->AssertEquals(2, $Store[0]);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestInsertAfterList():
+	void {
+
+		$Data = Common\Datastore::FromArray([
+			'zero', 'one', 'two', 'three'
+		]);
+
+		////////
+
+		$this->AssertCount(4, $Data);
+
+		////////
+
+		$Data->InsertAfter(2, 'two and a half');
+
+		$this->AssertCount(5, $Data);
+		$this->AssertEquals('two and a half', $Data[3]);
+
+		////////
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestShoveAfterAssoc():
+	void {
+
+		$Data = Common\Datastore::FromArray([
+			'k0'=> 'zero', 'k1'=> 'one', 'k2'=> 'two', 'k3'=> 'three'
+		]);
+
+		////////
+
+		$this->AssertCount(4, $Data);
+
+		////////
+
+		$Data->ShoveAfter('k2', 'k25', 'two and a half');
+		$this->AssertCount(5, $Data);
+		$this->AssertEquals('two and a half', $Data['k25']);
+
+		$Keys = array_keys($Data->Export());
+		$this->AssertEquals('k2', $Keys[2]);
+		$this->AssertEquals('k25', $Keys[3]);
+		$this->AssertEquals('k3', $Keys[4]);
+
+		////////
 
 		return;
 	}

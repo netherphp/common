@@ -794,20 +794,6 @@ implements
 	}
 
 	public function
-	Values(bool $Array=FALSE):
-	array|static {
-	/*//
-	@date 2021-01-05
-	fetches a clean indexed copy of the data via array_values.
-	//*/
-
-		if(!$Array)
-		return new static(array_values($this->Data));
-
-		return array_values($this->Data);
-	}
-
-	public function
 	IsTrue(string $Key, bool $NullIsTrue=FALSE):
 	bool {
 	/*//
@@ -1227,42 +1213,6 @@ implements
 	}
 
 	public function
-	Revalue():
-	static {
-	/*//
-	@date 2021-01-05
-	rebuilds the dataset with clean indexes via array_values.
-	//*/
-
-		$this->Data = array_values($this->Data);
-		return $this;
-	}
-
-	public function
-	Mirror():
-	static {
-	/*//
-	@date 2023-04-20
-	quick flip of the ordering.
-	//*/
-
-		return new static(array_reverse($this->Data));
-	}
-
-	public function
-	Reverse():
-	static {
-	/*//
-	@date 2023-04-20
-	quick flip of the ordering.
-	//*/
-
-		$this->Data = array_reverse($this->Data);
-
-		return $this;
-	}
-
-	public function
 	Set(mixed $Key, mixed $Value):
 	static {
 	/*//
@@ -1376,26 +1326,6 @@ implements
 
 		array_unshift($this->Data,$Val);
 		return $this;
-	}
-
-	#[Meta\Date('2023-11-11')]
-	#[Meta\Info('Remove duplicates from this dataset.')]
-	public function
-	Flatten():
-	static {
-
-		$this->Data = array_unique($this->Data);
-
-		return $this;
-	}
-
-	#[Meta\Date('2023-11-11')]
-	#[Meta\Info('Make a new dataset with just the unique items.')]
-	public function
-	Unique():
-	static {
-
-		return new static(array_unique($this->Data));
 	}
 
 	#[Meta\Date('2023-11-15')]
@@ -1556,6 +1486,138 @@ implements
 			$Length,
 			FALSE
 		);
+
+		return $this;
+	}
+
+	public function
+	InsertAfter(int|string $After, mixed $Thing):
+	static {
+
+		$Found = FALSE;
+		$Key = NULL;
+		$Iter = 0;
+
+		// find out how deep we need to go.
+
+		foreach(array_keys($this->Data) as $Key) {
+			if($Key === $After) {
+				$Found = TRUE;
+				break;
+			}
+
+			$Iter += 1;
+			continue;
+		}
+
+		if(!$Found)
+		$Iter = count($this->Data);
+
+		array_splice($this->Data, ($Iter + 1), 0, $Thing);
+
+		return $this;
+	}
+
+	public function
+	ShoveAfter(int|string $After, int|string $ThingKey, mixed $ThingVal):
+	static {
+
+		$Data = [];
+		$Key = NULL;
+		$Val = NULL;
+
+		////////
+
+		foreach($this->Data as $Key => $Val) {
+			$Data[$Key] = $Val;
+
+			if($Key === $After)
+			$Data[$ThingKey] = $ThingVal;
+
+			continue;
+		}
+
+		$this->Data = $Data;
+
+		////////
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2023-11-11')]
+	#[Meta\Info('strip duplicates from this dataset.')]
+	public function
+	Flatten():
+	static {
+
+		return new static(array_unique($this->Data));
+	}
+
+	#[Meta\Date('2023-11-11')]
+	#[Meta\Info('return a new dataset without any duplicates.')]
+	public function
+	Unique():
+	static {
+
+		$this->Data = array_unique($this->Data);
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('return a new fresh indexed dataset.')]
+	public function
+	Values(bool $Array=FALSE):
+	array|static {
+	/*//
+	@date
+	fetches a clean indexed copy of the data via array_values.
+	//*/
+
+		if(!$Array)
+		return new static(array_values($this->Data));
+
+		return array_values($this->Data);
+	}
+
+	#[Meta\Info('modify the current dataset with fresh indexing.')]
+	public function
+	Revalue():
+	static {
+	/*//
+	@date 2021-01-05
+	rebuilds the dataset with clean indexes via array_values.
+	//*/
+
+		$this->Data = array_values($this->Data);
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('returns new reversed dataset.')]
+	public function
+	Mirror():
+	static {
+
+		return new static(array_reverse($this->Data));
+	}
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('reverse the current dataset.')]
+	public function
+	Reverse():
+	static {
+
+		$this->Data = array_reverse($this->Data);
 
 		return $this;
 	}
