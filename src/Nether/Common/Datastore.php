@@ -1490,34 +1490,39 @@ implements
 		return $this;
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('insert a value after the specified key. data will be listified prior.')]
 	public function
 	InsertAfter(int|string $After, mixed $Thing):
 	static {
 
-		$Found = FALSE;
+		$Data = [];
 		$Key = NULL;
-		$Iter = 0;
+		$Val = NULL;
 
-		// find out how deep we need to go.
+		////////
 
-		foreach(array_keys($this->Data) as $Key) {
-			if($Key === $After) {
-				$Found = TRUE;
-				break;
-			}
+		foreach($this->Values() as $Key => $Val) {
+			$Data[] = $Val;
 
-			$Iter += 1;
+			if($Key === $After)
+			$Data[] = $Thing;
+
 			continue;
 		}
 
-		if(!$Found)
-		$Iter = count($this->Data);
+		$this->Data = $Data;
 
-		array_splice($this->Data, ($Iter + 1), 0, $Thing);
+		////////
 
 		return $this;
 	}
 
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('insert a key and value after the specified key.')]
 	public function
 	ShoveAfter(int|string $After, int|string $ThingKey, mixed $ThingVal):
 	static {
