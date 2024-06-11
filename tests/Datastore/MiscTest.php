@@ -70,6 +70,24 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestHasAnyKey():
+	void {
+
+		$Data = new Common\Datastore([
+			'k1'=> 1, 'k2'=> 2, 'k3'=> 3
+		]);
+
+		$this->AssertTrue($Data->HasAnyKey('k1', 'k2'));
+		$this->AssertTrue($Data->HasAnyKey([ 'k2', 'k1' ]));
+
+		$this->AssertFalse($Data->HasAnyKey('k8', 'k9'));
+		$this->AssertFalse($Data->HasAnyKey([ 'k8', 'k9' ]));
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestFromString():
 	void {
 
