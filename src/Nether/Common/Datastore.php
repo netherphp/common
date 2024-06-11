@@ -1997,7 +1997,7 @@ implements
 	 * @codeCoverageIgnore
 	 */
 
-	#[Meta\Deprecated('2023-07-10', 'use FromStackBlended instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromStackBlended() instead')]
 	static public function
 	NewBlended(iterable $OG, ...$Adds):
 	static {
@@ -2009,7 +2009,7 @@ implements
 	 * @codeCoverageIgnore
 	 */
 
-	#[Meta\Deprecated('2023-07-10', 'use FromStackMerged instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromStackMerged() instead')]
 	static public function
 	NewMerged(iterable $OG, ...$Updates):
 	static {
@@ -2022,7 +2022,7 @@ implements
 	 */
 
 	#[Meta\DateAdded('2022-08-15')]
-	#[Meta\Deprecated('2023-07-10', 'use FromFile instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromFile() instead')]
 	static public function
 	NewFromFile(string $Filename):
 	static {
@@ -2035,13 +2035,17 @@ implements
 	 */
 
 	#[Meta\DateAdded('2022-08-15')]
-	#[Meta\Deprecated('2023-07-10', 'use FromJSON instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromJSON() instead')]
 	static public function
 	NewFromJSON(?string $JSON):
 	static {
 
 		return static::FromJSON($JSON);
 	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
 
 	#[Meta\Date('2015-12-02')]
 	#[Meta\Deprecated('2024-04-22', 'use Export() instead.')]
@@ -2051,6 +2055,10 @@ implements
 
 		return $this->Data;
 	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
 
 	#[Meta\Date('2022-11-23')]
 	#[Meta\Deprecated('2024-04-22', 'use Reference() instead.')]
@@ -2066,8 +2074,12 @@ implements
 		return $this->Data;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
+
 	#[Meta\Date('2015-12-02')]
-	#[Meta\Deprecated('2024-04-22', 'this method being public is deprecated.')]
+	#[Meta\Deprecated('2024-04-22', 'use Import() instead.')]
 	public function
 	SetData(?iterable $Input):
 	static {
