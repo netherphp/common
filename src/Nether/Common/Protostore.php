@@ -104,7 +104,7 @@ implements
 	Rewind():
 	void {
 
-		$this->Data->Next();
+		$this->Data->Rewind();
 
 		return;
 	}
