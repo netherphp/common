@@ -237,25 +237,4 @@ implements Stringable {
 		return Filters\Text::Tabbify($Data);
 	}
 
-	static public function
-	IndentWithTab(string $Input, int $Inc=1):
-	string {
-
-		$Output = sprintf("\t%s", str_replace("\n", "\n\t", $Input));
-
-		return $Output;
-	}
-
-	static public function
-	MarkdownToHTML(string $Input):
-	string {
-
-		$Parse = new \Parsedown;
-		$Parse->SetSafeMode(TRUE);
-
-		$Output = $Parse->Text($Input);
-
-		return $Output;
-	}
-
 }
