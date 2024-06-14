@@ -1,8 +1,9 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common\Misc;
 
 use PHPUnit\Framework\TestCase;
+use Nether\Common\Overbuffer;
 
 class OverbufferTest
 extends TestCase {
@@ -29,6 +30,11 @@ extends TestCase {
 			$this->AssertEquals(
 				str_repeat(sprintf('derp%s', PHP_EOL), $Loop),
 				$Buf->Get()
+			);
+
+			$this->AssertEquals(
+				str_repeat(sprintf('derp%s', PHP_EOL), $Loop),
+				(string)$Buf
 			);
 
 			$this->AssertEquals(
