@@ -24,7 +24,7 @@ implements
 		$this->Data = new Datastore;
 
 		if($Input !== NULL)
-		$this->Data->SetData($Input);
+		$this->Data->Import($Input);
 
 		return;
 	}
