@@ -1,12 +1,14 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common\Timer;
 
 use PHPUnit\Framework\TestCase;
+use Nether\Common\Timer;
+use Nether\Common\Error\MissingCallableFunc;
 
 use Throwable;
 
-class TimerTest
+class MainTest
 extends TestCase {
 
 	public function
@@ -55,6 +57,8 @@ extends TestCase {
 		$Timer->Run();
 		$this->AssertGreaterThan(0.2, $Timer->Time);
 		$this->AssertLessThan(0.3, $Timer->Time);
+		$this->AssertGreaterThan(0.2, $Timer->Get());
+		$this->AssertLessThan(0.3, $Timer->Get());
 
 		// reset the timer.
 
@@ -98,7 +102,7 @@ extends TestCase {
 			$Exceptional = TRUE;
 
 			$this->AssertInstanceOf(
-				Error\MissingCallableFunc::class,
+				MissingCallableFunc::class,
 				$Error
 			);
 		}
