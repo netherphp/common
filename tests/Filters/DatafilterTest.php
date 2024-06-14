@@ -94,6 +94,47 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestRawGet():
+	void {
+
+		$Data = new Datafilter([ 'Test'=> 'Test Value' ]);
+		$Data->Test(Filters\Text::SlottableKey(...));
+
+		$this->AssertEquals('test-value', $Data->Get('Test'));
+		$this->AssertEquals('Test Value', $Data->Raw('Test'));
+		$this->AssertNull($Data->Raw('asdfdasfafa'));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestExportGotchas():
+	void {
+
+		$Raw = [ 'Test'=> 'Value' ];
+
+		// the default behaviour is case insensitivity so when you export
+		// the data from a Datafilter object all the keys will be in
+		// lowercase.
+
+		$Filter = new Datafilter($Raw);
+		$Data = $Filter->Export();
+		$this->AssertArrayHasKey('test', $Data);
+		$this->AssertArrayNotHasKey('Test', $Data);
+
+		// ci can also be disabled though.
+
+		$Filter = new Datafilter($Raw, Case: TRUE);
+		$Data = $Filter->Export();
+		$this->AssertArrayHasKey('Test', $Data);
+		$this->AssertArrayNotHasKey('test', $Data);
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestIteration():
 	void {
 

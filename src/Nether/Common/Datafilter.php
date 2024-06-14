@@ -202,6 +202,8 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	Raw(string $Key):
 	mixed {
 
+		$Key = $this->PrepareKey($Key);
+
 		if(isset($this->__Data[$Key]))
 		return $this->__Data[$Key];
 
@@ -273,6 +275,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 		return $Data->Join('&');
 	}
 
+	#[Meta\Info('Returns the dataset. If CI was enabled all keys will be lower cased.')]
 	public function
 	Export():
 	?array {
