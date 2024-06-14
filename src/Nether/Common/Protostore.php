@@ -3,6 +3,7 @@
 namespace Nether\Common;
 
 use ArrayAccess;
+use Countable;
 use Iterator;
 use ReturnTypeWillChange;
 
@@ -10,7 +11,8 @@ use ReturnTypeWillChange;
 class Protostore
 implements
 	ArrayAccess,
-	Iterator {
+	Iterator,
+	Countable {
 
 	protected Datastore
 	$Data;
@@ -27,6 +29,18 @@ implements
 		$this->Data->Import($Input);
 
 		return;
+	}
+
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Countable ////////////////////////////////////////
+
+	#[Meta\Date('2024-06-14')]
+	public function
+	Count():
+	int {
+
+		return $this->Data->Count();
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -135,12 +149,14 @@ implements
 	////////////////////////////////////////////////////////////////
 	// Local Dataset API ///////////////////////////////////////////
 
-	#[Meta\Date('2023-08-12')]
+	#[Meta\Date('2024-06-14')]
 	public function
-	Count():
-	int {
+	Import(iterable $Input):
+	static {
 
-		return $this->Data->Count();
+		$this->Data->Import($Input);
+
+		return $this;
 	}
 
 	#[Meta\Date('2023-08-10')]

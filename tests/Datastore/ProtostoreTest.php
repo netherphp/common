@@ -82,4 +82,28 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestImportExport():
+	void {
+
+		$Data = [ 'One'=> 'Uno', 'Two'=> 'Dos', 'Three'=> 'Tres' ];
+
+		$PStore = new Protostore;
+		$PStore->Import($Data);
+
+		$this->AssertCount(3, $PStore);
+		$this->AssertEquals('Dos', $PStore['Two']);
+
+		////////
+
+		$Array = $PStore->Export();
+
+		$this->AssertIsArray($Array);
+		$this->AssertCount(3, $Array);
+		$this->AssertEquals('Dos', $Array['Two']);
+
+		return;
+	}
+
 };
