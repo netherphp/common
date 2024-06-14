@@ -1,21 +1,27 @@
 <?php
 
-namespace Nether\Common;
+namespace NetherTestSuite\Common\Prototype;
+
+use Nether\Common\Filters;
 
 use PHPUnit\Framework\TestCase;
+use Nether\Common\Prototype;
+use Nether\Common\Meta\PropertyFilter;
+use Nether\Common\Meta\PropertyPatchable;
+use Nether\Common\Prototype\Flags;
 
 class PatchableTest1
 extends Prototype {
 
 	public int $ID;
 
-	#[Meta\PropertyPatchable]
-	#[Meta\PropertyFilter([ Filters\Text::class, 'Trimmed' ])]
+	#[PropertyPatchable]
+	#[PropertyFilter([ Filters\Text::class, 'Trimmed' ])]
 	public string $Name;
 
-	#[Meta\PropertyPatchable]
-	#[Meta\PropertyFilter([ Filters\Text::class, 'Trimmed' ])]
-	#[Meta\PropertyFilter([ Filters\Text::class, 'Stripped' ])]
+	#[PropertyPatchable]
+	#[PropertyFilter([ Filters\Text::class, 'Trimmed' ])]
+	#[PropertyFilter([ Filters\Text::class, 'Stripped' ])]
 	public string $Food;
 
 }
@@ -32,7 +38,7 @@ extends TestCase {
 		$Props = PatchableTest1::GetPropertyIndex();
 
 		$Patchable = PatchableTest1::GetPropertiesWithAttribute(
-			Meta\PropertyPatchable::class
+			PropertyPatchable::class
 		);
 
 		$this->AssertCount(3, $Props);
@@ -46,7 +52,7 @@ extends TestCase {
 		$Value = NULL;
 
 		foreach($Patchable as $Prop) {
-			$Filters = $Prop->GetAttributes(Meta\PropertyFilter::class);
+			$Filters = $Prop->GetAttributes(PropertyFilter::class);
 
 			if($Prop->Name === 'Name') {
 				$this->AssertCount(1, $Filters);
@@ -78,7 +84,7 @@ extends TestCase {
 	void {
 
 
-		$Patchable = Meta\PropertyPatchable::FromClass(
+		$Patchable = PropertyPatchable::FromClass(
 			PatchableTest1::class
 		);
 
