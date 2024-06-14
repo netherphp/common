@@ -274,7 +274,7 @@ class Text {
 	}
 
 	static public function
-	YamlEscapeSingleQuote(mixed $Input):
+	EscapeSingleQuoteYAML(mixed $Input):
 	string {
 
 		static::Prepare($Input);
@@ -294,6 +294,32 @@ class Text {
 		////////
 
 		return $Input;
+	}
+
+	static public function
+	ReadableJSON(mixed $Input):
+	string {
+
+		static::Prepare($Input);
+
+		if($Input === NULL)
+		$Input = '';
+
+		if(!is_string($Input))
+		$Input = (string)$Input;
+
+		////////
+
+		$Data = json_encode($Input, JSON_PRETTY_PRINT);
+
+		if($Data === FALSE)
+		throw new Common\Error\RequiredDataMissing(
+			'Input', 'Something JSONable'
+		);
+
+		////////
+
+		return static::Tabbify($Data);
 	}
 
 	#[Common\Meta\DateAdded('2023-10-18')]
