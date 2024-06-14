@@ -43,26 +43,41 @@ extends TestCase {
 
 		$Data = [ 'One'=> 'Uno', 'Two'=> 'Dos', 'Three'=> 'Tres' ];
 		$PStore = new Protostore($Data);
+		$Item = NULL;
 
 		// so i was surprised to find that implementing these things for
 		// Iterator isn't making current(), key(), and next() functions
 		// work as expected, like current($PStore);
 
 		// current
+
 		$this->AssertEquals('Uno', $PStore->Current());
 
 		// key
+
 		$this->AssertEquals('One', $PStore->Key());
 
 		// next
+
 		$PStore->Next();
 		$this->AssertEquals('Dos', $PStore->Current());
 		$this->AssertEquals('Two', $PStore->Key());
 
 		// rewind
+
 		$PStore->Rewind();
 		$this->AssertEquals('Uno', $PStore->Current());
 		$this->AssertEquals('One', $PStore->Key());
+
+		// valid
+
+		$this->AssertTrue($PStore->Valid());
+		foreach($PStore as $Item) { }
+
+		$this->AssertFalse($PStore->Valid());
+
+		$PStore->Rewind();
+		$this->AssertTrue($PStore->Valid());
 
 		return;
 	}
