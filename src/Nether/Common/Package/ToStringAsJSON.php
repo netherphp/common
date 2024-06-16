@@ -14,9 +14,9 @@ trait ToStringAsJSON {
 		return $this->ToJSON();
 
 		if($this instanceof Common\Interfaces\ToArray)
-		return Common\Text::ReadableJSON($this->ToArray());
+		return Common\Filters\Text::ReadableJSON($this->ToArray());
 
-		return Common\Text::ReadableJSON($this);
+		return Common\Filters\Text::ReadableJSON($this);
 	}
 
 };

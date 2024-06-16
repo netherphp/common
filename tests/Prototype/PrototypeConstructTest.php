@@ -1,10 +1,9 @@
 <?php
 
-namespace NetherTestSuite\PrototypeConstructTest;
-
-use PHPUnit;
+namespace NetherTestSuite\Common\Prototype;
 
 use Throwable;
+use PHPUnit\Framework\TestCase;
 use Nether\Common\Datastore;
 use Nether\Common\Prototype;
 use Nether\Common\Prototype\Flags;
@@ -14,6 +13,8 @@ use Nether\Common\Prototype\ConstructArgs;
 use Nether\Common\Meta\PropertyOrigin;
 use Nether\Common\Meta\PropertyObjectify;
 use Nether\Common\Meta\PropertyFactory;
+use Nether\Common\Error\MissingCallableFunc;
+use Nether\Common\Error\RequiredDataMissing;
 
 class LocalTest2
 extends Prototype {
@@ -44,7 +45,7 @@ extends Prototype {
 		], NULL, 0);
 	}
 
-}
+};
 
 class LocalTest3
 extends Prototype {
@@ -68,7 +69,7 @@ extends Prototype {
 		return;
 	}
 
-}
+};
 
 class LocalTest4
 extends Prototype {
@@ -84,7 +85,7 @@ extends Prototype {
 		return;
 	}
 
-}
+};
 
 class LocalTest5
 extends Prototype {
@@ -93,10 +94,36 @@ extends Prototype {
 	public Datastore
 	$Datastore;
 
-}
+};
+
+class LocalTest6
+extends Prototype {
+
+	#[PropertyFactory('asdfadsf')]
+	public string
+	$Value;
+
+};
+
+
+class LocalTest7
+extends Prototype {
+
+	#[PropertyFactory([ LocalTest7::class, 'Value' ], 'Input')]
+	public string
+	$Value;
+
+	static public function
+	Value(string $V):
+	string {
+
+		return $V;
+	}
+
+};
 
 class PrototypeConstructTest
-extends PHPUnit\Framework\TestCase {
+extends TestCase {
 
 	/** @test */
 	public function
@@ -474,6 +501,72 @@ extends PHPUnit\Framework\TestCase {
 
 		return;
 	}
+
+	/** @test */
+	public function
+	TestPropertyFactoryCallableFail1():
+	void {
+
+		// if the callable filter func was not found.
+
+		$Failed = FALSE;
+		$Obj = NULL;
+		$Error = NULL;
+
+		////////
+
+		try {
+			$Obj = new LocalTest6;
+		}
+
+		catch(Throwable $Error) {
+			$Failed = TRUE;
+
+			$this->AssertInstanceOf(
+				MissingCallableFunc::class,
+				$Error
+			);
+		}
+
+		$this->AssertTrue($Failed);
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestPropertyFactoryCallableFail2():
+	void {
+
+		// if a callable filter function was found but the input
+		// property was not.
+
+		$Failed = FALSE;
+		$Obj = NULL;
+		$Error = NULL;
+
+		////////
+
+		try {
+			$Obj = new LocalTest7;
+		}
+
+		catch(Throwable $Error) {
+			$Failed = TRUE;
+
+			$this->AssertInstanceOf(
+				RequiredDataMissing::class,
+				$Error
+			);
+		}
+
+		$this->AssertTrue($Failed);
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	/** @test */
 	public function

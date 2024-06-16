@@ -278,6 +278,26 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestTemplateReplaceTokens():
+	void {
+
+		$Body = "This is a {%TOKEN%} in the {%STRING%}.";
+
+		$Tokens = [
+			'TOKEN'  => 'rider',
+			'STRING' => 'storm'
+		];
+
+		$this->AssertEquals(
+			'This is a rider in the storm.',
+			Common\Text::TemplateReplaceTokens($Body, $Tokens)
+		);
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

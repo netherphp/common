@@ -2,6 +2,8 @@
 
 namespace Nether\Common\Units;
 
+use Nether\Common;
+
 use DateInterval;
 use DateTime;
 use Stringable;
@@ -245,6 +247,11 @@ Printing via Stringable will print using all the current instance settings.
 	SetStart(mixed $When):
 	static {
 
+		if(is_float($When))
+		$When = (int)round($When, 0);
+
+		////////
+
 		$When = $this->HandleTimeInput($When);
 
 		$this->Start = new DateTime($When);
@@ -255,6 +262,11 @@ Printing via Stringable will print using all the current instance settings.
 	public function
 	SetStop(mixed $When):
 	static {
+
+		if(is_float($When))
+		$When = (int)round($When, 0);
+
+		////////
 
 		$When = $this->HandleTimeInput($When);
 
@@ -339,6 +351,9 @@ Printing via Stringable will print using all the current instance settings.
 
 			($When === NULL)
 			=> sprintf('@%d', time()),
+
+			($When instanceof Common\Date)
+			=> $When->Get(Common\Values::DateFormatYMDT24VZ),
 
 			default
 			=> $When

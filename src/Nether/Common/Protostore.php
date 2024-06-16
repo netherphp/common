@@ -3,6 +3,7 @@
 namespace Nether\Common;
 
 use ArrayAccess;
+use Countable;
 use Iterator;
 use ReturnTypeWillChange;
 
@@ -10,7 +11,8 @@ use ReturnTypeWillChange;
 class Protostore
 implements
 	ArrayAccess,
-	Iterator {
+	Iterator,
+	Countable {
 
 	protected Datastore
 	$Data;
@@ -24,9 +26,21 @@ implements
 		$this->Data = new Datastore;
 
 		if($Input !== NULL)
-		$this->Data->SetData($Input);
+		$this->Data->Import($Input);
 
 		return;
+	}
+
+
+	////////////////////////////////////////////////////////////////
+	// IMPLEMENTS Countable ////////////////////////////////////////
+
+	#[Meta\Date('2024-06-14')]
+	public function
+	Count():
+	int {
+
+		return $this->Data->Count();
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -104,7 +118,7 @@ implements
 	Rewind():
 	void {
 
-		$this->Data->Next();
+		$this->Data->Rewind();
 
 		return;
 	}
@@ -135,12 +149,22 @@ implements
 	////////////////////////////////////////////////////////////////
 	// Local Dataset API ///////////////////////////////////////////
 
-	#[Meta\Date('2023-08-12')]
+	#[Meta\Date('2024-06-14')]
 	public function
-	Count():
-	int {
+	Import(iterable $Input):
+	static {
 
-		return $this->Data->Count();
+		$this->Data->Import($Input);
+
+		return $this;
+	}
+
+	#[Meta\Date('2023-08-10')]
+	public function
+	Export():
+	array {
+
+		return $this->Data->Export();
 	}
 
 	#[Meta\Date('2023-08-10')]
@@ -160,6 +184,7 @@ implements
 	}
 
 	#[Meta\Date('2023-08-10')]
+	#[Meta\Deprecated('2024-06-06', 'use Export() instead')]
 	public function
 	GetData():
 	array {

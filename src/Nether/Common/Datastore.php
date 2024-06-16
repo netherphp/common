@@ -416,10 +416,23 @@ implements
 
 	#[Meta\Date('2024-04-22')]
 	public function
-	Import(iterable $Data):
+	Import(iterable $Input):
 	static {
 
-		$this->SetData($Data);
+		// fun fact:
+		// in 8.2.0 iterator_to_array can handle arrays without needing
+		// to check for ourselves.
+
+		$this->Data = match(TRUE) {
+			(is_array($Input) === FALSE)
+			=> iterator_to_array($Input),
+
+			(is_array($Input) === TRUE)
+			=> $Input,
+
+			default
+			=> [ ]
+		};
 
 		return $this;
 	}
@@ -447,53 +460,6 @@ implements
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
-
-	#[Meta\Date('2015-12-02')]
-	#[Meta\Deprecated('2024-04-22', 'use Export() instead.')]
-	public function
-	GetData():
-	array {
-
-		return $this->Data;
-	}
-
-	#[Meta\Date('2022-11-23')]
-	#[Meta\Deprecated('2024-04-22', 'use Reference() instead.')]
-	public function
-	&GetDataRef():
-	array {
-
-		// return the dataset by reference. keep in mind that you need to
-		// do the ampersand on the reciever end too, and that it only
-		// really works if assigned to a variable first. dropping this on
-		// an array function for example wont work.
-
-		return $this->Data;
-	}
-
-	#[Meta\Date('2015-12-02')]
-	#[Meta\Deprecated('2024-04-22', 'this method being public is deprecated.')]
-	public function
-	SetData(?iterable $Input):
-	static {
-
-		// fun fact:
-		// in 8.2.0 iterator_to_array can handle arrays without needing
-		// to check for ourselves.
-
-		$this->Data = match(TRUE) {
-			(is_array($Input) === FALSE)
-			=> iterator_to_array($Input),
-
-			(is_array($Input) === TRUE)
-			=> $Input,
-
-			default
-			=> [ ]
-		};
-
-		return $this;
-	}
 
 	#[Meta\Date('2015-12-02')]
 	public function
@@ -773,6 +739,17 @@ implements
 
 		$Key = NULL;
 
+		////////
+
+		// if there is only one item and that item is an array then
+		// what happened was i regret the original splatter api.
+
+		if(count($Keys) === 1)
+		if(is_array(current($Keys)))
+		$Keys = current($Keys);
+
+		////////
+
 		foreach($Keys as $Key) {
 			if(is_string($Key) || is_int($Key))
 			if($this->HasKey($Key))
@@ -827,20 +804,6 @@ implements
 	//*/
 
 		return array_keys($this->Data);
-	}
-
-	public function
-	Values(bool $Array=FALSE):
-	array|static {
-	/*//
-	@date 2021-01-05
-	fetches a clean indexed copy of the data via array_values.
-	//*/
-
-		if(!$Array)
-		return new static(array_values($this->Data));
-
-		return array_values($this->Data);
 	}
 
 	public function
@@ -956,10 +919,6 @@ implements
 	public function
 	IsNotEmpty():
 	bool {
-
-		// technically if the system had enough ram to add int max plus
-		// one things this is going to have an annurism over an array with
-		// negative 9 bazillion things.
 
 		return $this->Count() > 0;
 	}
@@ -1252,27 +1211,12 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2024-06-07')]
 	public function
-	Revalue():
+	Reset():
 	static {
-	/*//
-	@date 2021-01-05
-	rebuilds the dataset with clean indexes via array_values.
-	//*/
 
-		$this->Data = array_values($this->Data);
-		return $this;
-	}
-
-	public function
-	Reverse():
-	static {
-	/*//
-	@date 2023-04-20
-	quick flip of the ordering.
-	//*/
-
-		$this->Data = array_reverse($this->Data);
+		$this->Rewind();
 
 		return $this;
 	}
@@ -1391,26 +1335,6 @@ implements
 
 		array_unshift($this->Data,$Val);
 		return $this;
-	}
-
-	#[Meta\Date('2023-11-11')]
-	#[Meta\Info('Remove duplicates from this dataset.')]
-	public function
-	Flatten():
-	static {
-
-		$this->Data = array_unique($this->Data);
-
-		return $this;
-	}
-
-	#[Meta\Date('2023-11-11')]
-	#[Meta\Info('Make a new dataset with just the unique items.')]
-	public function
-	Unique():
-	static {
-
-		return new static(array_unique($this->Data));
 	}
 
 	#[Meta\Date('2023-11-15')]
@@ -1547,7 +1471,86 @@ implements
 		return $this;
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('insert a value after the specified key. data will be listified prior.')]
+	public function
+	InsertAfter(int|string $After, mixed $Thing):
+	static {
+
+		$Data = [];
+		$Key = NULL;
+		$Val = NULL;
+
+		////////
+
+		foreach($this->Values() as $Key => $Val) {
+			$Data[] = $Val;
+
+			if($Key === $After)
+			$Data[] = $Thing;
+
+			continue;
+		}
+
+		$this->Data = $Data;
+
+		////////
+
+		return $this;
+	}
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('insert a key and value after the specified key.')]
+	public function
+	ShoveAfter(int|string $After, int|string $ThingKey, mixed $ThingVal):
+	static {
+
+		$Data = [];
+		$Key = NULL;
+		$Val = NULL;
+
+		////////
+
+		foreach($this->Data as $Key => $Val) {
+			$Data[$Key] = $Val;
+
+			if($Key === $After)
+			$Data[$ThingKey] = $ThingVal;
+
+			continue;
+		}
+
+		$this->Data = $Data;
+
+		////////
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	#[Meta\Date('2024-04-03')]
+	#[Meta\Info('chop this dataset down to the specified slice.')]
+	public function
+	Chop(int $Offset, ?int $Length=NULL):
+	static {
+
+		$this->Data = array_slice(
+			$this->Data,
+			$Offset,
+			$Length,
+			FALSE
+		);
+
+		return $this;
+	}
+
+	#[Meta\Date('2024-04-03')]
+	#[Meta\Info('return new dataset of just the specified slice.')]
 	public function
 	Slice(int $Offset, ?int $Length=NULL):
 	static {
@@ -1560,17 +1563,80 @@ implements
 		));
 	}
 
-	#[Meta\Date('2024-04-03')]
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2023-11-11')]
+	#[Meta\Info('strip duplicates from this dataset.')]
 	public function
-	Chop(int $Offset, ?int $Length=NULL):
+	Flatten():
 	static {
 
-		$this->Data = array_slice(
-			$this->Data,
-			$Offset,
-			$Length,
-			FALSE
-		);
+		return new static(array_unique($this->Data));
+	}
+
+	#[Meta\Date('2023-11-11')]
+	#[Meta\Info('return a new dataset without any duplicates.')]
+	public function
+	Unique():
+	static {
+
+		$this->Data = array_unique($this->Data);
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('return a new fresh indexed dataset.')]
+	public function
+	Values(bool $Array=FALSE):
+	array|static {
+	/*//
+	@date
+	fetches a clean indexed copy of the data via array_values.
+	//*/
+
+		if(!$Array)
+		return new static(array_values($this->Data));
+
+		return array_values($this->Data);
+	}
+
+	#[Meta\Info('modify the current dataset with fresh indexing.')]
+	public function
+	Revalue():
+	static {
+	/*//
+	@date 2021-01-05
+	rebuilds the dataset with clean indexes via array_values.
+	//*/
+
+		$this->Data = array_values($this->Data);
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('returns new reversed dataset.')]
+	public function
+	Mirror():
+	static {
+
+		return new static(array_reverse($this->Data));
+	}
+
+	#[Meta\Date('2024-06-10')]
+	#[Meta\Info('reverse the current dataset.')]
+	public function
+	Reverse():
+	static {
+
+		$this->Data = array_reverse($this->Data);
 
 		return $this;
 	}
@@ -1875,6 +1941,21 @@ implements
 		return $Store;
 	}
 
+	#[Meta\Date('2024-05-11')]
+	#[Meta\Info('Load up a datastore by blowing up a string.')]
+	static public function
+	FromString(?string $Input, string $Delimiter=''):
+	static {
+
+		if($Delimiter === '')
+		return new static(mb_str_split($Input));
+
+		return new static(explode(
+			$Delimiter,
+			($Input ?: '')
+		));
+	}
+
 	#[Meta\DateAdded('2023-07-10')]
 	#[Meta\Info('Perform a BlendRight upon all the arguments and return the final result.')]
 	static public function
@@ -1916,7 +1997,7 @@ implements
 	 * @codeCoverageIgnore
 	 */
 
-	#[Meta\Deprecated('2023-07-10', 'use FromStackBlended instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromStackBlended() instead')]
 	static public function
 	NewBlended(iterable $OG, ...$Adds):
 	static {
@@ -1928,7 +2009,7 @@ implements
 	 * @codeCoverageIgnore
 	 */
 
-	#[Meta\Deprecated('2023-07-10', 'use FromStackMerged instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromStackMerged() instead')]
 	static public function
 	NewMerged(iterable $OG, ...$Updates):
 	static {
@@ -1941,7 +2022,7 @@ implements
 	 */
 
 	#[Meta\DateAdded('2022-08-15')]
-	#[Meta\Deprecated('2023-07-10', 'use FromFile instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromFile() instead')]
 	static public function
 	NewFromFile(string $Filename):
 	static {
@@ -1954,12 +2035,56 @@ implements
 	 */
 
 	#[Meta\DateAdded('2022-08-15')]
-	#[Meta\Deprecated('2023-07-10', 'use FromJSON instead')]
+	#[Meta\Deprecated('2023-07-10', 'use FromJSON() instead')]
 	static public function
 	NewFromJSON(?string $JSON):
 	static {
 
 		return static::FromJSON($JSON);
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+
+	#[Meta\Date('2015-12-02')]
+	#[Meta\Deprecated('2024-04-22', 'use Export() instead.')]
+	public function
+	GetData():
+	array {
+
+		return $this->Data;
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+
+	#[Meta\Date('2022-11-23')]
+	#[Meta\Deprecated('2024-04-22', 'use Reference() instead.')]
+	public function
+	&GetDataRef():
+	array {
+
+		// return the dataset by reference. keep in mind that you need to
+		// do the ampersand on the reciever end too, and that it only
+		// really works if assigned to a variable first. dropping this on
+		// an array function for example wont work.
+
+		return $this->Data;
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+
+	#[Meta\Date('2015-12-02')]
+	#[Meta\Deprecated('2024-04-22', 'use Import() instead.')]
+	public function
+	SetData(?iterable $Input):
+	static {
+
+		return $this->Import($Input);
 	}
 
 }

@@ -1,27 +1,31 @@
 <?php
 
-namespace Nether;
+namespace NetherTestSuite\Common\Prototype;
 
-use PHPUnit;
+use PHPUnit\Framework\TestCase;
+use Nether\Common\Prototype;
+use Nether\Common\Meta\PropertyOrigin;
+use Nether\Common\Meta\PropertyPatchable;
+use Nether\Common\Prototype\Flags;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 class PrototypeRegionTest
-extends Common\Prototype {
+extends Prototype {
 /*//
 this is a test class to demonstrate the ability of the static property map
 to do its job. it is designed to emulate the mutation of an ugly data set
 like from the database into properties you actually want to type.
 //*/
 
-	#[Common\Meta\PropertyOrigin('country_id')]
+	#[PropertyOrigin('country_id')]
 	public int $ID = 0;
 
-	#[Common\Meta\PropertyOrigin('country_code')]
+	#[PropertyOrigin('country_code')]
 	public ?string $Code = NULL;
 
-	#[Common\Meta\PropertyOrigin('country_name')]
+	#[PropertyOrigin('country_name')]
 	public ?string $Name = NULL;
 
 }
@@ -30,7 +34,7 @@ like from the database into properties you actually want to type.
 ////////////////////////////////////////////////////////////////////////////////
 
 class PrototypeExtensionTest
-extends PHPUnit\Framework\TestCase {
+extends TestCase {
 
 	protected array
 	$Input = [
@@ -78,7 +82,7 @@ extends PHPUnit\Framework\TestCase {
 		$Object = new PrototypeRegionTest(
 			$this->Input,
 			NULL,
-			Common\Prototype\Flags::StrictInput
+			Flags::StrictInput
 		);
 
 		$this->AssertFalse(property_exists($Object, 'country_king'));
