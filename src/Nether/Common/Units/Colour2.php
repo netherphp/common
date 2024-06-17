@@ -135,14 +135,14 @@ class Colour2 {
 	HueRotate(int $Deg):
 	static {
 
-		$Deg = $Deg % 360;
+		$Hue = ($this->H + $Deg) % 360;
 
-		if($Deg < 0.0)
-		$Deg += 360;
+		if($Hue < 0.0)
+		$Hue += 360;
 
 		////////
 
-		$this->H = ($this->H + $Deg) % 360;
+		$this->H = $Hue;
 		$this->UpdateFromHSL();
 
 		return $this;
