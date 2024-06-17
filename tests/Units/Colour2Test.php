@@ -145,24 +145,6 @@ extends TestCase {
 			$this->AssertEquals(static::SweepRGB1F[$Key], $C->ToHexRGBA());
 		}
 
-		////////
-
-		$Err = NULL;
-
-		try { $Colour = Colour2::FromHexString('Ad'); }
-		catch(Throwable $Err) { }
-
-		$this->AssertInstanceOf(Common\Error\FormatInvalid::class, $Err);
-
-		////////
-
-		$Err = NULL;
-
-		try { $Colour = Colour2::FromHexString('OK'); }
-		catch(Throwable $Err) { }
-
-		$this->AssertInstanceOf(Common\Error\FormatInvalid::class, $Err);
-
 		return;
 	}
 
@@ -181,6 +163,42 @@ extends TestCase {
 		$C = Colour2::FromHexString($Short[1]);
 		$this->AssertEquals($Long[0], $C->ToHexRGB());
 		$this->AssertEquals($Long[1], $C->ToHexRGBA());
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestFromHexInvalid():
+	void {
+
+		// an invalid hex number.
+
+		$Err = NULL;
+		$Exp = FALSE;
+
+		try { Colour2::FromHexString('#OK'); }
+		catch(Throwable $Err) {
+			$Exp = TRUE;
+			$this->AssertInstanceOf(Common\Error\FormatInvalid::class, $Err);
+		}
+
+		$this->AssertTrue($Exp);
+
+		// an invalid hex colour length.
+
+		$Err = NULL;
+		$Exp = FALSE;
+
+		try { Colour2::FromHexString('#Ad'); }
+		catch(Throwable $Err) {
+			$Exp = TRUE;
+			$this->AssertInstanceOf(Common\Error\FormatInvalid::class, $Err);
+		}
+
+		$this->AssertTrue($Exp);
+
+		////////
 
 		return;
 	}

@@ -476,7 +476,7 @@ class Colour2 {
 		$Hex = ltrim($Hex, '#');
 		$Len = strlen($Hex);
 
-		if(preg_match('/[^0-9a-zA-Z]/', $Hex))
+		if(preg_match('/[^0-9a-fA-F]/', $Hex))
 		throw new Common\Error\FormatInvalid('invalid hex string');
 
 		////////
