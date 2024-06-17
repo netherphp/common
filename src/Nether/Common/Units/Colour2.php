@@ -131,8 +131,10 @@ class Colour2 {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Degrees - Range: -359 <-> 359')]
 	public function
-	HueRotate(int $Deg):
+	HueRotate(int $Deg=0):
 	static {
 
 		$Hue = ($this->H + $Deg) % 360;
@@ -148,40 +150,113 @@ class Colour2 {
 		return $this;
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Percentage - Range: -1.0 <-> 1.0')]
 	public function
-	HueShift(float $NPercent):
+	HueShift(float $Percent=0.0):
 	static {
 
 		$this->HueRotate(
-			round((360 * $NPercent), 0)
+			round((360 * $Percent), 0)
 		);
 
 		return $this;
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Percentage - Range: 0.0 <-> 1.0')]
 	public function
-	Saturate(float $Percent):
+	Saturate(float $Percent=0.0):
 	static {
 
-		throw new Common\Error\MethodNotFound('Saturate');
+		$Sat = static::ClampNormal(
+			$this->S + ($this->S * $Percent)
+		);
+
+		$this->S = $Sat;
+		$this->UpdateFromHSL();
 
 		return $this;
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Percentage - Range: 0.0 <-> 1.0')]
 	public function
-	Darken(float $Percent):
+	Desaturate(float $Percent=0.0):
 	static {
 
-		throw new Common\Error\MethodNotFound('Darken');
+		$Sat = static::ClampNormal(
+			$this->S - ($this->S * $Percent)
+		);
+
+		$this->S = $Sat;
+		$this->UpdateFromHSL();
 
 		return $this;
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Percentage - Range: 0.0 <-> 1.0')]
 	public function
-	Lighten(float $Percent):
+	Lighten(float $Percent=0.0):
 	static {
 
-		throw new Common\Error\MethodNotFound('Lighten');
+		$Lum = static::ClampNormal(
+			$this->L + ($this->L * $Percent)
+		);
+
+		$this->L = $Lum;
+
+		return $this;
+	}
+
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Percentage - Range: 0.0 <-> 1.0')]
+	public function
+	Darken(float $Percent=0.0):
+	static {
+
+		$Lum = static::ClampNormal(
+			$this->L - ($this->L * $Percent)
+		);
+
+		$this->L = $Lum;
+		$this->UpdateFromHSL();
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Multiplier - Range: 0.0 -> INF')]
+	public function
+	Saturation(float $Mult=1.0):
+	static {
+
+		$Sat = static::ClampNormal(
+			$this->S * $Mult
+		);
+
+		$this->S = $Sat;
+		$this->UpdateFromHSL();
+
+		return $this;
+	}
+
+	#[Common\Meta\Date('2024-06-17')]
+	#[Common\Meta\Info('Multiplier - Range: 0.0 -> INF')]
+	public function
+	Brightness(float $Mult=1.0):
+	static {
+
+		$Lum = static::ClampNormal(
+			$this->L * $Mult
+		);
+
+		$this->L = $Lum;
+		$this->UpdateFromHSL();
 
 		return $this;
 	}
@@ -670,6 +745,14 @@ class Colour2 {
 		////////
 
 		return $Num;
+	}
+
+	#[Common\Meta\Date('2024-06-17')]
+	static public function
+	ClampNormal(float $Val):
+	float {
+
+		return min(max($Val, 0.0), 1.0);
 	}
 
 };
