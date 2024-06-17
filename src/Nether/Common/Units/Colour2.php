@@ -312,7 +312,7 @@ class Colour2 {
 
 		////////
 
-		if($Max === 0.0)
+		if($Min === $Max)
 		$Sat = 0.0;
 
 		elseif($Lum <= 0.5)
