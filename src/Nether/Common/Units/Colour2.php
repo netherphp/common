@@ -57,6 +57,10 @@ class Colour2 {
 	protected float
 	$L;
 
+	#[Common\Meta\Date('2024-06-17')]
+	protected float
+	$V;
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -116,6 +120,14 @@ class Colour2 {
 		return $this->L;
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
+	public function
+	V():
+	float {
+
+		return $this->V;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -160,7 +172,7 @@ class Colour2 {
 
 	#[Common\Meta\Date('2024-06-15')]
 	protected function
-	CalcHue():
+	CalcHueFromRGB():
 	int {
 
 		$Hue = 0;
@@ -196,12 +208,12 @@ class Colour2 {
 
 	#[Common\Meta\Date('2024-06-15')]
 	protected function
-	CalcSat():
+	CalcSatFromRGB():
 	float {
 
 		$Max = max($this->Rn, $this->Gn, $this->Bn);
 		$Min = min($this->Rn, $this->Gn, $this->Bn);
-		$Lum = $this->CalcLum();
+		$Lum = $this->CalcLumFromRGB();
 		$Sat = 0.0;
 
 		////////
@@ -222,7 +234,7 @@ class Colour2 {
 
 	#[Common\Meta\Date('2024-06-15')]
 	protected function
-	CalcLum():
+	CalcLumFromRGB():
 	float {
 
 		$Min = min($this->Rn, $this->Gn, $this->Bn);
@@ -232,54 +244,134 @@ class Colour2 {
 		return $Lum;
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
+	protected function
+	CalcValFromRGB():
+	float {
+
+		$Max = max($this->Rn, $this->Gn, $this->Bn);
+
+		return $Max;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
 	#[Common\Meta\Date('2024-06-15')]
 	protected function
-	UpdateHSL():
+	UpdateFromRGB():
 	static {
 
-		$this->H = $this->CalcHue();
-		$this->S = $this->CalcSat();
-		$this->L = $this->CalcLum();
+		$this->UpdateRGBNormals();
+
+		$this->H = $this->CalcHueFromRGB();
+		$this->S = $this->CalcSatFromRGB();
+		$this->L = $this->CalcLumFromRGB();
+		$this->V = $this->CalcValFromRGB();
+
+		return $this;
+	}
+
+	#[Common\Meta\Date('2024-06-16')]
+	protected function
+	UpdateFromHSL():
+	static {
+
+		// none of this was obvious math. this was written by following
+		// an explained algo.
+
+		$Hue = $this->H();
+		$Sat = $this->S();
+		$Lum = $this->L();
+
+		$Rot = ($Hue / 360.0);
+		$RGB = [];
+		$T1 = NULL;
+		$T2 = NULL;
+
+		////////
+
+		if($Sat === 0.0) {
+			$this->R = static::ClampByte($Lum * 255);
+			$this->G = $this->R;
+			$this->B = $this->R;
+			$this->UpdateRGBNormals();
+			return $this;
+		}
+
+		////////
+
+		$T1 = match(TRUE) {
+			($Lum < 0.5)
+			=> $Lum * (1.0 + $Sat),
+
+			default
+			=> ($Lum + ($Sat - ($Lum * $Sat)))
+		};
+
+		$T2 = (2 * $Lum) - $T1;
+
+		////////
+
+		$RGB[0] = $Rot + 0.333;
+		$RGB[1] = $Rot;
+		$RGB[2] = $Rot - 0.333;
+
+		$RGB = array_map(
+			fn(float $V)=> match(TRUE) {
+				($V < 0.0) => ($V + 1.0),
+				($V > 1.0) => ($V - 1.0),
+				default    => $V
+			},
+			$RGB
+		);
+
+		$RGB = array_map(
+			fn(float $V)=> match(TRUE) {
+				(($V * 6.0) < 1.0)
+				=> $T2 + (($T1 - $T2) * 6.0 * $V),
+
+				(($V * 2.0) < 1.0)
+				=> $T1,
+
+				(($V * 3.0) < 2.0)
+				=> $T2 + (($T1 - $T2) * (0.666 - $V) * 6.0),
+
+				default
+				=> $T2
+			},
+			$RGB
+		);
+
+		$RGB = array_map(
+			fn(float $V)=> static::ClampByte(
+				round(($V * 255), 0)
+			),
+			$RGB
+		);
+
+		////////
+
+		$this->R = $RGB[0];
+		$this->G = $RGB[1];
+		$this->B = $RGB[2];
+
+		$this->UpdateRGBNormals();
+
+		////////
 
 		return $this;
 	}
 
 	#[Common\Meta\Date('2024-06-15')]
 	protected function
-	UpdateNormals():
+	UpdateRGBNormals():
 	static {
 
 		$this->Rn = $this->R / 255.0;
 		$this->Gn = $this->G / 255.0;
 		$this->Bn = $this->B / 255.0;
 		$this->An = $this->A / 255.0;
-
-		return $this;
-	}
-
-	#[Common\Meta\Date('2024-06-15')]
-	protected function
-	UpdateInts():
-	static {
-
-		$this->R = Common\Filters\Numbers::IntRange(
-			($this->Rn * 255), 0, 255
-		);
-
-		$this->G = Common\Filters\Numbers::IntRange(
-			($this->Gn * 255), 0, 255
-		);
-
-		$this->B = Common\Filters\Numbers::IntRange(
-			($this->Bn * 255), 0, 255
-		);
-
-		$this->A = Common\Filters\Numbers::IntRange(
-			($this->An * 255), 0, 255
-		);
 
 		return $this;
 	}
@@ -313,8 +405,7 @@ class Colour2 {
 
 		////////
 
-		$this->UpdateNormals();
-		$this->UpdateHSL();
+		$this->UpdateFromRGB();
 
 		return $this;
 	}
@@ -327,8 +418,7 @@ class Colour2 {
 		list($this->R, $this->G, $this->B) = static::DecToBitsRGB($Int);
 		$this->A = 0xFF;
 
-		$this->UpdateNormals();
-		$this->UpdateHSL();
+		$this->UpdateFromRGB();
 
 		return $this;
 	}
@@ -341,8 +431,34 @@ class Colour2 {
 		list($this->R, $this->G, $this->B) = static::DecToBitsRGBA($Int);
 		$this->A = 0xFF;
 
-		$this->UpdateNormals();
-		$this->UpdateHSL();
+		$this->UpdateFromRGB();
+
+		return $this;
+	}
+
+	#[Common\Meta\Date('2024-06-16')]
+	public function
+	ImportRGBA(int $R, int $G, int $B, int $A=255):
+	static {
+
+		$this->ImportIntRGBA(
+			($R << 24) | ($G << 16) | ($B << 8) | ($A << 0)
+		);
+
+		return $this;
+	}
+
+	#[Common\Meta\Date('2024-06-16')]
+	public function
+	ImportHSL(int $H, float $S, float $L):
+	static {
+
+		$this->H = $H % 360;
+		$this->S = min(1.0, max(0.0, $S));
+		$this->L = min(1.0, max(0.0, $L));
+		$this->A = 0xFF;
+
+		$this->UpdateFromHSL();
 
 		return $this;
 	}
@@ -442,6 +558,28 @@ class Colour2 {
 		return $Output;
 	}
 
+	#[Common\Meta\Date('2024-06-16')]
+	static public function
+	FromHSL(int $H, float $S, float $L):
+	static {
+
+		$Output = new static;
+		$Output->ImportHSL($H, $S, $L);
+
+		return $Output;
+	}
+
+	#[Common\Meta\Date('2024-06-15')]
+	static public function
+	FromRGBA(int $R, int $G, int $B, int $A=255):
+	static {
+
+		$Output = new static;
+		$Output->ImportRGBA($R, $G, $B, $A);
+
+		return $Output;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
@@ -493,6 +631,26 @@ class Colour2 {
 			(($Int & 0x00F0) >> 4)  | (($Int & 0x00F0) >> 0),
 			(($Int & 0x000F) >> 0)  | (($Int & 0x000F) << 4)
 		];
+	}
+
+	#[Common\Meta\Date('2024-06-16')]
+	static public function
+	ClampByte(int|float $Num):
+	int {
+
+		$Num = (int)$Num;
+
+		////////
+
+		if($Num > 255)
+		$Num = 255;
+
+		if($Num < 0)
+		$Num = 0;
+
+		////////
+
+		return $Num;
 	}
 
 };
