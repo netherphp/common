@@ -753,21 +753,17 @@ class Colour2 {
 		return min(max($Val, 0.0), 1.0);
 	}
 
+	#[Common\Meta\Date('2024-06-17')]
 	static public function
 	WrapDegrees(int|float $Deg):
 	int {
 
-		if(is_float($Deg))
-		$Deg = (int)round($Deg, 0);
+		$Wrapped = ((int)round($Deg, 0)) % Common\Values::CircleDegMax;
 
-		////////
+		if($Wrapped < 0)
+		$Wrapped += Common\Values::CircleDegMax;
 
-		$Deg = $Deg % Common\Values::CircleDegrees;
-
-		if($Deg < 0)
-		$Deg += Common\Values::CircleDegrees;
-
-		return $Deg;
+		return $Wrapped;
 	}
 
 };

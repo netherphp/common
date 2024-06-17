@@ -14,8 +14,17 @@ class Values {
 	DayPerWk  = 7;
 
 	const
-	CircleDegrees = 360,
-	CircleRadians = (M_PI * 2);
+	BitsPerByte = 8,
+	BitsPerUnit = 1024;
+
+	const
+	ByteMax = 0b11111111;
+
+	const
+	CircleDegMax = 360,
+	CircleRadMax = (M_PI * 2);
+
+	////////
 
 	const
 	DateFormatYMD              = 'Y-m-d',
