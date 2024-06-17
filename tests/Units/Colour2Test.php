@@ -168,6 +168,25 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestFromHexShort():
+	void {
+
+		$Short = [ '#123', '#1234' ];
+		$Long = [ '#112233', '#11223344' ];
+
+		$C = Colour2::FromHexString($Short[0]);
+		$this->AssertEquals($Long[0], $C->ToHexRGB());
+		$this->AssertEquals("{$Long[0]}FF", $C->ToHexRGBA());
+
+		$C = Colour2::FromHexString($Short[1]);
+		$this->AssertEquals($Long[0], $C->ToHexRGB());
+		$this->AssertEquals($Long[1], $C->ToHexRGBA());
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestFromIntRGB():
 	void {
 

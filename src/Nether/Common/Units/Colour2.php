@@ -727,19 +727,7 @@ class Colour2 {
 	ClampByte(int|float $Num):
 	int {
 
-		$Num = (int)$Num;
-
-		////////
-
-		if($Num > 255)
-		$Num = 255;
-
-		if($Num < 0)
-		$Num = 0;
-
-		////////
-
-		return $Num;
+		return min(max((int)$Num, 0), Common\Values::ByteMax);
 	}
 
 	#[Common\Meta\Date('2024-06-17')]
