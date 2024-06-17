@@ -218,19 +218,93 @@ extends TestCase {
 		$Chsl = NULL;
 		$Crgb = NULL;
 
+		////////
+
 		foreach(static::SweepHSL1 as $Key => $HSL) {
+
+			// check values
 			$Chsl = Colour2::FromHSL($HSL[0], $HSL[1], $HSL[2]);
 			$this->AssertEquals($HSL[0], $Chsl->H());
 			$this->AssertEquals($HSL[1], $Chsl->S());
 			$this->AssertEquals($HSL[2], $Chsl->L());
 			$this->AssertEquals(255, $Chsl->A());
 
+			// sanity check rgb values
 			$Crgb = Colour2::FromHexString(static::SweepRGB1[$Key]);
 			$this->AssertEqualsWithDelta($Crgb->R(), $Chsl->R(), $Fuzz);
 			$this->AssertEqualsWithDelta($Crgb->G(), $Chsl->G(), $Fuzz);
 			$this->AssertEqualsWithDelta($Crgb->B(), $Chsl->B(), $Fuzz);
 			$this->AssertEqualsWithDelta($Crgb->A(), $Chsl->A(), $Fuzz);
+
 		}
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	/** @test */
+	public function
+	TestHueRotateShift():
+	void {
+
+		$Col = Colour2::FromHSL(...static::RedHSL1);
+		$this->AssertEquals(0, $Col->H());
+
+		// basic rotations by degrees.
+
+		$Col->HueRotate(120);
+		$this->AssertEquals(120, $Col->H());
+
+		$Col->HueRotate(120);
+		$this->AssertEquals(240, $Col->H());
+
+		$Col->HueRotate(120);
+		$this->AssertEquals(0, $Col->H());
+
+		$Col->HueRotate(-120);
+		$this->AssertEquals(240, $Col->H());
+
+		$Col->HueRotate(-120);
+		$this->AssertEquals(120, $Col->H());
+
+		$Col->HueRotate(-120);
+		$this->AssertEquals(0, $Col->H());
+
+		// basic rotations by percentage.
+
+		$Col->HueShift(0.3334);
+		$this->AssertEquals(120, $Col->H());
+
+		$Col->HueShift(0.3334);
+		$this->AssertEquals(240, $Col->H());
+
+		$Col->HueShift(0.3334);
+		$this->AssertEquals(0, $Col->H());
+
+		$Col->HueShift(-0.3334);
+		$this->AssertEquals(240, $Col->H());
+
+		$Col->HueShift(-0.3334);
+		$this->AssertEquals(120, $Col->H());
+
+		$Col->HueShift(-0.3334);
+		$this->AssertEquals(0, $Col->H());
+
+		// rotations that overflow the number of degrees.
+
+		$Col->HueRotate(120 * 4);
+		$this->AssertEquals(120, $Col->H());
+
+		$Col->HueRotate(-120 * 4);
+		$this->AssertEquals(0, $Col->H());
+
+		$Col->HueShift(0.3334 * 4);
+		$this->AssertEquals(120, $Col->H());
+
+		$Col->HueShift(-0.3334 * 4);
+		$this->AssertEquals(0, $Col->H());
 
 		return;
 	}
