@@ -276,22 +276,19 @@ class Colour2 {
 
 		////////
 
-		if($Gap === 0.0)
-		$Hue = 0;
+		$Hue = match(TRUE) {
+			($Gap === 0.0)
+			=> 0,
 
-		elseif($Max === $this->Rn)
-		$Hue = 60 * (($this->Gn - $this->Bn) / $Gap);
+			($Max === $this->Rn)
+			=> 60 * (($this->Gn - $this->Bn) / $Gap),
 
-		elseif($Max === $this->Gn)
-		$Hue = 60 * (2.0 + (($this->Bn - $this->Rn) / $Gap));
+			($Max === $this->Gn)
+			=> 60 * (2.0 + (($this->Bn - $this->Rn) / $Gap)),
 
-		elseif($Max === $this->Bn)
-		$Hue = 60 * (4.0 + (($this->Rn - $this->Gn) / $Gap));
-
-		////////
-
-		if($Hue < 0)
-		$Hue += 360;
+			($Max === $this->Bn)
+			=> 60 * (4.0 + (($this->Rn - $this->Gn) / $Gap))
+		};
 
 		////////
 
