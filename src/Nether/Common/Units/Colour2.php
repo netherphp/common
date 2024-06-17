@@ -132,10 +132,23 @@ class Colour2 {
 	////////////////////////////////////////////////////////////////
 
 	public function
-	Rotate(float $Percent):
+	HueRotate(int $Deg):
 	static {
 
-		throw new Common\Error\MethodNotFound('Rotate');
+		$this->H = ($this->H + $Deg) % 360;
+
+		$this->UpdateFromHSL();
+
+		return $this;
+	}
+
+	public function
+	HueShift(float $NPercent):
+	static {
+
+		$this->H = ($this->H + (360 * $NPercent)) % 360;
+
+		$this->UpdateFromHSL();
 
 		return $this;
 	}
