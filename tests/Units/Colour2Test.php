@@ -366,6 +366,29 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestUtilClampByte():
+	void {
+
+		$Input = [
+			[    0,   0 ],
+			[  100, 100 ],
+			[  200, 200 ],
+			[  300, 255 ],
+			[  400, 255 ],
+			[ -100,   0 ],
+			[ -400,   0 ]
+		];
+
+		$Value = NULL;
+
+		foreach($Input as $Value)
+		$this->AssertEquals($Value[1], Colour2::ClampByte($Value[0]));
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestUtilClampNormal():
 	void {
 
