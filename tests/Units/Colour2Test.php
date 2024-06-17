@@ -119,7 +119,7 @@ extends TestCase {
 	];
 
 	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
+	// COLOUR READING //////////////////////////////////////////////
 
 	/** @test */
 	public function
@@ -294,7 +294,7 @@ extends TestCase {
 	}
 
 	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
+	// MANIPULATION API ////////////////////////////////////////////
 
 	/** @test */
 	public function
@@ -357,6 +357,56 @@ extends TestCase {
 
 		$Col->HueShift(-0.3334 * 4);
 		$this->AssertEquals(0, $Col->H());
+
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////
+	// UTILITY METHODS /////////////////////////////////////////////
+
+	/** @test */
+	public function
+	TestUtilClampNormal():
+	void {
+
+		$Input = [
+			[  0.0, 0.0 ],
+			[  0.5, 0.5 ],
+			[  1.0, 1.0 ],
+			[ -1.0, 0.0 ],
+			[ -0.5, 0.0 ],
+			[  1.5, 1.0 ]
+		];
+
+		$Value = NULL;
+
+		foreach($Input as $Value)
+		$this->AssertEquals($Value[1], Colour2::ClampNormal($Value[0]));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestUtilWrapDegrees():
+	void {
+
+		$Input = [
+			[    0,   0 ],
+			[  120, 120 ],
+			[  240, 240 ],
+			[  360,   0 ],
+			[  480, 120 ],
+			[ -120, 240 ],
+			[ -240, 120 ],
+			[ -360,   0 ],
+			[ -480, 240 ]
+		];
+
+		$Value = NULL;
+
+		foreach($Input as $Value)
+		$this->AssertEquals($Value[1], Colour2::WrapDegrees($Value[0]));
 
 		return;
 	}
