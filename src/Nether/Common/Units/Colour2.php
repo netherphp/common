@@ -295,9 +295,7 @@ class Colour2 {
 
 		////////
 
-		return Common\Filters\Numbers::IntRange(
-			$Hue, 0, 360
-		);
+		return static::WrapDegrees($Hue);
 	}
 
 	#[Common\Meta\Date('2024-06-15')]
@@ -753,6 +751,23 @@ class Colour2 {
 	float {
 
 		return min(max($Val, 0.0), 1.0);
+	}
+
+	static public function
+	WrapDegrees(int|float $Deg):
+	int {
+
+		if(is_float($Deg))
+		$Deg = (int)round($Deg, 0);
+
+		////////
+
+		$Deg = $Deg % Common\Values::CircleDegrees;
+
+		if($Deg < 0)
+		$Deg += Common\Values::CircleDegrees;
+
+		return $Deg;
 	}
 
 };

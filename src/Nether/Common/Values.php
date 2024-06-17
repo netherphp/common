@@ -14,6 +14,10 @@ class Values {
 	DayPerWk  = 7;
 
 	const
+	CircleDegrees = 360,
+	CircleRadians = (M_PI * 2);
+
+	const
 	DateFormatYMD              = 'Y-m-d',
 	DateFormatYMDT12           = 'Y-m-d g:ia',
 	DateFormatYMDT12Z          = 'Y-m-d g:ia T',
