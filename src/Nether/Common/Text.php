@@ -2,6 +2,8 @@
 
 namespace Nether\Common;
 
+use Nether\Dye;
+
 use Stringable;
 
 class Text
@@ -33,7 +35,7 @@ implements Stringable {
 	public bool
 	$Underline;
 
-	public ?Units\Colour
+	public ?Dye\Colour
 	$Colour;
 
 	////////////////////////////////////////////////////////////////
@@ -105,9 +107,9 @@ implements Stringable {
 		if(isset($this->Colour))
 		array_push($Codes, ...[
 			38, 2,
-			$this->Colour->R(),
-			$this->Colour->G(),
-			$this->Colour->B()
+			$this->Colour->RGB->R(),
+			$this->Colour->RGB->G(),
+			$this->Colour->RGB->B()
 		]);
 
 		////////
@@ -140,7 +142,7 @@ implements Stringable {
 		$Styles[] = 'text-decoration: underline';
 
 		if(isset($this->Colour))
-		$Styles[] = "color: {$this->Colour->GetHexRGB()}";
+		$Styles[] = "color: {$this->Colour->ToHexRGB()}";
 
 		if(count($Styles))
 		$Styles = sprintf(' style="%s;"', join('; ', $Styles));
@@ -168,7 +170,7 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	New(string $Text=NULL, int $Mode=self::ModePlain, Units\Colour $Colour=NULL, bool $Bold=FALSE, bool $Italic=FALSE, bool $Underline=FALSE):
+	New(string $Text=NULL, int $Mode=self::ModePlain, Dye\Colour $Colour=NULL, bool $Bold=FALSE, bool $Italic=FALSE, bool $Underline=FALSE):
 	static {
 
 		return new static([

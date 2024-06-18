@@ -3,6 +3,7 @@
 namespace NetherTestSuite\Common\Filters;
 
 use Nether\Common;
+use Nether\Dye;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -47,12 +48,12 @@ extends TestCase {
 			],
 			[
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
+				'Colour'    => Dye\Colour::From('#FF0000'),
 				'Expect'    => 'Test'
 			],
 			[
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
+				'Colour'    => Dye\Colour::From('#FF0000'),
 				'Bold'      => TRUE,
 				'Expect'    => 'Test'
 			]
@@ -120,13 +121,13 @@ extends TestCase {
 			[
 				'Mode'      => Common\Text::ModeTerminal,
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
+				'Colour'    => Dye\Colour::From('#ff0000'),
 				'Expect'    => "\e[38;2;255;0;0mTest\e[0m"
 			],
 			[
 				'Mode'      => Common\Text::ModeTerminal,
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
+				'Colour'    => Dye\Colour::From('#ff0000'),
 				'Bold'      => TRUE,
 				'Expect'    => "\e[1;38;2;255;0;0mTest\e[0m"
 			]
@@ -186,15 +187,15 @@ extends TestCase {
 			[
 				'Mode'      => Common\Text::ModeTagDiv,
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
-				'Expect'    => '<div style="color: #ff0000;">Test</div>'
+				'Colour'    => Dye\Colour::From('#FF0000'),
+				'Expect'    => '<div style="color: #FF0000;">Test</div>'
 			],
 			[
 				'Mode'      => Common\Text::ModeTagDiv,
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
+				'Colour'    => Dye\Colour::From('#FF0000'),
 				'Bold'      => TRUE,
-				'Expect'    => '<div style="font-weight: bold; color: #ff0000;">Test</div>'
+				'Expect'    => '<div style="font-weight: bold; color: #FF0000;">Test</div>'
 			]
 		];
 
@@ -252,15 +253,15 @@ extends TestCase {
 			[
 				'Mode'      => Common\Text::ModeTagSpan,
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
-				'Expect'    => '<span style="color: #ff0000;">Test</span>'
+				'Colour'    => Dye\Colour::From('#FF0000'),
+				'Expect'    => '<span style="color: #FF0000;">Test</span>'
 			],
 			[
 				'Mode'      => Common\Text::ModeTagSpan,
 				'Text'      => 'Test',
-				'Colour'    => Common\Units\Colour::FromString('red'),
+				'Colour'    => Dye\Colour::From('#FF0000'),
 				'Bold'      => TRUE,
-				'Expect'    => '<span style="font-weight: bold; color: #ff0000;">Test</span>'
+				'Expect'    => '<span style="font-weight: bold; color: #FF0000;">Test</span>'
 			]
 		];
 

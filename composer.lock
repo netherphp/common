@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96867499de83f9277e8d271f80618971",
+    "content-hash": "691645924eb134d36a758093c0391276",
     "packages": [
         {
             "name": "brick/math",
@@ -223,6 +223,58 @@
                 }
             ],
             "time": "2023-10-27T15:32:31+00:00"
+        },
+        {
+            "name": "netherphp/dye",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netherphp/dye.git",
+                "reference": "340801b9ea0d7d16ff4c9447079c03a15673006f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/netherphp/dye/zipball/340801b9ea0d7d16ff4c9447079c03a15673006f",
+                "reference": "340801b9ea0d7d16ff4c9447079c03a15673006f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+                "netherphp/standards": ">=0.2.10",
+                "phpunit/phpunit": "^11.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Nether\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Bob Majdak Jr",
+                    "email": "bob@pegasusgate.net",
+                    "homepage": "http://pegasusgate.net/+bob",
+                    "role": "developer"
+                }
+            ],
+            "description": "Simple colour formatting and manipulation.",
+            "keywords": [
+                "colour",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/netherphp/dye/issues",
+                "source": "https://github.com/netherphp/dye/tree/master"
+            },
+            "time": "2024-06-18T20:42:17+00:00"
         },
         {
             "name": "ozdemirburak/iris",
@@ -2492,7 +2544,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "netherphp/dye": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
