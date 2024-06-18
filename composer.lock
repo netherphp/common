@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "691645924eb134d36a758093c0391276",
+    "content-hash": "8bca2df3942e3eb59e83ada39b4ee396",
     "packages": [
         {
             "name": "brick/math",
@@ -277,64 +277,6 @@
             "time": "2024-06-18T20:42:17+00:00"
         },
         {
-            "name": "ozdemirburak/iris",
-            "version": "3.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ozdemirburak/iris.git",
-                "reference": "909650aa1ba67de4560a459a261c830b8050bf56"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ozdemirburak/iris/zipball/909650aa1ba67de4560a459a261c830b8050bf56",
-                "reference": "909650aa1ba67de4560a459a261c830b8050bf56",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~8.0|~9.0",
-                "squizlabs/php_codesniffer": "~3.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OzdemirBurak\\Iris\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Burak Özdemir",
-                    "homepage": "https://ozdemirburak.com"
-                }
-            ],
-            "description": "PHP library for color manipulation and conversion.",
-            "homepage": "https://github.com/ozdemirburak/iris",
-            "keywords": [
-                "color",
-                "conversion",
-                "hex",
-                "hexa",
-                "hsl",
-                "hsla",
-                "hsv",
-                "manipulation",
-                "rgb",
-                "rgba",
-                "transformation"
-            ],
-            "support": {
-                "issues": "https://github.com/ozdemirburak/iris/issues",
-                "source": "https://github.com/ozdemirburak/iris/tree/3.1.1"
-            },
-            "time": "2023-02-22T23:12:10+00:00"
-        },
-        {
             "name": "psr/log",
             "version": "3.0.0",
             "source": {
@@ -564,67 +506,6 @@
                 }
             ],
             "time": "2023-11-08T05:53:05+00:00"
-        },
-        {
-            "name": "savvywombat/color",
-            "version": "1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/SavvyWombat/color-php.git",
-                "reference": "a922e6fec299a42954743a41d536473dd0790936"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/SavvyWombat/color-php/zipball/a922e6fec299a42954743a41d536473dd0790936",
-                "reference": "a922e6fec299a42954743a41d536473dd0790936",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4||^8"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "phpunit/phpunit": "^9.5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "SavvyWombat\\Color\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stuart Jones",
-                    "email": "stuart@savvywombat.com.au",
-                    "homepage": "https://savvywombat.com.au",
-                    "role": "creator"
-                }
-            ],
-            "description": "Package for manipulating colors in multiple color spaces.",
-            "homepage": "https://github.com/SavvyWombat/color-php",
-            "keywords": [
-                "color",
-                "color space",
-                "colors",
-                "conversion",
-                "convert",
-                "hex",
-                "hsl",
-                "manipulation",
-                "rgb",
-                "savvy wombat",
-                "savvywombat",
-                "transform"
-            ],
-            "support": {
-                "issues": "https://github.com/SavvyWombat/color-php/issues",
-                "source": "https://github.com/SavvyWombat/color-php/tree/1.3.1"
-            },
-            "time": "2022-09-29T08:57:37+00:00"
         }
     ],
     "packages-dev": [
