@@ -32,7 +32,7 @@ implements
 	ToArray():
 	array {
 
-		return $this->GetData();
+		return $this->Revalue()->Export();
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -56,6 +56,8 @@ implements
 
 			$this->Data[$Key] = new Common\Filesystem\Directory($Val);
 		}
+
+		$this->Revalue();
 
 		return $this;
 	}
