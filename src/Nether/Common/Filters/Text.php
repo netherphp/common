@@ -305,8 +305,8 @@ class Text {
 		if($Input === NULL)
 		$Input = '';
 
-		if(!is_string($Input))
-		$Input = (string)$Input;
+		//if(!is_string($Input))
+		//$Input = (string)$Input;
 
 		////////
 
