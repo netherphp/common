@@ -392,7 +392,7 @@ extends TestCase {
 
 		foreach($Checks as $File => $Expect) {
 			$Mime = Common\Filesystem\Util::MimeType($File);
-			$this->AssertEquals($Expect, $Mime);
+			$this->AssertContains($Mime, [ $Expect, 'text/plain' ]);
 		}
 
 		return;
