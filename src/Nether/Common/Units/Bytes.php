@@ -222,4 +222,33 @@ format. it can be used both one off or as like a printing/filter provider.
 		return new static($Bytes);
 	}
 
+	static public function
+	FromReadable(string $Input):
+	static {
+
+		$Value = strtolower($Input);
+
+		$Bytes = match(TRUE) {
+			(str_ends_with($Value, 'p'))
+			=> (int)$Input * pow(1024, 5),
+
+			(str_ends_with($Value, 't'))
+			=> (int)$Input * pow(1024, 4),
+
+			(str_ends_with($Value, 'g'))
+			=> (int)$Input * pow(1024, 3),
+
+			(str_ends_with($Value, 'm'))
+			=> (int)$Input * pow(1024, 2),
+
+			(str_ends_with($Value, 'k'))
+			=> (int)$Input * pow(1024, 1),
+
+			default
+			=> (int)$Input
+		};
+
+		return new static($Bytes);
+	}
+
 }
