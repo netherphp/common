@@ -12,6 +12,11 @@ use SplFileInfo;
 ################################################################################
 ################################################################################
 
+ini_set('mime_magic.magicfile', sprintf(
+	'%s/data/magic.mgc',
+	dirname(__FILE__, 4)
+));
+
 class Util {
 
 	#[Common\Meta\Date('2023-10-31')]
@@ -301,6 +306,8 @@ class Util {
 	string {
 
 		$Type = mime_content_type($Filename);
+
+		////////
 
 		if($Type)
 		return $Type;
