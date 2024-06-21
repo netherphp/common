@@ -367,4 +367,35 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestMimeTypeByFilename():
+	void {
+
+		$BaseDir = dirname(__FILE__, 3);
+		$File = NULL;
+		$Expect  = NULL;
+
+		$Checks = [
+			Common\Filesystem\Util::Pathify($BaseDir, 'composer.json')
+			=> 'application/json',
+
+			Common\Filesystem\Util::Pathify($BaseDir, 'phpunit.xml')
+			=> 'text/xml',
+
+			Common\Filesystem\Util::Pathify($BaseDir, 'README.md')
+			=> 'text/plain',
+
+			Common\Filesystem\Util::Pathify($BaseDir, 'src', 'Nether', 'Common', 'Datastore.php')
+			=> 'text/x-php',
+		];
+
+		foreach($Checks as $File => $Expect) {
+			$Mime = Common\Filesystem\Util::MimeType($File);
+			$this->AssertEquals($Expect, $Mime);
+		}
+
+		return;
+	}
+
 }

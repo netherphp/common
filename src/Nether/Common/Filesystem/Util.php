@@ -1,4 +1,5 @@
-<?php
+<?php ##########################################################################
+################################################################################
 
 namespace Nether\Common\Filesystem;
 
@@ -7,6 +8,9 @@ use FileEye;
 
 use Exception;
 use SplFileInfo;
+
+################################################################################
+################################################################################
 
 class Util {
 
@@ -289,6 +293,19 @@ class Util {
 		clearstatcache($Filename);
 
 		return filesize($Filename);
+	}
+
+	#[Common\Date('2024-06-21')]
+	static public function
+	MimeType(string $Filename):
+	string {
+
+		$Type = mime_content_type($Filename);
+
+		if($Type)
+		return $Type;
+
+		return 'application/octet-stream';
 	}
 
 	static public function
