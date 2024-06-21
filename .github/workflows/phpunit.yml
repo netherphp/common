@@ -21,7 +21,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: xdebug
-          extensions: mbstring, intl
+          extensions: mbstring, intl, fileinfo
       - name: Run PHPUnit
         run: |
           composer install
