@@ -13,7 +13,7 @@ extends Common\Error {
 	public ?string
 	$Pattern;
 
-	public ?mixed
+	public mixed
 	$Data;
 
 	public function
