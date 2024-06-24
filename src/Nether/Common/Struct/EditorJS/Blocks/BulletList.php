@@ -8,6 +8,7 @@ use Nether\Common;
 ################################################################################
 ################################################################################
 
+#[Common\meta\Info('Pairs with editorjs/tools/list.js')]
 class BulletList
 extends Common\Struct\EditorJS\Block {
 

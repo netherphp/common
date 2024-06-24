@@ -8,6 +8,7 @@ use Nether\Common;
 ################################################################################
 ################################################################################
 
+#[Common\meta\Info('Pairs with editorjs/tools/atl-break.js')]
 class BreakHr
 extends Common\Struct\EditorJS\Block {
 
