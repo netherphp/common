@@ -1,0 +1,35 @@
+<?php ##########################################################################
+################################################################################
+
+namespace Nether\Common\Struct\EditorJS\Blocks;
+
+use Nether\Common;
+
+################################################################################
+################################################################################
+
+class BreakHr
+extends Common\Struct\EditorJS\Block {
+
+	protected function
+	OnReady(Common\Prototype\ConstructArgs $Argv):
+	void {
+		parent::OnReady($Argv);
+
+		($this->Data)
+		->Mode(Common\Filters\Text::Stripped(...));
+
+		return;
+	}
+
+	public function
+	__ToString():
+	string {
+
+		return sprintf(
+			'<hr class="atl-editorjs-hr %s" />',
+			$this->Data->Mode
+		);
+	}
+
+}
