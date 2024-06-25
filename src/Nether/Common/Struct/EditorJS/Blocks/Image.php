@@ -34,7 +34,7 @@ extends Common\Struct\EditorJS\Block {
 	__ToString():
 	string {
 
-		$Classes = Common\Datastore::FromArray([ 'atl-editorjs-img' ]);
+		$Classes = Common\Datastore::FromArray([ 'atl-blog-img' ]);
 		$UUID = Common\UUID::V7();
 		$Output = '';
 		$Image = NULL;
@@ -57,7 +57,7 @@ extends Common\Struct\EditorJS\Block {
 		}
 
 		if($Gallery)
-		$Classes->Push('atl-editorjs-img-gallery');
+		$Classes->Push('atl-blog-img-gallery');
 
 		$Props = Common\Datastore::FromArray([
 			'data-uuid'          => $UUID,
