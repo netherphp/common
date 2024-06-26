@@ -133,4 +133,13 @@ class Values {
 		);
 	}
 
+	#[Meta\Date('2024-06-26')]
+	#[Meta\Info('Convert a key value map into a list of key=value params.')]
+	static public function
+	MapToParams(string $K, mixed $V):
+	string {
+
+		return sprintf('%s="%s"', $K, $V);
+	}
+
 }
