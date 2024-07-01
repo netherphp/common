@@ -398,7 +398,11 @@ implements
 			?? 'UTC'
 		);
 
-		return new static("{$Date} {$TZ}", $Imm);
+		$Output = new static(new DateTime(
+			$Date, new DateTimeZone($TZ)
+		), $Imm);
+
+		return $Output;
 	}
 
 	#[Common\Meta\Date('2021-08-26')]

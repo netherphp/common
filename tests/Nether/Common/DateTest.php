@@ -82,7 +82,7 @@ extends TestCase {
 			Values::DateFormatYMD,
 			Values::DateFormatFancyDate,
 			Values::DateFormatT12,
-			Values::DateFormatYMDT12VZ,
+			Values::DateFormatYMDT24VO,
 			Values::DateFormatUnix
 		];
 
@@ -142,10 +142,10 @@ extends TestCase {
 	void {
 
 		$Time = 1643840542;
-		$When = '2022-02-02 22:22:22 UTC';
-		$WhenLocal = '2022-02-02 16:22:22 GMT-0600';
+		$When = '2022-02-02 22:22:22 +0000';
+		$WhenLocal = '2022-02-02 16:22:22 -0600';
 		$DateObj = Date::FromDateString($When);
-		$Format = Values::DateFormatYMDT24VZ;
+		$Format = Values::DateFormatYMDT24VO;
 
 		$this->AssertEquals($When, $DateObj->Get($Format));
 
