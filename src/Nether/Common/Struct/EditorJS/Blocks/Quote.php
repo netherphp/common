@@ -25,7 +25,7 @@ extends Common\Struct\EditorJS\Block {
 	}
 
 	public function
-	__ToString():
+	Render():
 	string {
 
 		$Blockquote = NULL;

@@ -3,6 +3,7 @@
 namespace Nether\Common\Struct\EditorJS;
 
 use Nether\Common;
+use Nether\Surface;
 
 use Exception;
 use Stringable;
@@ -17,6 +18,9 @@ implements Stringable {
 
 	public ?Common\Datafilter
 	$Data = NULL;
+
+	public Surface\Engine
+	$Surface;
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
@@ -37,7 +41,23 @@ implements Stringable {
 	__ToString():
 	string {
 
+		return $this->Render();
+	}
+
+	public function
+	Render():
+	string {
+
 		return "<div class=\"mb-4\">[EditorJS\Block type={$this->Type}]</div>";
+	}
+
+	public function
+	SetSurface(Surface\Engine $Surface):
+	static {
+
+		$this->Surface = $Surface;
+
+		return $this;
 	}
 
 }

@@ -6,15 +6,12 @@ namespace Nether\Common\Struct\EditorJS\Blocks;
 use Nether\Atlantis;
 use Nether\Common;
 
-use Stringable;
-
 ################################################################################
 ################################################################################
 
 #[Common\meta\Info('Pairs with editorjs/tools/atl-image.js')]
 class Image
-extends Common\Struct\EditorJS\Block
-implements Stringable {
+extends Common\Struct\EditorJS\Block {
 
 	protected function
 	OnReady(Common\Prototype\ConstructArgs $Raw):
@@ -37,24 +34,13 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__ToString():
-	string {
-
-		return $this->Render();
-	}
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-
-	public function
 	Render():
 	string {
 
 		$Classes = Common\Datastore::FromArray([ 'atl-blog-img' ]);
 		$UUID = Common\UUID::V7();
-		$Output = '';
+		$Output = NULL;
 		$Props = NULL;
-		$Params = NULL;
 		$Image = NULL;
 		$Caption = NULL;
 
@@ -74,8 +60,6 @@ implements Stringable {
 			=> $this->RenderMiscImage()
 		};
 
-		////////
-
 		$Props = Common\Datastore::FromArray([
 			'data-uuid'          => $UUID,
 			'data-image-url'     => $this->Data->ImageURL,
@@ -83,14 +67,12 @@ implements Stringable {
 			'data-image-primary' => $this->Data->Primary
 		]);
 
-		$Params = $Props->MapKeyValue(Common\Values::MapToParams(...));
-
 		////////
 
-		$Output .= sprintf(
+		$Output = sprintf(
 			'<div class="%s" %s>',
 			$Classes->Join(' '),
-			$Params->Join(' ')
+			$Props->MapKeyValue(Common\Values::MapToParams(...))->Join(' ')
 		);
 
 		if($Image)

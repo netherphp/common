@@ -22,7 +22,7 @@ extends Common\Struct\EditorJS\Block {
 	}
 
 	public function
-	__ToString():
+	Render():
 	string {
 
 		return "<div class=\"mb-4\">{$this->Data->Text}</div>\n";
