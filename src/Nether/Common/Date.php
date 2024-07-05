@@ -41,7 +41,7 @@ implements
 	////////////////////////////////////////////////////////////////
 
 	public function
-	__Construct(mixed $Input='now', bool $Immutable=FALSE) {
+	__Construct(mixed $Input='now', bool $Immutable=TRUE) {
 
 		if($Input instanceof DateTimeInterface)
 		$this->ConstructFromDateTime($Input, $Immutable);
