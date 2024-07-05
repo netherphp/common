@@ -277,12 +277,12 @@ extends TestCase {
 		// the same but it will lose the timezone name due to how we cloned.
 
 		$FromDate = new Date($Control);
-		$this->AssertTrue($FromDate->GetDateTime() instanceof DateTime);
+		$this->AssertTrue($FromDate->GetDateTime() instanceof DateTimeImmutable);
 		$this->AssertEquals('+00:00', $FromDate->GetTimezoneName());
 		$this->AssertEquals(0, $FromDate->GetTimezoneOffset());
 
-		$FromDate = new Date($Control, TRUE);
-		$this->AssertTrue($FromDate->GetDateTime() instanceof DateTimeImmutable);
+		$FromDate = new Date($Control, FALSE);
+		$this->AssertTrue($FromDate->GetDateTime() instanceof DateTime);
 		$this->AssertEquals('+00:00', $FromDate->GetTimezoneName());
 		$this->AssertEquals(0, $FromDate->GetTimezoneOffset());
 
@@ -295,12 +295,12 @@ extends TestCase {
 		// should be exactly the same.
 
 		$FromDateTime = new Date($Control->GetDateTime());
-		$this->AssertTrue($FromDateTime->GetDateTime() instanceof DateTime);
+		$this->AssertTrue($FromDateTime->GetDateTime() instanceof DateTimeImmutable);
 		$this->AssertEquals('America/Chicago', $Control->GetTimezoneName());
 		$this->AssertEquals(-21600, $Control->GetTimezoneOffset());
 
-		$FromDateTime = new Date($Control->GetDateTime(), TRUE);
-		$this->AssertTrue($FromDateTime->GetDateTime() instanceof DateTimeImmutable);
+		$FromDateTime = new Date($Control->GetDateTime(), FALSE);
+		$this->AssertTrue($FromDateTime->GetDateTime() instanceof DateTime);
 		$this->AssertEquals('America/Chicago', $Control->GetTimezoneName());
 		$this->AssertEquals(-21600, $Control->GetTimezoneOffset());
 
