@@ -173,8 +173,10 @@ class OneScript {
 		foreach($this->Files as $File)
 		$this->Output .= $this->RenderFile($File);
 
-		if($this->Outfile)
-		file_put_contents($this->Outfile, $this->Output);
+		if($this->Outfile) {
+			file_put_contents($this->Outfile, $this->Output);
+			chmod($this->Outfile, 0666);
+		}
 
 		////////
 
