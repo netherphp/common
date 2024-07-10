@@ -119,6 +119,17 @@ class Util {
 		return;
 	}
 
+	static public function
+	ChmodOctal(string $Path):
+	int {
+
+		clearstatcache();
+
+		$Val = fileperms($Path) & 0xFFF;
+
+		return decoct($Val);
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

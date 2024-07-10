@@ -5,6 +5,10 @@ namespace Nether\Common;
 class Values {
 
 	const
+	Zero = 0,
+	One  = 1;
+
+	const
 	SecPerMin = 60,
 	SecPerHr  = 3600,
 	SecPerDay = 86400,
