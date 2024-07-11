@@ -116,18 +116,20 @@ class Util {
 		chmod($Path, $Mode);
 		umask($UMask);
 
+		clearstatcache();
+
 		return;
 	}
 
 	static public function
 	ChmodOctal(string $Path):
-	int {
+	string {
 
 		clearstatcache();
 
-		$Val = fileperms($Path) & 0xFFF;
+		$Val = fileperms($Path) & 0o777;
 
-		return decoct($Val);
+		return sprintf('0o%s', decoct($Val));
 	}
 
 	////////////////////////////////////////////////////////////////
