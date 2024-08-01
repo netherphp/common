@@ -18,6 +18,48 @@ extends TestCase {
 
 	/** @test */
 	public function
+	TestDefine():
+	void {
+
+		$Store = new Common\Datastore;
+		$this->AssertFalse(isset($Store['One']));
+		$this->AssertFalse(isset($Store['Two']));
+		$this->AssertFalse(isset($Store['Three']));
+
+		// define it.
+
+		$Store->Define('One', 1);
+		$this->AssertEquals(1, $Store['One']);
+
+		// fail to overwrite it.
+
+		$Store->Define('One', 2);
+		$this->AssertEquals(1, $Store['One']);
+
+		// define a handful.
+
+		$Store->Define([
+			'One'   => 69,
+			'Two'   => 2,
+			'Three' => 3
+		]);
+
+		// fail to overwrite One
+
+		$this->AssertEquals(1, $Store['One']);
+
+		// defined the others.
+
+		$this->AssertEquals(2, $Store['Two']);
+		$this->AssertEquals(3, $Store['Three']);
+
+		////////
+
+		return;
+	}
+
+	/** @test */
+	public function
 	TestHeadMethodsAgainstLists():
 	void {
 

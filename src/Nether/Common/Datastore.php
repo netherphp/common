@@ -999,13 +999,27 @@ implements
 	}
 
 	public function
-	Define(string $Key, mixed $Val):
+	Define(string|array $Key, mixed $Val=NULL):
 	static {
 	/*//
 	@date 2022-08-29
 	add this data under this key, but only if it does not already exist.
 	the "do not overwrite" version of Shove.
 	//*/
+
+		if(is_array($Key)) {
+			$K = NULL;
+			$V = NULL;
+
+			foreach($Key as $K => $V) {
+				if(!array_key_exists($K, $this->Data))
+				$this->Data[$K] = $V;
+			}
+
+			return $this;
+		}
+
+		////////
 
 		if(!array_key_exists($Key, $this->Data))
 		$this->Data[$Key] = $Val;
