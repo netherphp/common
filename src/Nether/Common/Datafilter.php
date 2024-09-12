@@ -413,6 +413,63 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	// new api i am building trying to ween off the __Call and __Get.
+
+	#[Meta\Date('2024-09-12')]
+	public function
+	FilterPush(string $Key, callable|string|array $Func, ...$Argv):
+	static {
+
+		$Key = $this->PrepareKey($Key);
+		$F = NULL;
+		$Cf = NULL;
+		$Cv = NULL;
+
+		////////
+
+		if(is_array($Func)) {
+			foreach($Func as $F) {
+				if(!is_array($F) || count($F) < 1)
+				throw new Exception('FilterPush requires Array<Array<Callable, ...Argv>>');
+
+				$Cf = current(array_slice($F, 0, 1));
+				$Cv = array_slice($F, 1);
+
+				$this->FilterAdd($Key, $Cf, ...$Cv);
+			}
+
+			return $this;
+		}
+
+		////////
+
+		$this->FilterAdd($Key, $Func, $Argv);
+
+		return $this;
+	}
+
+	public function
+	FilterAdd(string $Key, callable|string $Func, ...$Argv):
+	static {
+
+		$Key = $this->PrepareKey($Key);
+
+		if(!is_callable($Func))
+		throw new Exception('supplied filter not callable.');
+
+		////////
+
+		if(!array_key_exists($Key, $this->__Filters))
+		$this->__Filters[$Key] = [];
+
+		$this->__Filters[$Key][] = new DatafilterCallable($Func, $Argv);
+
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	public function
 	PrepareKey(string $Key):
 	string {
