@@ -443,7 +443,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 
 		////////
 
-		$this->FilterAdd($Key, $Func, $Argv);
+		$this->FilterAdd($Key, $Func, ...$Argv);
 
 		return $this;
 	}
