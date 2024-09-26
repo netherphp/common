@@ -22,6 +22,9 @@ extends Common\Prototype {
 	public string
 	$Bin;
 
+	public string
+	$Version;
+
 	public Common\Datastore
 	$Files;
 
@@ -91,17 +94,26 @@ extends Common\Prototype {
 		return $this;
 	}
 
+	public function
+	SetVersion(string $Version):
+	static {
+
+		$this->Version = $Version;
+
+		return $this;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
 	public function
-	Build():
+	Build(?string $Version=NULL):
 	void {
 
 		$this->PrepareForBuild();
 		$this->DeleteFilesInBuild();
 		$this->CopyFilesIntoBuild();
-		$this->CompilePharOfBuild();
+		$this->CompilePharOfBuild($Version);
 		$this->InspectPharOfBuild();
 
 		return;
@@ -259,11 +271,34 @@ extends Common\Prototype {
 	}
 
 	public function
-	CompilePharOfBuild():
+	CompilePharOfBuild(?string $Version=NULL):
 	void {
 
+		// if null Version will be pulled from the annotation.
+		// - if valid string Version will be appended to the file name.
+		// - if empty string Version will not be appended.
+
+		////////
+
+		$Version ??= $this->Version;
+		$Outfile = $this->OutputFile;
+
+		////////
+
+		if($Version)
+		$Outfile = str_replace(
+			sprintf('.%s.phar', $Version),
+			sprintf('-%s.phar', $Version),
+			Common\Filesystem\Util::ReplaceFileExtension(
+				$Outfile,
+				sprintf('%s.phar', $Version)
+			)
+		);
+
+		////////
+
 		$Files = $this->IndexFilesInBuild();
-		$Outfile = Common\Filesystem\Util::Pathify($this->BuildDir, $this->OutputFile);
+		$Outfile = Common\Filesystem\Util::Pathify($this->BuildDir, $Outfile);
 		$Phar = new Phar($Outfile);
 
 		$Phar->StartBuffering();
@@ -348,7 +383,7 @@ extends Common\Prototype {
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	From(string $PharOut, string $Bin, Common\Datastore $Files, ?string $BaseDir=NULL, ?string $BuildDir=NULL, ?Common\Datastore $FileFilters=NULL):
+	From(string $PharOut, string $Bin, string $Version, Common\Datastore $Files, ?string $BaseDir=NULL, ?string $BuildDir=NULL, ?Common\Datastore $FileFilters=NULL):
 	static {
 
 		$Output = new static;
@@ -356,6 +391,7 @@ extends Common\Prototype {
 		($Output)
 		->SetOutputFile($PharOut)
 		->SetBin($Bin)
+		->SetVersion($Version)
 		->SetFileList($Files)
 		->SetBaseDir($BaseDir)
 		->SetBuildDir($BuildDir)
