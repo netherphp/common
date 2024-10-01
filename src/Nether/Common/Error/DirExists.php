@@ -4,12 +4,12 @@ namespace Nether\Common\Error;
 
 use Exception;
 
-class DirNotFound
+class DirExists
 extends Exception {
 
 	public function
 	__Construct(string $Path) {
-		parent::__Construct("dir not found: {$Path}");
+		parent::__Construct("dir already exists: {$Path}");
 		return;
 	}
 
