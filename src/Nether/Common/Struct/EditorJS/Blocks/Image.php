@@ -37,7 +37,7 @@ extends Common\Struct\EditorJS\Block {
 	Render():
 	string {
 
-		$Classes = Common\Datastore::FromArray([ 'atl-blog-img' ]);
+		$Classes = Common\Datastore::FromArray([ 'atl-blog-post-img' ]);
 		$UUID = Common\UUID::V7();
 		$Output = NULL;
 		$Props = NULL;
