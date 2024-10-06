@@ -1663,6 +1663,25 @@ implements
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	#[Meta\Date('2024-10-06')]
+	public function
+	Keystore():
+	static {
+
+		return static::FromArray($this->Keys());
+	}
+
+	#[Meta\Date('2024-10-06')]
+	public function
+	Valuestore():
+	static {
+
+		return static::FromArray($this->Values());
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	#[Meta\Date('2024-06-10')]
 	#[Meta\Info('returns new reversed dataset.')]
 	public function
