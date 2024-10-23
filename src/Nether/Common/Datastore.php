@@ -1513,6 +1513,20 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2024-10-23')]
+	public function
+	Search(mixed $Val, bool $Strict=FALSE):
+	mixed {
+	/*//
+	@date 2015-12-02
+	returns if this datastore has the requested value. if the value is found
+	it will return the key that contains it. if not found it will return a
+	boolean false.
+	//*/
+
+		return array_search($Val, $this->Data, $Strict);
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
