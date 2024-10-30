@@ -252,6 +252,22 @@ class Text {
 		return $Output;
 	}
 
+	#[Common\Meta\DateAdded('2022-02-17')]
+	#[Common\Meta\Info('Generate a Pascal formatted string from a Key formatted string.')]
+	static public function
+	WordsFromKey(mixed $Input):
+	string {
+
+		static::Prepare($Input);
+
+		$Output = preg_replace('#([A-Z])#', ' \\1', $Input);
+		$Output = static::SlottableKey($Output);
+		$Output = ucwords(str_replace('-', ' ', $Output));
+		$Output = preg_replace('#[^A-Za-z0-9 ]#', '', $Output);
+
+		return $Output;
+	}
+
 	#[Common\Meta\DateAdded('2023-07-06')]
 	#[Common\Meta\Info('Convert spaced indenting into tabbed indenting.')]
 	static public function
