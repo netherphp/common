@@ -311,6 +311,23 @@ implements ArrayAccess, Countable, IteratorAggregate {
 		return $this;
 	}
 
+	#[Meta\Date('2024-11-16')]
+	public function
+	Pick(...$Keys):
+	Datastore {
+
+		$Output = new Datastore;
+
+		////////
+
+		foreach($Keys as $K)
+		$Output->Set($K, $this->Get($K));
+
+		////////
+
+		return $Output;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
