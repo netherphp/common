@@ -103,6 +103,30 @@ class Values {
 		return $Test ? $One : $Other;
 	}
 
+	#[Meta\Date('2024-11-21')]
+	static public function
+	IsNth(int $Num, int $Nth):
+	bool {
+
+		return (($Num % $Nth) === 0);
+	}
+
+	#[Meta\Date('2024-11-21')]
+	static public function
+	IsEven(int $Num):
+	bool {
+
+		return static::IsNth($Num, 2);
+	}
+
+	#[Meta\Date('2024-11-21')]
+	static public function
+	IsOdd(int $Num):
+	bool {
+
+		return !static::IsNth($Num, 2);
+	}
+
 	#[Meta\Date('2024-04-29')]
 	#[Meta\Info('Check if a string is only made up of numbers (Base 10).')]
 	static public function
@@ -136,6 +160,9 @@ class Values {
 			&& $Num > 0
 		);
 	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	#[Meta\Date('2024-06-26')]
 	#[Meta\Info('Convert a key value map into a list of key=value params.')]

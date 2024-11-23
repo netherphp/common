@@ -317,6 +317,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	Datastore {
 
 		$Output = new Datastore;
+		$K = NULL;
 
 		////////
 
