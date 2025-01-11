@@ -29,7 +29,8 @@ implements
 	use
 	Common\Package\PropertyInfoPackage,
 	Common\Package\ToArray,
-	Common\Package\ToJSON;
+	Common\Package\ToJSON,
+	Common\Package\ToStringAsJSON;
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
@@ -109,6 +110,26 @@ implements
 	static {
 
 		return new static($X, $Y);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	FromVectorkin(mixed $Input):
+	static {
+
+		$Output = new static;
+
+		if(is_array($Input)) {
+			if(array_key_exists('X', $Input))
+			$Output->X = $Input['X'];
+
+			if(array_key_exists('Y', $Input))
+			$Output->Y = $Input['Y'];
+		}
+
+		return $Output;
 	}
 
 };
