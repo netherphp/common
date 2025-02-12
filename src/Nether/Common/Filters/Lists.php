@@ -94,6 +94,8 @@ class Lists {
 
 		////////
 
+		$Output = array_map(trim(...), $Output);
+
 		return static::ArrayOf($Output, $Filters);
 	}
 
