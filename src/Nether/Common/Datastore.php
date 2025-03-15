@@ -802,6 +802,48 @@ implements
 		return FALSE;
 	}
 
+	#[Meta\Date('2025-03-14')]
+	#[Meta\Info('Use a callable to check if the dataset has something.')]
+	public function
+	HasThing(callable $FuncKeyValue):
+	bool {
+
+		$K = NULL;
+		$V = NULL;
+
+		////////
+
+		foreach($this->Data as $K=> $V) {
+			if($FuncKeyValue($K, $V))
+			return TRUE;
+
+			continue;
+		}
+
+		return FALSE;
+	}
+
+	#[Meta\Date('2025-03-14')]
+	#[Meta\Info('Use a callable to find an item in the dataset.')]
+	public function
+	FindThing(callable $FuncKeyValue):
+	?Units\KeyValue {
+
+		$K = NULL;
+		$V = NULL;
+
+		////////
+
+		foreach($this->Data as $K=> $V) {
+			if($FuncKeyValue($K, $V))
+			return new Units\KeyValue($K, $V);
+
+			continue;
+		}
+
+		return NULL;
+	}
+
 	public function
 	IsFirstKey(mixed $Key):
 	bool {
