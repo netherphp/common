@@ -5,6 +5,9 @@ namespace Nether\Common;
 class Values {
 
 	const
+	NullUUID = '00000000-0000-0000-0000-000000000000';
+
+	const
 	Zero = 0,
 	One  = 1;
 

@@ -434,6 +434,7 @@ implements ArrayAccess, Countable, IteratorAggregate {
 	// new api i am building trying to ween off the __Call and __Get.
 
 	#[Meta\Date('2024-09-12')]
+	#[Meta\Info('This is the preferred method as it wraps FilterAdd to add array syntax support.')]
 	public function
 	FilterPush(string $Key, callable|string|array $Func, ...$Argv):
 	static {
@@ -466,6 +467,8 @@ implements ArrayAccess, Countable, IteratorAggregate {
 		return $this;
 	}
 
+	#[Meta\Date('2024-09-12')]
+	#[Meta\Info('Add a single filter to the stack of the specified input.')]
 	public function
 	FilterAdd(string $Key, callable|string $Func, ...$Argv):
 	static {
