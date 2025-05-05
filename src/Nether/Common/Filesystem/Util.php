@@ -313,6 +313,26 @@ class Util {
 	MimeType(string $Filename):
 	string {
 
+		return static::FileMimeType($Filename);
+	}
+
+	static public function
+	FileExtension(string $Filename):
+	?string {
+
+		if(str_contains($Filename, '.'))
+		return strtolower(substr(
+			$Filename,
+			(strrpos($Filename, '.') + 1)
+		));
+
+		return NULL;
+	}
+
+	static public function
+	FileMimeType(string $Filename):
+	string {
+
 		$Type = mime_content_type($Filename);
 
 		////////
@@ -321,6 +341,16 @@ class Util {
 		return $Type;
 
 		return 'application/octet-stream';
+	}
+
+	static public function
+	FileMimeExtension(string $Type):
+	string {
+
+		$FileEye = new FileEye\MimeMap\Type($Type);
+		$Ext = $FileEye->GetDefaultExtension();
+
+		return $Ext;
 	}
 
 	static public function
