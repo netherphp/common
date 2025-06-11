@@ -230,6 +230,38 @@ extends TestCase {
 		return;
 	}
 
+	/** @test */
+	public function
+	TestDecadeInner():
+	void {
+
+		$Time = Timeframe::FromDecadeInner(1980);
+
+		$this->AssertEquals($Time->GetStartFormat('Y-m-d H:i:s'), '1980-01-01 00:00:00');
+		$this->AssertEquals($Time->GetStopFormat('Y-m-d H:i:s'), '1989-12-31 23:59:59');
+		$this->AssertEquals(315532800, $Time->GetStartTime());
+		$this->AssertEquals(631151999, $Time->GetStopTime());
+		$this->AssertTrue(str_starts_with($Time->Get(), '9yr 11mo '));
+
+		return;
+	}
+
+	/** @test */
+	public function
+	TestDecadeOuter():
+	void {
+
+		$Time = Timeframe::FromDecadeOuter(1980);
+
+		$this->AssertEquals($Time->GetStartFormat('Y-m-d H:i:s'), '1980-01-01 00:00:00');
+		$this->AssertEquals($Time->GetStopFormat('Y-m-d H:i:s'), '1990-01-01 00:00:00');
+		$this->AssertEquals(315532800, $Time->GetStartTime());
+		$this->AssertEquals(631152000, $Time->GetStopTime());
+		$this->AssertEquals($Time->Get(), '10yr');
+
+		return;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

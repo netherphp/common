@@ -237,11 +237,56 @@ Printing via Stringable will print using all the current instance settings.
 	GetTimeDiff():
 	int {
 
-		$TimeStart = $this->Start->GetTimestamp();
-		$TimeStop = $this->Stop->GetTimestamp();
+		$TimeStart = $this->GetStartTime();
+		$TimeStop = $this->GetStopTime();
 
 		return ($TimeStop - $TimeStart);
 	}
+
+	public function
+	GetStart():
+	DateTime {
+
+		return $this->Start;
+	}
+
+	public function
+	GetStartTime():
+	int {
+
+		return $this->Start->GetTimestamp();
+	}
+
+	public function
+	GetStartFormat(string $Format):
+	string {
+
+		return $this->Start->Format($Format);
+	}
+
+	public function
+	GetStop():
+	DateTime {
+
+		return $this->Stop;
+	}
+
+	public function
+	GetStopTime():
+	int {
+
+		return $this->Stop->GetTimestamp();
+	}
+
+	public function
+	GetStopFormat(string $Format):
+	string {
+
+		return $this->Stop->Format($Format);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 	public function
 	SetStart(mixed $When):
@@ -384,6 +429,42 @@ Printing via Stringable will print using all the current instance settings.
 		$DT->Add($Diff);
 
 		return (int)abs($DT->GetTimestamp());
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	FromDecade(int $Year, bool $EndOn=TRUE):
+	static {
+
+		$Start = sprintf('%d-01-01 00:00:00 GMT', $Year);
+
+		$Stop = match($EndOn) {
+			TRUE  => sprintf('%d-12-31 23:59:59 GMT', ($Year + 9)),
+			FALSE => sprintf('%d-01-01 00:00:00 GMT', ($Year + 10)),
+		};
+
+		$Output = new static(
+			Start: $Start,
+			Stop: $Stop
+		);
+
+		return $Output;
+	}
+
+	static public function
+	FromDecadeInner(int $Year):
+	static {
+
+		return static::FromDecade($Year, TRUE);
+	}
+
+	static public function
+	FromDecadeOuter(int $Year):
+	static {
+
+		return static::FromDecade($Year, FALSE);
 	}
 
 }
