@@ -6,6 +6,8 @@ use Nether\Common;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use Stringable;
 
 class Timeframe
@@ -433,6 +435,25 @@ Printing via Stringable will print using all the current instance settings.
 
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
+
+	static public function
+	Today(string $Timezone='GMT'):
+	static {
+
+		$DateTimeZone = new DateTimeZone($Timezone);
+		$Today = new DateTimeImmutable('today', $DateTimeZone);
+		$Tomorrow = $Today->Modify('+1 day')->Modify('-1 second');
+
+		$Start = $Today->Format(Common\Values::DateFormatYMDT24VO);
+		$Stop = $Tomorrow->Format(Common\Values::DateFormatYMDT24VO);
+
+		$Output = new static(
+			Start: $Start,
+			Stop: $Stop
+		);
+
+		return $Output;
+	}
 
 	static public function
 	FromDecade(int $Year, bool $EndOn=TRUE):
