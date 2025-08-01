@@ -164,6 +164,28 @@ class Values {
 		);
 	}
 
+	#[Meta\Date('2025-07-31')]
+	#[Meta\Info('When people backspace the HTML Editor empty it often leaves behind an empty div>br that breaks more simple empty checks.')]
+	static public function
+	IsEmptyEditorString(?string $Input):
+	bool {
+
+		// the simple check.
+
+		if(!$Input)
+		return TRUE;
+
+		// check if it was empty html.
+
+		if(strlen($Input) < 32)
+		if(strip_tags($Input) === '')
+		return TRUE;
+
+		////////
+
+		return FALSE;
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

@@ -961,13 +961,21 @@ implements
 
 		////////
 
-		if(is_string($Val))
-		if($Val === 'null' || $Val === 'NULL')
-		$Val = NULL;
+		if(is_string($Val)) {
+			if($Val === 'null' || $Val === 'NULL')
+			$Val = NULL;
+		}
 
 		////////
 
 		return ($Val === NULL);
+	}
+
+	public function
+	IsNotNull(string $Key):
+	bool {
+
+		return !$this->IsNull($Key);
 	}
 
 	#[Meta\Date('2023-11-08')]
