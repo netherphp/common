@@ -186,6 +186,15 @@ class Values {
 		return FALSE;
 	}
 
+	#[Meta\Date('2025-08-08')]
+	#[Meta\Info('I am beyond infurated that we do not have an !instanceof operator.')]
+	static public function
+	IsInstanceOf(mixed $Thing, string $Class):
+	bool {
+
+		return ($Thing instanceof $Class);
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
