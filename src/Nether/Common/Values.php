@@ -195,6 +195,22 @@ class Values {
 		return ($Thing instanceof $Class);
 	}
 
+	#[Meta\Date('2025-07-07')]
+	static public function
+	IsOnWindows():
+	bool {
+
+		return (PHP_OS_FAMILY === 'Windows');
+	}
+
+	#[Meta\Date('2025-07-07')]
+	static public function
+	IsOnUnix():
+	bool {
+
+		return (PHP_OS_FAMILY !== 'Windows');
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 

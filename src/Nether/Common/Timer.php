@@ -112,4 +112,23 @@ class Timer {
 		return $this->Time;
 	}
 
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
+	static public function
+	New(?callable $Func=NULL, bool $Start=FALSE):
+	static {
+
+		$Output = new static($Func);
+
+		////////
+
+		if($Start)
+		$Output->Start();
+
+		////////
+
+		return $Output;
+	}
+
 }
