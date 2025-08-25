@@ -1043,6 +1043,9 @@ implements
 	Inc(string|int $Key, int|float $Inc=1):
 	int|float {
 
+		if(!isset($this->Data[$Key]))
+		$this->Data[$Key] = 0;
+
 		$Val = match(TRUE) {
 			is_int($this->Data[$Key]),
 			is_float($this->Data[$Key])
