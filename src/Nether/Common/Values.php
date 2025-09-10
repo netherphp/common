@@ -133,12 +133,15 @@ class Values {
 	#[Meta\Date('2024-04-29')]
 	#[Meta\Info('Check if a string is only made up of numbers (Base 10).')]
 	static public function
-	IsNumericDec(?string $Input):
+	IsNumericDec(mixed $Input):
 	bool {
 
 		// just do not trust is_numeric() and the stupid amount of things
 		// it checks when all we wanted was a series of decimal digits in
 		// a string.
+
+		if(!is_string($Input))
+		return FALSE;
 
 		$Input ??= '';
 		$Num = preg_match('/^[0-9]{1,}$/', $Input);
