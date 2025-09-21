@@ -1566,6 +1566,14 @@ implements
 		return $this;
 	}
 
+	#[Meta\Date('2025-09-19')]
+	public function
+	Flop():
+	static {
+
+		return static::FromArray(array_flip($this->Data));
+	}
+
 	#[Meta\Date('2024-10-23')]
 	public function
 	Search(mixed $Val, bool $Strict=FALSE):
