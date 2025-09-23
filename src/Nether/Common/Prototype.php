@@ -187,8 +187,14 @@ implements
 	#[Meta\Date('2023-07-26')]
 	#[Meta\Info('Factory for creating new instances using an array.')]
 	static public function
-	FromArray(iterable $Input):
+	FromArray(object|iterable $Input):
 	static {
+
+		if(is_object($Input))
+		if($Input::class === static::class)
+		return $Input;
+
+		////////
 
 		return new static($Input, NULL, 0);
 	}
