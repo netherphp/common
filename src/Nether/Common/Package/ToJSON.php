@@ -16,4 +16,14 @@ trait ToJSON {
 		return Common\Filters\Text::ReadableJSON($this);
 	}
 
+	public function
+	ToSlimJSON():
+	string {
+
+		if($this instanceof Common\Interfaces\ToArray)
+		return json_encode($this->ToArray());
+
+		return json_encode($this);
+	}
+
 };
