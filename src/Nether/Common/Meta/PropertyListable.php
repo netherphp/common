@@ -16,7 +16,7 @@ class PropertyListable {
 	$MethodArgs;
 
 	public function
-	__Construct(string $MethodName=NULL, ...$MethodArgs) {
+	__Construct(?string $MethodName=NULL, ...$MethodArgs) {
 
 		$this->MethodName = $MethodName;
 		$this->MethodArgs = $MethodArgs;
