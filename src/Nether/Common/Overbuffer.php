@@ -89,11 +89,11 @@ implements
 	#[Meta\Date('2023-11-23')]
 	public function
 	Stop():
-	string {
+	static {
 
-		$Output = ob_get_clean();
+		$this->Buffer = ob_get_clean();
 
-		return $Output;
+		return $this;
 	}
 
 	public function

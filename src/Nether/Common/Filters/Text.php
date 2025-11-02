@@ -338,6 +338,26 @@ class Text {
 		return static::Tabbify($Data);
 	}
 
+	static public function
+	RDNSify(mixed $Input):
+	string {
+
+		static::Prepare($Input);
+
+		if($Input === NULL)
+		$Input = '';
+
+		////////
+
+		$Bits = explode('.', (string)$Input);
+		$Bits = join('.', array_reverse($Bits));
+
+		return $Bits;
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	#[Common\Meta\DateAdded('2023-10-18')]
 	#[Common\Meta\Info('Expecting a dataset in JSON return an array, silently trashing it and returning an empty dataset if it was invalid.')]
 	static public function
