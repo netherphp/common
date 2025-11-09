@@ -14,7 +14,7 @@ class Deprecated {
 	$Info;
 
 	public function
-	__Construct(string $Date, string $Info=NULL) {
+	__Construct(string $Date, ?string $Info=NULL) {
 
 		$this->Date = $Date;
 		$this->Info = $Info;
