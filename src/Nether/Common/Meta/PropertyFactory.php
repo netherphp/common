@@ -20,7 +20,7 @@ extends PropertyObjectify {
 	$Source;
 
 	public function
-	__Construct(mixed $Callable, string $Source=NULL, ...$Args) {
+	__Construct(mixed $Callable, ?string $Source=NULL, ...$Args) {
 
 		$this->Callable = $Callable;
 		$this->Source = $Source;

@@ -170,7 +170,7 @@ implements Stringable {
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	New(string $Text=NULL, int $Mode=self::ModePlain, Dye\Colour $Colour=NULL, bool $Bold=FALSE, bool $Italic=FALSE, bool $Underline=FALSE):
+	New(?string $Text=NULL, int $Mode=self::ModePlain, ?Dye\Colour $Colour=NULL, bool $Bold=FALSE, bool $Italic=FALSE, bool $Underline=FALSE):
 	static {
 
 		return new static([

@@ -16,7 +16,7 @@ class Lists {
 	#[Common\Meta\DateAdded('2023-07-07')]
 	#[Common\Meta\Info('Run a set of filters over a list of items. If a single item is provided it will be wrapped in an array.')]
 	static public function
-	ArrayOf(mixed $Items, callable|iterable $Filters=NULL):
+	ArrayOf(mixed $Items, callable|iterable|NULL $Filters=NULL):
 	array {
 
 		$Output = static::Prepare($Items);
@@ -47,7 +47,7 @@ class Lists {
 	#[Common\Meta\DateAdded('2023-07-07')]
 	#[Common\Meta\Info('Same as ArrayOf except Falsy values will return NULL.')]
 	static public function
-	ArrayOfNullable(mixed $Items, callable|iterable $Filters=NULL):
+	ArrayOfNullable(mixed $Items, callable|iterable|NULL $Filters=NULL):
 	?array {
 
 		$Output = static::Prepare($Items);
@@ -72,7 +72,7 @@ class Lists {
 	#[Common\Meta\DateAdded('2023-07-07')]
 	#[Common\Meta\Info('Same as ArrayOf except Falsy values will return NULL.')]
 	static public function
-	CommaOfNullable(mixed $Items, callable|iterable $Filters=NULL):
+	CommaOfNullable(mixed $Items, callable|iterable|NULL $Filters=NULL):
 	?array {
 
 		$Output = static::Prepare($Items);
