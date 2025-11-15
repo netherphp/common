@@ -1689,7 +1689,9 @@ implements
 	Flatten():
 	static {
 
-		return new static(array_unique($this->Data));
+		$this->Data = array_unique($this->Data);
+
+		return $this;
 	}
 
 	#[Meta\Date('2023-11-11')]
@@ -1698,9 +1700,7 @@ implements
 	Unique():
 	static {
 
-		$this->Data = array_unique($this->Data);
-
-		return $this;
+		return new static(array_unique($this->Data));
 	}
 
 	////////////////////////////////////////////////////////////////
