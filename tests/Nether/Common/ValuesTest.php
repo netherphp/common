@@ -107,7 +107,8 @@ extends TestCase {
 		foreach($Dataset as $Input)
 		$this->AssertEquals(
 			Values::IsNumericDec($Input[0]),
-			$Input[1]
+			$Input[1],
+			"{$Input[0]}, {$Input[1]}"
 		);
 
 		return;

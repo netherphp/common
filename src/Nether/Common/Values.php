@@ -140,11 +140,14 @@ class Values {
 		// it checks when all we wanted was a series of decimal digits in
 		// a string.
 
+		if(is_int($Input) || is_float($Input))
+		return TRUE;
+
 		if(!is_string($Input))
 		return FALSE;
 
 		$Input ??= '';
-		$Num = preg_match('/^[0-9]{1,}$/', $Input);
+		$Num = preg_match('/^[0-9\.]{1,}$/', $Input);
 
 		return (TRUE
 			&& $Num !== FALSE

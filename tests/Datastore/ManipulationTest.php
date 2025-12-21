@@ -239,7 +239,7 @@ extends TestCase {
 	void {
 
 		$Store = new Common\Datastore([ 1, 2, 2, 3, 3, 3 ]);
-		$Uniq = $Store->Flatten();
+		$Uniq = $Store->Unique();
 
 		// check we got a new list of unique items that is separate from
 		// the original datastore.
@@ -247,7 +247,7 @@ extends TestCase {
 		$this->AssertEquals(6, $Store->Count());
 		$this->AssertEquals(3, $Uniq->Count());
 
-		$Store->Unique();
+		$Store->Flatten();
 		$this->AssertEquals(3, $Store->Count());
 		$this->AssertEquals(3, $Uniq->Count());
 

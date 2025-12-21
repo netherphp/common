@@ -2018,15 +2018,15 @@ implements
 
 		switch($Format) {
 			case static::FormatJSON:
-				$Data->Exec(fn()=> print( json_encode($this->Data, $FlagsJSON)) );
+				$Data->Execute(fn()=> print(json_encode($this->Data, $FlagsJSON)));
 			break;
 			default:
-				$Data->Exec(fn()=> print( serialize($this->Data)) );
+				$Data->Execute(fn()=> print(serialize($this->Data)));
 			break;
 		}
 
-		$Data
-		->Filter(Filters\Text::Tabbify(...));
+		if($Format === static::FormatJSON)
+		$Data->Filter(Filters\Text::Tabbify(...));
 
 		////////
 
