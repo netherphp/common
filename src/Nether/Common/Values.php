@@ -47,6 +47,7 @@ class Values {
 	DateFormatYMDT24V          = 'Y-m-d H:i:s',
 	DateFormatYMDT24VZ         = 'Y-m-d H:i:s T',
 	DateFormatYMDT24VO         = 'Y-m-d H:i:s O',
+	DateFormatBasicDate        = 'M j Y',
 	DateFormatFancyDateTime    = 'F jS Y g:ia',
 	DateFormatFancyDate        = 'F jS, Y',
 	DateFormatFancyDateVerbose = 'l F jS, Y',
