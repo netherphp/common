@@ -388,6 +388,18 @@ Printing via Stringable will print using all the current instance settings.
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
+	public function
+	IsPast():
+	bool {
+
+		$Diff = $this->Stop->GetTimestamp() - $this->Start->GetTimestamp();
+
+		return ($Diff < 0);
+	}
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+
 	protected function
 	HandleTimeInput(mixed $When):
 	mixed {
@@ -437,7 +449,7 @@ Printing via Stringable will print using all the current instance settings.
 	////////////////////////////////////////////////////////////////
 
 	static public function
-	Today(string $Timezone='GMT'):
+	Today(string $Timezone='UTC'):
 	static {
 
 		$DateTimeZone = new DateTimeZone($Timezone);
