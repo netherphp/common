@@ -47,6 +47,7 @@ implements
 	static {
 
 		$this->Buffer = '';
+
 		return $this;
 	}
 
@@ -56,20 +57,12 @@ implements
 	mixed {
 
 		$Out = NULL;
-		$Buf = NULL;
 
 		////////
 
 		$this->Start();
 		$Out = $Fn();
-		$Buf = $this->Stop();
-
-		////////
-
-		if($this->Keep)
-		$this->Buffer .= $Buf;
-		else
-		$this->Buffer = $Buf;
+		$this->Stop();
 
 		////////
 
@@ -88,12 +81,22 @@ implements
 
 	#[Meta\Date('2023-11-23')]
 	public function
-	Stop():
-	string {
+	Stop(?bool $Keep=NULL):
+	static {
 
+		$Keep ??= $this->Keep;
 		$Buf = ob_get_clean();
 
-		return $Buf;
+		////////
+
+		if($this->Keep)
+		$this->Buffer .= $Buf;
+		else
+		$this->Buffer = $Buf;
+
+		////////
+
+		return $this;
 	}
 
 	public function
