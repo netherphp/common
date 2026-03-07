@@ -62,8 +62,8 @@ class DataFileCSV {
 	}
 
 	public function
-	Next():
-	?array {
+	Next(?string $Class=NULL):
+	null|array|object {
 
 		$Row = fgetcsv($this->Handle);
 		$Output = NULL;
@@ -79,8 +79,12 @@ class DataFileCSV {
 		$Key = NULL;
 		$Val = NULL;
 
-		foreach($Row as $Key => $Val)
-		$Output[$this->Headers[$Key]] = $Val;
+		foreach($Row as $Key => $Val) {
+			$Output[$this->Headers[$Key]] = $Val;
+		}
+
+		if($Class && class_exists($Class))
+		$Output = new $Class($Output);
 
 		return $Output;
 	}
