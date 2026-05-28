@@ -52,6 +52,13 @@ implements ArrayAccess {
 		return;
 	}
 
+	public function
+	__invoke(string $Key, callable|array $Funcs, ?array $Argv=NULL):
+	static {
+
+		return $this->SetFilters('Key', $Funcs, $Argv);
+	}
+
 	////////////////////////////////////////////////////////////////
 	// implement ArrayAccess ///////////////////////////////////////
 
