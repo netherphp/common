@@ -218,6 +218,14 @@ class Values {
 		return (PHP_OS_FAMILY !== 'Windows');
 	}
 
+	#[Meta\Date('2026-07-13')]
+	static public function
+	HasBitSet(int $Value, int $ToCheck):
+	bool {
+
+		return (($Value & $ToCheck) === $ToCheck);
+	}
+
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 
