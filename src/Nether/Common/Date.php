@@ -447,7 +447,7 @@ implements
 
 		////////
 
-		$Result = trim(`date +"%z"`);
+		$Result = trim(shell_exec('date +"%z"'));
 
 		return $Result;
 	}
