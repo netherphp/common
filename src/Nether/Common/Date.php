@@ -463,7 +463,7 @@ implements
 		////////
 
 		$Result = parse_ini_string(trim(
-			`wmic OS Get CurrentTimeZone /value`
+			shell_exec('wmic OS Get CurrentTimeZone /value')
 		));
 
 		//if(!$Result || !isset($Result['CurrentTimeZone']))
